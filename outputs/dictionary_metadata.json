@@ -1,0 +1,4360 @@
+{
+  "registry": {
+    "MDOTW_VW_OCCURRENCE_PUBLIC": {
+      "AccIncTypeDisplayEng": {
+        "full_name": "Accident/incident type (English)",
+        "description": "The type of accident or incident, in English. ",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "AccIncTypeID"
+      },
+      "AccIncTypeDisplayFre": {
+        "full_name": "Accident/incident type (French)",
+        "description": "The type of accident or incident, in French. ",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "AccIncTypeID": {
+        "full_name": "Accident/incident type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "unknown",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "AccIncTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "AirTemp_Celsius": {
+        "full_name": "Air temperature (Celsius)",
+        "description": "The air temperature at the time of the occurrence, in degrees Celsius.",
+        "data_type": "int",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "AreaTypeDisplayEng": {
+        "full_name": "Area type (English)",
+        "description": "The type of area where the occurrence took place, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "AreaTypeID"
+      },
+      "AreaTypeDisplayFre": {
+        "full_name": "Area type (French)",
+        "description": "The type of area where the occurrence took place, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "AreaTypeID": {
+        "full_name": "Area type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "AreaTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "BearingDisplay": {
+        "full_name": "Bearing",
+        "description": "The bearing of the distance between the occurrence location and the nearest geographical location.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "BearingID"
+      },
+      "BearingID": {
+        "full_name": "Bearing identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "BearingDisplay",
+        "display_to_id_map": null
+      },
+      "BeaufortScaleDisplayEng": {
+        "full_name": "Beaufort scale (English)",
+        "description": "The description of the wind speed at the time of the occurrence, according to the Beaufort scale, in English.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "BeaufortScaleID"
+      },
+      "BeaufortScaleDisplayFre": {
+        "full_name": "Beaufort scale (French)",
+        "description": "The description of the wind speed at the time of the occurrence, according to the Beaufort scale, in French.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "BeaufortScaleID": {
+        "full_name": "Beaufort scale identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "environmental",
+        "is_boolean": false,
+        "id_to_display_map": "BeaufortScaleDisplayEng",
+        "display_to_id_map": null
+      },
+      "BergyBitsEnum": {
+        "full_name": "Bergy bits enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "BergyBitsEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "BergyBitsEnumDisplayEng": {
+        "full_name": "Bergy bits (English)",
+        "description": "Indicates whether there were bergy bits at the occurrence location, in English. ",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "BergyBitsEnum"
+      },
+      "BergyBitsEnumDisplayFre": {
+        "full_name": "Bergy bits (French)",
+        "description": "Indicates whether there were bergy bits at the occurrence location, in French. ",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "DamageIND": {
+        "full_name": "Damage indicator",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "smallint",
+        "category": "casualty",
+        "is_boolean": true,
+        "id_to_display_map": "DamageIND_DisplayEng",
+        "display_to_id_map": null
+      },
+      "DamageIND_DisplayEng": {
+        "full_name": "Damage (English)",
+        "description": "Indicates whether there was any damage to the vessel, in English.",
+        "data_type": "varchar",
+        "category": "casualty",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "DamageIND"
+      },
+      "DamageIND_DisplayFre": {
+        "full_name": "Damage (French)",
+        "description": "Indicates whether there was any damage to the vessel, in French.",
+        "data_type": "varchar",
+        "category": "casualty",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "DeployedIND": {
+        "full_name": "Deployed indicator",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "smallint",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": "DeployedIND_DisplayEng",
+        "display_to_id_map": null
+      },
+      "DeployedIND_DisplayEng": {
+        "full_name": "Deployed (English)",
+        "description": "Indicates whether the TSB deployed to the occurrence site, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "DeployedIND"
+      },
+      "DeployedIND_DisplayFre": {
+        "full_name": "Deployed (French)",
+        "description": "Indicates whether the TSB deployed to the occurrence site, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "EntryDate": {
+        "full_name": "Entry date",
+        "description": "The date on which the occurrence record was created in MARSIS. Date format is YYYY-MM-DD.",
+        "data_type": "datetime",
+        "category": "admin",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "EnvironmentalConditionID": {
+        "full_name": "Environmental condition identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "FatigueContFactorEnum": {
+        "full_name": "Fatigue contributing factor enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "FatigueContFactorEnum_DisplayEng",
+        "display_to_id_map": null
+      },
+      "FatigueContFactorEnum_DisplayEng": {
+        "full_name": "Fatigue contributing factor (English)",
+        "description": "Indicates whether fatigue was a contributing factor in the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "FatigueContFactorEnum"
+      },
+      "FatigueContFactorEnum_DisplayFre": {
+        "full_name": "Fatigue contributing factor (French)",
+        "description": "Indicates whether fatigue was a contributing factor in the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "FatigueInvestEnum": {
+        "full_name": "Fatigue investigated enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "FatigueInvestEnum_DisplayEng",
+        "display_to_id_map": null
+      },
+      "FatigueInvestEnum_DisplayEng": {
+        "full_name": "Fatigue investigated (English)",
+        "description": "Indicates whether the TSB investigated fatigue as part of the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "FatigueInvestEnum"
+      },
+      "FatigueInvestEnum_DisplayFre": {
+        "full_name": "Fatigue investigated (French)",
+        "description": "Indicates whether the TSB investigated fatigue as part of the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "GrowlersEnum": {
+        "full_name": "Growlers enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "GrowlersEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "GrowlersEnumDisplayEng": {
+        "full_name": "Growlers (English)",
+        "description": "Indicates whether there were growlers in the area of the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "GrowlersEnum"
+      },
+      "GrowlersEnumDisplayFre": {
+        "full_name": "Growlers (French)",
+        "description": "Indicates whether there were growlers in the area of the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "IcebergEnum": {
+        "full_name": "Iceberg enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "environmental",
+        "is_boolean": false,
+        "id_to_display_map": "IcebergEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "IcebergEnumDisplayEng": {
+        "full_name": "Iceberg (English)",
+        "description": "Indicates whether an iceberg was present in the area of the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "environmental",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "IcebergEnum"
+      },
+      "IcebergEnumDisplayFre": {
+        "full_name": "Iceberg (French)",
+        "description": "Indicates whether an iceberg was present in the area of the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "environmental",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "IceCoverage_ScaleOutOf1to10": {
+        "full_name": "Ice coverage scale out of 0 to 10",
+        "description": "The amount of ice covering the area at the time of the occurrence, on a scale of 0 (no ice) to 10.",
+        "data_type": "smallint",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ImoClasslevelDisplayEng": {
+        "full_name": "International Maritime Organization class level (English)",
+        "description": "The description of the IMO classification, in English.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "ImoClassLevelID"
+      },
+      "ImoClassLevelDisplayFre": {
+        "full_name": "International Maritime Organization class level (French)",
+        "description": "The description of the IMO classification, in French.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ImoClassLevelID": {
+        "full_name": "International Maritime Organization class level identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": "ImoClasslevelDisplayEng",
+        "display_to_id_map": null
+      },
+      "IncludedInDailyEnum": {
+        "full_name": "Included in daily enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "smallint",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "IncludedInDailyEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "IncludedInDailyEnumDisplayEng": {
+        "full_name": "Included in daily (English)",
+        "description": "Indicates whether the occurrence is included in the TSB's daily notification log, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "IncludedInDailyEnum"
+      },
+      "IncludedInDailyEnumDisplayFre": {
+        "full_name": "Included in daily (French)",
+        "description": "Indicates whether the occurrence is included in the TSB's daily notification log, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "InjuriesIND": {
+        "full_name": "Injuries indicator",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "smallint",
+        "category": "casualty",
+        "is_boolean": true,
+        "id_to_display_map": "InjuriesIND_DisplayEng",
+        "display_to_id_map": null
+      },
+      "InjuriesIND_DisplayEng": {
+        "full_name": "Injuries (English)",
+        "description": "Indicates whether the occurrence resulted in any injuries, in English.",
+        "data_type": "varchar",
+        "category": "casualty",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "InjuriesIND"
+      },
+      "InjuriesIND_DisplayFre": {
+        "full_name": "Injuries (French)",
+        "description": "Indicates whether the occurrence resulted in any injuries, in French.",
+        "data_type": "varchar",
+        "category": "casualty",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "LatEnum": {
+        "full_name": "Latitude enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "LatEnum_Bearing_DisplayEng": {
+        "full_name": "Latitude bearing (English)",
+        "description": "Indicates whether the occurrence took place north or south of the equator (N = north; S = south), in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "LatEnum_Bearing_DisplayFre": {
+        "full_name": "Latitude bearing (French)",
+        "description": "Indicates whether the occurrence took place north or south of the equator (N = north; S = south), in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "Latitude": {
+        "full_name": "Latitude",
+        "description": "The latitude at which the occurrence took place, in decimal degrees. A positive number indicates a latitude in the northern hemisphere; a negative number indicates a latitude in the southern hemisphere.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "LightConditionDisplayEng": {
+        "full_name": "Light condition (English)",
+        "description": "The light conditions at the time of the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "LightConditionID"
+      },
+      "LightConditionDisplayFre": {
+        "full_name": "Light condition (French)",
+        "description": "The light conditions at the time of the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "LightConditionID": {
+        "full_name": "Light condition identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "environmental",
+        "is_boolean": false,
+        "id_to_display_map": "LightConditionDisplayEng",
+        "display_to_id_map": null
+      },
+      "LongEnum": {
+        "full_name": "Longitude enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "LongEnum_Bearing_DisplayEng",
+        "display_to_id_map": null
+      },
+      "LongEnum_Bearing_DisplayEng": {
+        "full_name": "Longitude bearing (English)",
+        "description": "Indicates whether the occurrence took place east or west of the meridian (E = east; W = west), in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "LongEnum"
+      },
+      "LongEnum_Bearing_DisplayFre": {
+        "full_name": "Longitude bearing (French)",
+        "description": "Indicates whether the occurrence took place east or west of the meridian (E = east; O = west), in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "Longitude": {
+        "full_name": "Longitude",
+        "description": "The longitude at which the occurrence took place, in decimal degrees.   A positive number indicates a longitude in the eastern hemisphere; a negative number indicates a longitude in the western hemisphere.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "MajorChangesIncludedInDaily": {
+        "full_name": "Major changes included in daily",
+        "description": "Indicates whether there have been major changes to the occurrence information since it was released in the daily notification report.",
+        "data_type": "smallint",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "NearestLocationDescription": {
+        "full_name": "Nearest location description",
+        "description": "The location nearest to where the occurrence took place, in the language in which it was entered in MARSIS.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "NearestLocationDistance_Nm": {
+        "full_name": "Nearest location distance (nautical miles)",
+        "description": "The distance in nautical miles between the location indicated in the NearLocDescription field and the actual location of the occurrence, when available. This distance may be included in the NearLocDescription field for records entered before 25 November 2013.",
+        "data_type": "numeric",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "NotificationDetailID": {
+        "full_name": "Notification detail identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ObservedByDisplayEng": {
+        "full_name": "Observed by (English)",
+        "description": "The role of the person who noticed the presence of ice, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "ObservedByID"
+      },
+      "ObservedByDisplayFre": {
+        "full_name": "Observed by (French)",
+        "description": "The role of the person who noticed the presence of ice, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ObservedByID": {
+        "full_name": "Observed by identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "ObservedByDisplayEng",
+        "display_to_id_map": null
+      },
+      "OccClassDisplayEng": {
+        "full_name": "Occurrence classification (English)",
+        "description": "The TSB investigation classification of the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "OccClassID"
+      },
+      "OccClassDisplayFre": {
+        "full_name": "Occurrence classification (French)",
+        "description": "The TSB investigation classification of the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OccClassID": {
+        "full_name": "Occurrence classification identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "OccClassDisplayEng",
+        "display_to_id_map": null
+      },
+      "OccClosedDate": {
+        "full_name": "Occurrence closed date",
+        "description": "The date on which the TSB's investigation into the occurrence was closed. Date format is YYYY-MM-DD.",
+        "data_type": "datetime",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OccDate": {
+        "full_name": "Occurrence date",
+        "description": "The date on which the occurrence took place. Date format is YYYY-MM-DD.",
+        "data_type": "date",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OccID": {
+        "full_name": "Occurrence identification number",
+        "description": "The occurrence identification number; a unique identifier for the occurrence assigned by MARSIS.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OccNo": {
+        "full_name": "Occurrence number",
+        "description": "The TSB occurrence number; a unique identifier for the occurrence. The \"M\" is to identify Marine mode followed by 2 digits to identify the year of the occurrence. The letter after the year is to identify the TSB region responsible for investigating the occurrence. This is followed by the sequential number assigned by the MARSIS application.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OccTime": {
+        "full_name": "Occurrence time",
+        "description": "The time at which the occurrence took place. Time format is hh:mm (24-hour clock).",
+        "data_type": "time",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OccTypeDisplayEng": {
+        "full_name": "Occurrence type (English)",
+        "description": "Indicates whether the occurrence was an accident or reportable incident, in English. ",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "OccurrenceTypeID"
+      },
+      "OccTypeDisplayFre": {
+        "full_name": "Occurrence type (French)",
+        "description": "Indicated whether the occurrence was an accident or reportable incident, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OccurrenceTypeID": {
+        "full_name": "Occurrence type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "OccTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "OtherStateInvestigatingDisplayEng": {
+        "full_name": "Other state investigating (English)",
+        "description": "The other state that is investigating the occurrence, if applicable, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "OtherStateInvestigatingID"
+      },
+      "OtherStateInvestigatingDisplayFre": {
+        "full_name": "Other state investigation (French)",
+        "description": "The other state that is investigating the occurrence, if applicable, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OtherStateInvestigatingID": {
+        "full_name": "Other state investigation identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "OtherStateInvestigatingDisplayEng",
+        "display_to_id_map": null
+      },
+      "PollutionIND": {
+        "full_name": "Pollution indicator",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "smallint",
+        "category": "casualty",
+        "is_boolean": true,
+        "id_to_display_map": "PollutionIND_DisplayEng",
+        "display_to_id_map": null
+      },
+      "PollutionIND_DisplayEng": {
+        "full_name": "Pollution (English)",
+        "description": "Indicates whether there was pollution associated with the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "casualty",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "PollutionIND"
+      },
+      "PollutionIND_DisplayFre": {
+        "full_name": "Pollution (French)",
+        "description": "Indicates whether there was pollution associated with the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "casualty",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "Position": {
+        "full_name": "Position",
+        "description": "The geographical position where the occurrence was located. The data is displayed as a standard GIS number that can be translated into coordinates in various formats.",
+        "data_type": "geography",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "PositionEstimatedIND": {
+        "full_name": "Position estimated indicator",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "smallint",
+        "category": "spatial",
+        "is_boolean": true,
+        "id_to_display_map": "PositionEstimatedIND_DisplayEng",
+        "display_to_id_map": null
+      },
+      "PositionEstimatedIND_DisplayEng": {
+        "full_name": "Position estimated (English)",
+        "description": "Indicates whether the occurrence position is estimated, in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "PositionEstimatedIND"
+      },
+      "PositionEstimatedIND_DisplayFre": {
+        "full_name": "Position estimate (French)",
+        "description": "Indicates whether the occurrence position is estimated, in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "PositionInText": {
+        "full_name": "Position in text",
+        "description": "The geographical position where the occurrence was located. This is a legacy field from a previous version of MARSIS. This data is now included in the Position field.",
+        "data_type": "nvarchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "PositionTypeDisplayEng": {
+        "full_name": "Position type (English)",
+        "description": "The format in which the occurrence position is expressed (DD.DDDD, DDMM.MMM, or DDMMSS.SS), in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "PositionTypeEnum"
+      },
+      "PositionTypeDisplayFre": {
+        "full_name": "Position type (French)",
+        "description": "The format in which the occurrence position is expressed (DD.DDDD, Degr\u00e9s-Minutes-Minutes, or degr\u00e9s-Minutes-Secondes-Secondes), in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "PositionTypeEnum": {
+        "full_name": "Position type enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "PositionTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "ProvinceDisplayEng": {
+        "full_name": "Province (English)",
+        "description": "The province of the occurrence location, in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "ProvinceID"
+      },
+      "ProvinceDisplayFre": {
+        "full_name": "Province (French)",
+        "description": "The province of the occurrence location, in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ProvinceID": {
+        "full_name": "Province identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "ProvinceDisplayEng",
+        "display_to_id_map": null
+      },
+      "RegionOfOccurrenceDisplayEng": {
+        "full_name": "Region of occurrence (English)",
+        "description": "The region in which the occurrence took place (Pacific Region, Central Region, Atlantic Region, or Foreign Waters), in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "RegionOfOccurrenceID"
+      },
+      "RegionOfOccurrenceDisplayFre": {
+        "full_name": "Region of occurrence (French)",
+        "description": "The region in which the occurrence took place (R\u00e9gion pacifique, R\u00e9gion centrale, R\u00e9gion atlantique, Eaux \u00e9trang\u00e8res), in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "RegionOfOccurrenceID": {
+        "full_name": "Region of occurrence identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "RegionOfOccurrenceDisplayEng",
+        "display_to_id_map": null
+      },
+      "RegionResponsibilityDisplayEng": {
+        "full_name": "Region of responsibility (English)",
+        "description": "The administrative region of the TSB responsible for investigating the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "RegionResponsibilityID"
+      },
+      "RegionResponsibilityDisplayFre": {
+        "full_name": "Region of responsibility (French)",
+        "description": "The administrative region of the TSB responsible for investigating the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "RegionResponsibilityID": {
+        "full_name": "Region of responsibility identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "RegionResponsibilityDisplayEng",
+        "display_to_id_map": null
+      },
+      "ReleasedDate": {
+        "full_name": "Released date",
+        "description": "The date on which the initial occurrence details were released to the occurrence notification log.",
+        "data_type": "datetime",
+        "category": "admin",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ReportedByDisplayEng": {
+        "full_name": "Reported by (English)",
+        "description": "The organization that initially reported the occurrence to the TSB, or the means by which the occurrence was reported, in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "ReportedByID"
+      },
+      "ReportedByDisplayFre": {
+        "full_name": "Reported by (French)",
+        "description": "The organization that initially reported the occurrence to the TSB, or the means by which the occurrence was reported, in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ReportedByID": {
+        "full_name": "Reported by identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "ReportedByDisplayEng",
+        "display_to_id_map": null
+      },
+      "ReportedDate": {
+        "full_name": "Reported date",
+        "description": "The date on which the occurrence was recorded by the TSB.",
+        "data_type": "datetime",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ReportSourceDisplayEng": {
+        "full_name": "Report source (English)",
+        "description": "The type of report that initially informed the TSB of an occurrence, in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "ReportSourceID"
+      },
+      "ReportSourceDisplayFre": {
+        "full_name": "Report source (French)",
+        "description": "The type of report that initially informed the TSB of an occurrence, in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ReportSourceID": {
+        "full_name": "Report source identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "ReportSourceDisplayEng",
+        "display_to_id_map": null
+      },
+      "RoutingDisplayEng": {
+        "full_name": "Routing (English)",
+        "description": "Indicates where in the routing system the occurrence happened, in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "RoutingID"
+      },
+      "RoutingDisplayFre": {
+        "full_name": "Routing (French)",
+        "description": "Indicates where in the routing system the occurrence happened, in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "RoutingID": {
+        "full_name": "Routing identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "RoutingDisplayEng",
+        "display_to_id_map": null
+      },
+      "SafetyCommIssuedIND": {
+        "full_name": "Safety communication issued indicator",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "smallint",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": "SafetyCommIssuedIND_DisplayEng",
+        "display_to_id_map": null
+      },
+      "SafetyCommIssuedIND_DisplayEng": {
+        "full_name": "Safety communication issued (English)",
+        "description": "Indicates whether any safety communications related to the occurrence have been issued by the TSB, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "SafetyCommIssuedIND"
+      },
+      "SafetyCommIssuedIND_DisplayFre": {
+        "full_name": "Safety communication issued (French)",
+        "description": "Indicates whether any safety communications related to the occurrence have been issued by the TSB, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "SearchAndRescueIND": {
+        "full_name": "Search and rescue indicator",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "smallint",
+        "category": "environmental",
+        "is_boolean": true,
+        "id_to_display_map": "SearchAndRescueIND_DisplayEng",
+        "display_to_id_map": null
+      },
+      "SearchAndRescueIND_DisplayEng": {
+        "full_name": "Search and rescue (English)",
+        "description": "Indicates whether search-and-rescue operations were initiated, in English.",
+        "data_type": "varchar",
+        "category": "environmental",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "SearchAndRescueIND"
+      },
+      "SearchAndRescueIND_DisplayFre": {
+        "full_name": "Search and rescue (French)",
+        "description": "Indicates whether search-and-rescue operations were initiated, in French.",
+        "data_type": "varchar",
+        "category": "environmental",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "SeaStateDisplayEng": {
+        "full_name": "Sea state (English)",
+        "description": "The sea state or condition at the time of the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "SeaStateID"
+      },
+      "SeaStateDisplayFre": {
+        "full_name": "Sea state (French)",
+        "description": "The sea state or condition at the time of the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "SeaStateID": {
+        "full_name": "Sea state identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "environmental",
+        "is_boolean": false,
+        "id_to_display_map": "SeaStateDisplayEng",
+        "display_to_id_map": null
+      },
+      "SeatTemp_Celsius": {
+        "full_name": "Sea temperature Celsius",
+        "description": "The sea temperature at the time of the occurrence, in degrees Celsius.",
+        "data_type": "int",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "SubstantiallyInsterestedStateIND": {
+        "full_name": "Substantially interested state indicator",
+        "description": "Indicates whether there is a substantially interested state, other than the TSB, investigating the occurrence (0 = yes; 1 = no).",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "SubstantiallyInterestedStateDisplayEng": {
+        "full_name": "Substantially interested state (English)",
+        "description": "The name of the substantially interested state investigating the occurrence, in English. ",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "SubstantiallyInterestedStateID"
+      },
+      "SubstantiallyInterestedStateDisplayFre": {
+        "full_name": "Substantially interested state (French)",
+        "description": "The name of the substantially interested state investigating the occurrence, in French. ",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "SubstantiallyInterestedStateID": {
+        "full_name": "Substantially interested state identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "SubstantiallyInterestedStateDisplayEng",
+        "display_to_id_map": null
+      },
+      "Summary": {
+        "full_name": "Summary",
+        "description": "The summary of the occurrence, in the language in which it was entered.",
+        "data_type": "varchar",
+        "category": "narrative",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "SwellDirection": {
+        "full_name": "Swell direction",
+        "description": "The swell direction at the time of the occurrence.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "SwellDirectionID": {
+        "full_name": "Swell direction identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "environmental",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "SwellHeight_Meters": {
+        "full_name": "Swell height (metres)",
+        "description": "The swell height at the time of the occurrence, in metres.",
+        "data_type": "numeric",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TimeZoneDisplayEng": {
+        "full_name": "Time zone (English)",
+        "description": "The time zone of the time of the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "TimeZoneID"
+      },
+      "TimeZoneDisplayFre": {
+        "full_name": "Time zone (French)",
+        "description": "The time zone of the time of the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TimeZoneID": {
+        "full_name": "Time zone identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": "TimeZoneDisplayEng",
+        "display_to_id_map": null
+      },
+      "TotalDeaths": {
+        "full_name": "Total deaths",
+        "description": "The total number of persons who died as a result of the occurrence.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TotalMinorInjuries": {
+        "full_name": "Total minor injuries",
+        "description": "The total number of persons who received minor injuries as a result of the occurrence.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TotalMissingIndividuals": {
+        "full_name": "Total missing individuals",
+        "description": "The total number of persons who are missing as a result of the occurrence.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TotalPeopleInTheWater": {
+        "full_name": "Total people in the water",
+        "description": "The total number of persons in the water as a result of the occurrence.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TotalSeriousInjuries": {
+        "full_name": "Total serious injuries",
+        "description": "The total number of persons seriously injured as a result of the occurrence.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "UnderIceRegimeEnum": {
+        "full_name": "Under ice regime",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "smallint",
+        "category": "environmental",
+        "is_boolean": false,
+        "id_to_display_map": "UnderIceRegimeEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "UnderIceRegimeEnumDisplayEng": {
+        "full_name": "Under ice regime (English)",
+        "description": "Indicates whether the vessel was navigating under the Ice Regime System, in English.",
+        "data_type": "varchar",
+        "category": "environmental",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "UnderIceRegimeEnum"
+      },
+      "UnderIceRegimeEnumDisplayFre": {
+        "full_name": "Under ice regime (French)",
+        "description": "Indicates whether the vessel was navigating under the Ice Regime System, in French.",
+        "data_type": "varchar",
+        "category": "environmental",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselIcingPresentEnum": {
+        "full_name": "Vessel icing present enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "VesselIcingPresentEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "VesselIcingPresentEnumDisplayEng": {
+        "full_name": "Vessel icing present (English)",
+        "description": "Indicates whether there was vessel icing at the time of the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "VesselIcingPresentEnum"
+      },
+      "VesselIcingPresentEnumDisplayFre": {
+        "full_name": "Vessel icing present (French)",
+        "description": "Indicates whether there was vessel icing at the time of the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselIcingQualificationDisplayEng": {
+        "full_name": "Vessel icing qualification (English)",
+        "description": "The severity of the vessel icing, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "VesselIcingQualificationID"
+      },
+      "VesselIcingQualificationDisplayFre": {
+        "full_name": "Vessel icing qualification (French)",
+        "description": "The severity of the vessel icing, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselIcingQualificationID": {
+        "full_name": "Vessel icing qualification identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "VesselIcingQualificationDisplayEng",
+        "display_to_id_map": null
+      },
+      "VisibilityDistance_Nm": {
+        "full_name": "Visibility distance (nautical miles)",
+        "description": "The visibility at the time of the occurrence, in nautical miles.",
+        "data_type": "numeric",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "WeatherConditionDisplayEng": {
+        "full_name": "Weather condition (English)",
+        "description": "The weather conditions at the time of the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "WeatherConditionID"
+      },
+      "WeatherConditionDisplayFre": {
+        "full_name": "Weather condition (French)",
+        "description": "The weather conditions at the time of the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "WeatherConditionID": {
+        "full_name": "Weather condition identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "environmental",
+        "is_boolean": false,
+        "id_to_display_map": "WeatherConditionDisplayEng",
+        "display_to_id_map": null
+      },
+      "WeatherFactorEnum": {
+        "full_name": "Weather factor enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "environmental",
+        "is_boolean": false,
+        "id_to_display_map": "WeatherFactorEnum_DisplayEng",
+        "display_to_id_map": null
+      },
+      "WeatherFactorEnum_DisplayEng": {
+        "full_name": "Weather factor (English)",
+        "description": "Indicates whether weather was a factor in the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "environmental",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "WeatherFactorEnum"
+      },
+      "WeatherFactorEnum_DisplayFre": {
+        "full_name": "Weather factor (French)",
+        "description": "Indicates whether weather was a factor in the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "environmental",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "WindDirection": {
+        "full_name": "Wind direction",
+        "description": "The direction in which the wind was blowing at the time of the occurrence.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "WindDirectionID": {
+        "full_name": "Wind direction identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "environmental",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "WindSpeed_Knots": {
+        "full_name": "Wind speed (knots)",
+        "description": "The wind speed at the time of the occurrence, in knots.",
+        "data_type": "numeric",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "WindSpeedTypeDisplayEng": {
+        "full_name": "Wind speed type (English)",
+        "description": "The type of wind speed measurement, in English.",
+        "data_type": "varchar",
+        "category": "environmental",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "WindSpeedTypeID"
+      },
+      "WindSpeedTypeDisplayFre": {
+        "full_name": "Wind speed type (French)",
+        "description": "The type of wind speed measurement, in French.",
+        "data_type": "varchar",
+        "category": "environmental",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "WindSpeedTypeID": {
+        "full_name": "Wind speed type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "environmental",
+        "is_boolean": false,
+        "id_to_display_map": "WindSpeedTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "WithInPilotBoardingAreaEnum": {
+        "full_name": "Within pilot boarding area enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "smallint",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "WithInPilotBoardingAreaEnum_DisplayEng",
+        "display_to_id_map": null
+      },
+      "WithInPilotBoardingAreaEnum_DisplayEng": {
+        "full_name": "Within pilot boarding area (English)",
+        "description": "Indicates whether the vessel was within a pilot boarding area, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "WithInPilotBoardingAreaEnum"
+      },
+      "WithInPilotBoardingAreaEnum_DisplayFre": {
+        "full_name": "Within pilot boarding area (French)",
+        "description": "Indicates whether the vessel was within a pilot boarding area, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      }
+    },
+    "MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC": {
+      "AccIncTypeDisplayEng": {
+        "full_name": "Accident/incident type (English)",
+        "description": "The type of accident or incident, in English. ",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "AccIncTypeID"
+      },
+      "AccIncTypeDisplayFre": {
+        "full_name": "Accident/incident type (French)",
+        "description": "The type of accident or incident, in French. ",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "AccIncTypeID": {
+        "full_name": "Accident/incident type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "AccIncTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "ActivityCategoryDisplayEng": {
+        "full_name": "Activity category (English)",
+        "description": "The category of activity (carriage of cargo or people, fishing, search and rescue, etc.) being undertaken on the occurrence voyage, in English.",
+        "data_type": "varchar",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "ActivityCategoryID"
+      },
+      "ActivityCategoryDisplayFre": {
+        "full_name": "Activity category (French)",
+        "description": "The category of activity (carriage of cargo or people, fishing, search and rescue, etc.) being undertaken on the occurrence voyage, in French.",
+        "data_type": "varchar",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ActivityCategoryID": {
+        "full_name": "Activity category identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": "ActivityCategoryDisplayEng",
+        "display_to_id_map": null
+      },
+      "ActivityTypeDisplayEng": {
+        "full_name": "Activity type (English)",
+        "description": "The subtype of activity being undertaken on the occurrence voyage, in English.",
+        "data_type": "varchar",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "ActivityTypeID"
+      },
+      "ActivityTypeDisplayFre": {
+        "full_name": "Activity type (French)",
+        "description": "The subtype of activity being undertaken on the occurrence voyage, in French.",
+        "data_type": "varchar",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ActivityTypeID": {
+        "full_name": "Activity type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": "ActivityTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "AirPollutionDisplayEng": {
+        "full_name": "Air pollution (English)",
+        "description": "Indicates whether there was air pollution present at the time of the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "AirPollutionEnum"
+      },
+      "AirPollutionDisplayFre": {
+        "full_name": "Air pollution (French)",
+        "description": "Indicates whether there was air pollution present at the time of the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "AirPollutionEnum": {
+        "full_name": "Air pollution enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": "AirPollutionDisplayEng",
+        "display_to_id_map": null
+      },
+      "CallSign": {
+        "full_name": "Call sign",
+        "description": "The vessel's radio call sign (a unique combination of letters and numbers).",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "CargoCategoryDisplayEng": {
+        "full_name": "Cargo category (English)",
+        "description": "The category of cargo on board the vessel, in English.",
+        "data_type": "varchar",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "CargoCategoryID"
+      },
+      "CargoCategoryDisplayFre": {
+        "full_name": "Cargo category (French)",
+        "description": "The category of cargo on board the vessel, in French.",
+        "data_type": "varchar",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "CargoCategoryID": {
+        "full_name": "Cargo category identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": "CargoCategoryDisplayEng",
+        "display_to_id_map": null
+      },
+      "CargoProductTypeDisplayEng": {
+        "full_name": "Cargo product type (English)",
+        "description": "The subtype of cargo on board the vessel, in English.",
+        "data_type": "varchar",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "CargoProductTypeID"
+      },
+      "CargoProductTypeDisplayFre": {
+        "full_name": "Cargo product type (French)",
+        "description": "The subtype of cargo on board the vessel, in French.",
+        "data_type": "varchar",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "CargoProductTypeID": {
+        "full_name": "Cargo product type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": "CargoProductTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "ClassSocietyDisplayEng": {
+        "full_name": "Class society (English)",
+        "description": "The name of the class society, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "ClassSocietyID"
+      },
+      "ClassSocietyDisplayFre": {
+        "full_name": "Class society (French)",
+        "description": "The name of the class society, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ClassSocietyID": {
+        "full_name": "Class society identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "ClassSocietyDisplayEng",
+        "display_to_id_map": null
+      },
+      "Course_Degrees": {
+        "full_name": "Course in degrees",
+        "description": "The vessel's course, in degrees.",
+        "data_type": "numeric",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "DepartureCountryDisplayEng": {
+        "full_name": "Departure country (English)",
+        "description": "The country from which the vessel departed, in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "DepartureCountryID"
+      },
+      "DepartureCountryDisplayFre": {
+        "full_name": "Departure country (French)",
+        "description": "The country from which the vessel departed, in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "DepartureCountryID": {
+        "full_name": "Departure country",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "DepartureCountryDisplayEng",
+        "display_to_id_map": null
+      },
+      "DepartureDate": {
+        "full_name": "Departure date",
+        "description": "The date on which the vessel sailed from port. Date format is YYYY-MM-DD.",
+        "data_type": "date",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "DepartureLocationTypeDisplayEng": {
+        "full_name": "Departure location type (English)",
+        "description": "The type of location where the occurrence happened, in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "DepartureLocationTypeID"
+      },
+      "DepartureLocationTypeDisplayFre": {
+        "full_name": "Departure location type (French)",
+        "description": "The type of location where the occurrence happened, in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "DepartureLocationTypeID": {
+        "full_name": "Departure location type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "DepartureLocationTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "DeparturePortDisplayEng": {
+        "full_name": "Departure port (English)",
+        "description": "The port from which the vessel departed, in English. ",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "DeparturePortID"
+      },
+      "DeparturePortDisplayFre": {
+        "full_name": "Departure port (French)",
+        "description": "The port from which the vessel departed, in French. ",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "DeparturePortID": {
+        "full_name": "Departure port identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "DeparturePortDisplayEng",
+        "display_to_id_map": null
+      },
+      "DepartureTime": {
+        "full_name": "Departure time",
+        "description": "The time at which the vessel sailed from port. Time format is hh:mm (24-hour clock).",
+        "data_type": "time",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "DepartureTimeZoneDisplayEng": {
+        "full_name": "Departure time zone (English)",
+        "description": "The time zone of the time at which the vessel sailed from port, in English. The number in parentheses indicates the number of hours ahead of Universal Coordinated Time.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "DepartureTimeZoneID"
+      },
+      "DepartureTimeZoneDisplayFre": {
+        "full_name": "Departure time zone (French)",
+        "description": "The time zone of the time at which the vessel sailed from port, in French. The number in parentheses indicates the number of hours ahead of Universal Coordinated Time.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "DepartureTimeZoneID": {
+        "full_name": "Departure time zone identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": "DepartureTimeZoneDisplayEng",
+        "display_to_id_map": null
+      },
+      "DestinationCountryDisplayEng": {
+        "full_name": "Destination country (English)",
+        "description": "The vessel's destination country, in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "DestinationCountryID"
+      },
+      "DestinationCountryDisplayFre": {
+        "full_name": "Destination country (French)",
+        "description": "The vessel's destination country, in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "DestinationCountryID": {
+        "full_name": "Destination country identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "DestinationCountryDisplayEng",
+        "display_to_id_map": null
+      },
+      "DestinationDate": {
+        "full_name": "Destination date",
+        "description": "The date on which the vessel was scheduled to arrive at the destination port. Date format is YYYY-MM-DD.",
+        "data_type": "date",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "DestinationLocationTypeDisplayEng": {
+        "full_name": "Destination location type (English)",
+        "description": "The type of location of the vessel's destination port, in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "DestinationLocationTypeID"
+      },
+      "DestinationLocationTypeDisplayFre": {
+        "full_name": "Destination location type (French)",
+        "description": "The type of location of the vessel's destination port, in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "DestinationLocationTypeID": {
+        "full_name": "Destination location type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "DestinationLocationTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "DestinationPortDisplayEng": {
+        "full_name": "Destination port (English)",
+        "description": "The vessel's destination port, in English. ",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "DestinationPortID"
+      },
+      "DestinationPortDisplayFre": {
+        "full_name": "Destination port (French)",
+        "description": "The vessel's destination port, in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "DestinationPortID": {
+        "full_name": "Destination port identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "DestinationPortDisplayEng",
+        "display_to_id_map": null
+      },
+      "DestinationTime": {
+        "full_name": "Destination time",
+        "description": "The time of day at which the vessel was scheduled to arrive at the destination port. Time format is hh:mm (24-hour clock).",
+        "data_type": "time",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "DestinationTimeZoneDisplayEng": {
+        "full_name": "Destination time zone (English)",
+        "description": "The time zone of the vessel's destination, in English.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "DestinationTimeZoneID"
+      },
+      "DestinationTimeZoneDisplayFre": {
+        "full_name": "Destination time zone (French)",
+        "description": "The time zone of the vessel's destination, in French.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "DestinationTimeZoneID": {
+        "full_name": "Destination time zone identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": "DestinationTimeZoneDisplayEng",
+        "display_to_id_map": null
+      },
+      "DraughtAft_Meters": {
+        "full_name": "Draught aft (metres)",
+        "description": "The draft of the vessel aft, in metres.",
+        "data_type": "numeric",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "DraughtFwd_Meters": {
+        "full_name": "Draught forward (metres)",
+        "description": "The draft of the vessel forward, in metres.",
+        "data_type": "numeric",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "FisheryTypeDisplayEng": {
+        "full_name": "Fishery type (English)",
+        "description": "The type of fishery (e.g. dive, gill net, troll), in English.",
+        "data_type": "varchar",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "FisheryTypeID"
+      },
+      "FisheryTypeDisplayFre": {
+        "full_name": "Fishery type (French)",
+        "description": "The type of fishery (e.g. dive, gill net, troll), in French.",
+        "data_type": "varchar",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "FisheryTypeID": {
+        "full_name": "Fishery type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": "FisheryTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "GearTypeDisplayEng": {
+        "full_name": "Gear type (English)",
+        "description": "The type of gear, in English.",
+        "data_type": "varchar",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "GearTypeID"
+      },
+      "GearTypeDisplayFre": {
+        "full_name": "Gear type (French)",
+        "description": "The type of gear, in French.",
+        "data_type": "varchar",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "GearTypeID": {
+        "full_name": "Gear type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": "GearTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "GrossTonnage": {
+        "full_name": "Gross tonnage",
+        "description": "The gross tonnage of the vessel involved in the occurrence. Gross tonnage is the volume capacity of the spaces within the hull and of the enclosed spaces above deck for cargo, fuel, passengers, and crew. ",
+        "data_type": "numeric",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "HullMaterialDisplayEng": {
+        "full_name": "Hull material (English)",
+        "description": "The material that the hull of the vessel involved in the occurrence is made out of, in English.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "HullMaterialID"
+      },
+      "HullMaterialID": {
+        "full_name": "Hull material identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": "HullMaterialDisplayEng",
+        "display_to_id_map": null
+      },
+      "HullMaterialTypeDisplayFre": {
+        "full_name": "Hull material type (French)",
+        "description": "The material that the hull of the vessel involved in the occurrence is made out of, in French.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "IMO": {
+        "full_name": "International Maritime Organization",
+        "description": "The number assigned to the vessel by the International Maritime Organization.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ImoClass": {
+        "full_name": "International Maritime Organization class",
+        "description": "Indicates the IMO Classification of an occurrence, based on the IMO Code of International Standards and Recommended Practices for a Safety Investigation into a Marine Casualty or Marine Incident (Casualty Investigation Code). ",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "Length_Meters": {
+        "full_name": "Length (metres)",
+        "description": "The length of the vessel, in metres.",
+        "data_type": "numeric",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "LengthTypeDisplayEng": {
+        "full_name": "Length type (English)",
+        "description": "Indicates whether the vessel's length is its overall or registered length, in English.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "LengthTypeID"
+      },
+      "LengthTypeDisplayFre": {
+        "full_name": "Length type (French)",
+        "description": "Indicates whether the vessel's length is its overall or registered length, in French.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "LengthTypeID": {
+        "full_name": "Length type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "unknown",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": "LengthTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "MMSI": {
+        "full_name": "Maritime Mobile Service Identity",
+        "description": "A Maritime Mobile Service Identity (MMSI) is a 9-digit unique identifier of a vessel. It is sent in digital form over a radio frequency channel.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "MultipleFishingOpsEnum": {
+        "full_name": "Multiple fishery operations enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "MultipleFishingOpsDisplayEng",
+        "display_to_id_map": null
+      },
+      "MultipleFishingOpsDisplayEng": {
+        "full_name": "Multiple fishery operations (English)",
+        "description": "Indicates whether the vessel was engaged in multiple fishing operations at the time of the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "MultipleFishingOpsEnum"
+      },
+      "MultipleFishingOpsDisplayFre": {
+        "full_name": "Multiple fishery operations (French)",
+        "description": "Indicates whether the vessel was engaged in multiple fishing operations at the time of the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "NumberOfCrew": {
+        "full_name": "Number of crew",
+        "description": "The number of crew members on board the vessel.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "NumberOfEvacuated": {
+        "full_name": "Number of evacuated",
+        "description": "The number of people evacuated from the vessel.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "NumberOfGuest": {
+        "full_name": "Number of guests",
+        "description": "The number of guests on board the vessel.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "NumberOfOther": {
+        "full_name": "Number of others",
+        "description": "The number of other people (e.g., repair crew) on board the vessel.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "NumberOfPass": {
+        "full_name": "Number of passengers",
+        "description": "The number of passengers on board the vessel.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "NumberOfPilots": {
+        "full_name": "Number of pilots",
+        "description": "The number of pilots on board the vessel.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OccID": {
+        "full_name": "Occurrence identification number",
+        "description": "The occurrence identification number; a unique identifier for the occurrence assigned by MARSIS.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OccNo": {
+        "full_name": "Occurrence number",
+        "description": "The TSB occurrence number; a unique identifier for the occurrence. The \"M\" is to identify Marine mode followed by 2 digits to identify the year of the occurrence. The letter after the year is to identify the TSB region responsible for investigating the occurrence. This is followed by the sequential number assigned by the MARSIS application.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselID": {
+        "full_name": "Vessel identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselName": {
+        "full_name": "Vessel name",
+        "description": "The name of the vessel.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OccTypeDisplayEng": {
+        "full_name": "Occurrence type (English)",
+        "description": "Indicates whether the occurrence was an accident or reportable incident, in English. ",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "OccTypeID"
+      },
+      "OccTypeDisplayFre": {
+        "full_name": "Occurrence type (French)",
+        "description": "Indicates whether the occurrence was an accident or reportable incident, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OccTypeID": {
+        "full_name": "Occurrence type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "OccTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "OccurrencePrimaryAccIncIND": {
+        "full_name": "Occurrence primary accident or incident indicator",
+        "description": "Indicates whether the accident/incident type is the primary accident/incident of the occurrence (0=no, 1=yes).",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OfficialNo": {
+        "full_name": "Official number",
+        "description": "The vessel's official number, assigned to it by its flag state.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OtherDamageObjectID": {
+        "full_name": "Other damage object identification number",
+        "description": "A system-generated number for the purposes of database \nadministration.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OtherObjectDamageDegreeDisplayEng": {
+        "full_name": "Other object damage degree (English)",
+        "description": "The degree of damage to the other object, in English.",
+        "data_type": "varchar",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "OtherObjectDamageDegreeID"
+      },
+      "OtherObjectDamageDegreeDisplayFre": {
+        "full_name": "Other object damage degree (French)",
+        "description": "The degree of damage to the other object, in French.",
+        "data_type": "varchar",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OtherObjectDamageDegreeID": {
+        "full_name": "Other object damage degree identification number",
+        "description": "A system-generated number for the purposes of database \nadministration.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": "OtherObjectDamageDegreeDisplayEng",
+        "display_to_id_map": null
+      },
+      "OtherObjectDisplayEng": {
+        "full_name": "Other object (English)",
+        "description": "The subtype of object (other than the vessel) that was damaged in the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "OtherObjectID"
+      },
+      "OtherObjectDisplayFre": {
+        "full_name": "Other object (French)",
+        "description": "The subtype of object (other than the vessel) that was damaged in the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OtherObjectIceRelatedDamageIND": {
+        "full_name": "Other object ice-related damage indicator",
+        "description": "Indicates whether there was ice-related damage to the object (0=no, 1=yes).",
+        "data_type": "smallint",
+        "category": "environmental",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OtherObjectID": {
+        "full_name": "Other object identification number",
+        "description": "A system-generated number for the purposes of database \nadministration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "OtherObjectDisplayEng",
+        "display_to_id_map": null
+      },
+      "OtherObjectTypeDisplayEng": {
+        "full_name": "Other object type (English)",
+        "description": "The type of object (other than the vessel) that was damaged in the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "OtherObjectTypeID"
+      },
+      "OtherObjectTypeDisplayFre": {
+        "full_name": "Other object type (French)",
+        "description": "The type of object (other than the vessel) that was damaged in the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OtherObjectTypeID": {
+        "full_name": "Other object identification number",
+        "description": "A system-generated number for the purposes of database \nadministration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "OtherObjectTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "ParentVesselID": {
+        "full_name": "Parent vessel identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ParentVesselName": {
+        "full_name": "Parent vessel name",
+        "description": "The name of the parent vessel.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ParentVesselVersion": {
+        "full_name": "Parent vessel version",
+        "description": "The version of the parent vessel at the time of the occurrence.",
+        "data_type": "int",
+        "category": "admin",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "PortOfRegistryDisplayEng": {
+        "full_name": "Port of registry (English)",
+        "description": "The vessel's port of registry, in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "PortOfRegistryID"
+      },
+      "PortOfRegistryDisplayFre": {
+        "full_name": "Port of registry (French)",
+        "description": "The vessel's port of registry, in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "PortOfRegistryID": {
+        "full_name": "Port of registry identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "PortOfRegistryDisplayEng",
+        "display_to_id_map": null
+      },
+      "VesselPrimaryAccIncTypeIND": {
+        "full_name": "Primary accident or incident type indicator",
+        "description": "Indicates the primary accident/incident type for the vessel.",
+        "data_type": "smallint",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ProdReleaseEnum": {
+        "full_name": "Product release enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "ProdReleaseEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "ProdReleaseEnumDisplayEng": {
+        "full_name": "Product release (English)",
+        "description": "Indicates whether any product was released, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "ProdReleaseEnum"
+      },
+      "ProdReleaseEnumEnumDisplayFre": {
+        "full_name": "Product release (French)",
+        "description": "Indicates whether any product was released, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ProdReleaseLocEnum": {
+        "full_name": "Product release location enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "ProdReleaseLocEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "ProdReleaseLocEnumDisplayEng": {
+        "full_name": "Product release location (English)",
+        "description": "Indicates where the released product was stored, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "ProdReleaseLocEnum"
+      },
+      "ProdReleaseLocEnumDisplayFre": {
+        "full_name": "Product release location (French)",
+        "description": "Indicates where the released product was stored, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ProductDetailDisplayEng": {
+        "full_name": "Product detail (English)",
+        "description": "The subcategory of cargo product on board, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "ProductDetailID"
+      },
+      "ProductDetailDisplayFre": {
+        "full_name": "Product detail (French)",
+        "description": "The subcategory of cargo product on board, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ProductDetailID": {
+        "full_name": "Product detail identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "ProductDetailDisplayEng",
+        "display_to_id_map": null
+      },
+      "PropulsionTypeDisplayEng": {
+        "full_name": "Propulsion type (English)",
+        "description": "Indicates the type of propulsion of the vessel, in English.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "PropulsionTypeID"
+      },
+      "PropulsionTypeDisplayFre": {
+        "full_name": "Propulsion type (French)",
+        "description": "Indicates the type of propulsion of the vessel, in French.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "PropulsionTypeID": {
+        "full_name": "Propulsion type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": "PropulsionTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "QuantityOnBoard": {
+        "full_name": "Quantity on board",
+        "description": "The quantity of product on board the vessel.",
+        "data_type": "numeric",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "QuantityOnBoardUnitsDisplayEng": {
+        "full_name": "Units of quantity on board (English)",
+        "description": "The units used to describe the quantity of product on board the vessel, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "QuantityOnBoardUnitsEnum"
+      },
+      "QuantityOnBoardUnitsDisplayFre": {
+        "full_name": "Units of quantity on board (French)",
+        "description": "The units used to describe the quantity of product on board the vessel, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "QuantityOnBoardUnitsEnum": {
+        "full_name": "Units of quantity on board enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "QuantityOnBoardUnitsDisplayEng",
+        "display_to_id_map": null
+      },
+      "QuantityReleased": {
+        "full_name": "Quantity released",
+        "description": "The quantity of hazardous product released from the vessel at the time of the occurrence.",
+        "data_type": "numeric",
+        "category": "admin",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "QuantityReleasedUnitsEnum": {
+        "full_name": "Units of quantity released enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "QuantReleasedUnitsDisplayEng",
+        "display_to_id_map": null
+      },
+      "QuantReleasedUnitsDisplayEng": {
+        "full_name": "Units of quantity released (English)",
+        "description": "The units used to describe the quantity of hazardous product released from the vessel at the time of the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "admin",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "QuantityReleasedUnitsEnum"
+      },
+      "QuantReleasedUnitsDisplayFre": {
+        "full_name": "Units of quantity released (French)",
+        "description": "The units used to describe the quantity of hazardous product released from the vessel at the time of the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "admin",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "SeaPollutionDegreeDisplayEng": {
+        "full_name": "Sea pollution degree (English)",
+        "description": "The degree of sea pollution resulting from the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "environmental",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "SeaPollutionDegreeID"
+      },
+      "SeaPollutionDegreeDisplayFre": {
+        "full_name": "Sea pollution degree (French)",
+        "description": "The degree of sea pollution resulting from the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "environmental",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "SeaPollutionDegreeID": {
+        "full_name": "Sea pollution degree identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "environmental",
+        "is_boolean": false,
+        "id_to_display_map": "SeaPollutionDegreeDisplayEng",
+        "display_to_id_map": null
+      },
+      "SmsOnBoardDisplayEng": {
+        "full_name": "Safety management system on board (English)",
+        "description": "Indicates whether a safety management system was used on board, in English.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "SmsOnBoardEnum"
+      },
+      "SmsOnBoardDisplayFre": {
+        "full_name": "Safety management system on board (French)",
+        "description": "Indicates whether a safety management system was used on board, in French.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "SmsOnBoardEnum": {
+        "full_name": "Safety management system on board enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": "SmsOnBoardDisplayEng",
+        "display_to_id_map": null
+      },
+      "SmsTypeDisplayEng": {
+        "full_name": "Safety management system type (English)",
+        "description": "The type of safety management system used on board, in English. ",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "SmsTypeEnum"
+      },
+      "SmsTypeDisplayFre": {
+        "full_name": "Safety management system type (French)",
+        "description": "The type of safety management system used on board, in French. ",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "SmsTypeEnum": {
+        "full_name": "Safety management system type enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": "SmsTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "Speed_Knots": {
+        "full_name": "Speed (knots)",
+        "description": "The vessel's speed, in knots.",
+        "data_type": "numeric",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "StowedOnDeckEnum": {
+        "full_name": "Stowed on deck enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": "StowedOnDeckEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "StowedOnDeckEnumDisplayEng": {
+        "full_name": "Stowed on deck (English)",
+        "description": "Indicates whether cargo was stowed on deck, in English.",
+        "data_type": "varchar",
+        "category": "voyage_activity",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "StowedOnDeckEnum"
+      },
+      "StowedOnDeckEnumDisplayFre": {
+        "full_name": "Stowed on deck (French)",
+        "description": "Indicates whether cargo was stowed on deck, in French.",
+        "data_type": "varchar",
+        "category": "voyage_activity",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TotalLength_Meters": {
+        "full_name": "Total length (metres)",
+        "description": "The total length of the vessel, in metres.",
+        "data_type": "numeric",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TotalPeopleOnBoard": {
+        "full_name": "Total people on board",
+        "description": "The total number of people on board the vessel.",
+        "data_type": "unknown",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TotalVesselDeaths": {
+        "full_name": "Total vessel deaths",
+        "description": "The total number of persons on board the vessel who died as a result of the occurrence.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TotalVesselMinorInjuries": {
+        "full_name": "Total vessel minor injuries",
+        "description": "The total number of persons on board the vessel who received minor injuries as a result of the occurrence.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TotalVesselMissingIndividuals": {
+        "full_name": "Total vessel missing individuals",
+        "description": "The total number of persons on board the vessel who are missing as a result of the occurrence.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TotalVesselPeopleInTheWater": {
+        "full_name": "Total vessel people in the water",
+        "description": "The total number of persons on board the vessel who were in the water as a result of the occurrence.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TotalVesselSeriousInjuries": {
+        "full_name": "Total vessel serious injuries",
+        "description": "The total number of persons on board the vessel who were seriously injured as a result of the occurrence.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TowedSequence": {
+        "full_name": "Towed sequence",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "smallint",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TowedVesselID": {
+        "full_name": "Towed vessel identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TowedVesselName": {
+        "full_name": "Towed vessel name",
+        "description": "The name of the vessel being towed.",
+        "data_type": "varchar",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TowedVesselTypeDisplayEng": {
+        "full_name": "Towed vessel type (English)",
+        "description": "The type of vessel being towed, in English.",
+        "data_type": "varchar",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "TowedVesselTypeID"
+      },
+      "TowedVesselTypeDisplayFre": {
+        "full_name": "Towed vessel type (French)",
+        "description": "The type of vessel being towed, in French.",
+        "data_type": "varchar",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TowedVesselTypeID": {
+        "full_name": "Towed vessel type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": "TowedVesselTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "TowedVesselVersion": {
+        "full_name": "Towed vessel version",
+        "description": "The version of the vessel being towed.",
+        "data_type": "int",
+        "category": "admin",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TowingPushingInd": {
+        "full_name": "Towing or pushing indicator",
+        "description": "Indicates whether the vessel was either towing or pushing another vessel or barge.",
+        "data_type": "int",
+        "category": "voyage_activity",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TowlineLength_Meters": {
+        "full_name": "Towline length (metres)",
+        "description": "The length of the towline between the tug and the vessel being towed, in metres.",
+        "data_type": "numeric",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "UnNumber": {
+        "full_name": "UN number",
+        "description": "The UN number of the product released as a result of the occurrence.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselBuilderAddressLine1": {
+        "full_name": "Vessel builder address line 1",
+        "description": "The first line of the address of the vessel builder.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselBuilderAddressLine2": {
+        "full_name": "Vessel builder address line 1",
+        "description": "The second line of the address of the vessel builder.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselBuilderCity": {
+        "full_name": "Vessel builder city",
+        "description": "The city of the vessel builder.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselBuilderCountryDisplayEng": {
+        "full_name": "Vessel builder country (English)",
+        "description": "The country of the vessel builder, in English.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "VesselBuilderCountryID"
+      },
+      "VesselBuilderCountryDisplayFre": {
+        "full_name": "Vessel builder country (French)",
+        "description": "The country of the vessel builder, in French.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselBuilderCountryID": {
+        "full_name": "Vessel builder country identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": "VesselBuilderCountryDisplayEng",
+        "display_to_id_map": null
+      },
+      "VesselBuilderEmailAddress": {
+        "full_name": "Vessel builder email address",
+        "description": "The email address of the vessel builder.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselBuilderID": {
+        "full_name": "Vessel builder identification number",
+        "description": "Builder Id is the unique Identifier of a builder of a vessel.",
+        "data_type": "int",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselBuilderName": {
+        "full_name": "Vessel builder name",
+        "description": "The name of the vessel builder.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselBuilderPhoneNumber": {
+        "full_name": "Vessel builder telephone number",
+        "description": "The telephone number of the vessel builder.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselBuilderPostalZipCode": {
+        "full_name": "Vessel builder postal code or zip code",
+        "description": "The postal code or zip code of the vessel builder.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselBuilderProvince": {
+        "full_name": "Vessel builder province",
+        "description": "The province of the vessel builder.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselCargoID": {
+        "full_name": "Vessel cargo identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselDamageDegreeDisplayEng": {
+        "full_name": "Vessel damage degree (English)",
+        "description": "The degree of damage to the vessel, in English.",
+        "data_type": "varchar",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "VesselDamageDegreeID"
+      },
+      "VesselDamageDegreeDisplayFre": {
+        "full_name": "Vessel damage degree (French)",
+        "description": "The degree of damage to the vessel, in French.",
+        "data_type": "varchar",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselDamageDegreeID": {
+        "full_name": "Vessel damage degree identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": "VesselDamageDegreeDisplayEng",
+        "display_to_id_map": null
+      },
+      "VesselDamageID": {
+        "full_name": "Vessel damage identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselDamageLocationCategoryDisplayEng": {
+        "full_name": "Vessel damage location category (English)",
+        "description": "The category of the location of the damage to the vessel, in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "VesselDamageLocationCategoryID"
+      },
+      "VesselDamageLocationCategoryDisplayFre": {
+        "full_name": "Vessel damage location category (French)",
+        "description": "The category of the location of the damage to the vessel, in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselDamageLocationCategoryID": {
+        "full_name": "Vessel damage location category identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "VesselDamageLocationCategoryDisplayEng",
+        "display_to_id_map": null
+      },
+      "VesselDamageLocationDisplayEng": {
+        "full_name": "Vessel damage location (English)",
+        "description": "The location of the damage to the vessel, in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "VesselDamageLocationID"
+      },
+      "VesselDamageLocationDisplayFre": {
+        "full_name": "Vessel damage location (French)",
+        "description": "The location of the damage to the vessel, in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselDamageLocationID": {
+        "full_name": "Vessel damage location identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "VesselDamageLocationDisplayEng",
+        "display_to_id_map": null
+      },
+      "VesselDamageLocationSubCategoryDisplayEng": {
+        "full_name": "Vessel damage location subcategory (English)",
+        "description": "The subcategory of the location of the damage to the vessel, in English.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "VesselDamageLocationSubCategoryID"
+      },
+      "VesselDamageLocationSubCategoryDisplayFre": {
+        "full_name": "Vessel damage location subcategory (French)",
+        "description": "The subcategory of the location of the damage to the vessel, in French.",
+        "data_type": "varchar",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselDamageLocationSubCategoryID": {
+        "full_name": "Vessel damage location subcategory identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "spatial",
+        "is_boolean": false,
+        "id_to_display_map": "VesselDamageLocationSubCategoryDisplayEng",
+        "display_to_id_map": null
+      },
+      "VesselFlagDisplayEng": {
+        "full_name": "Vessel flag (English)",
+        "description": "The flag country of the vessel, in English.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "VesselFlagID"
+      },
+      "VesselFlagDisplayFre": {
+        "full_name": "Vessel flag (French)",
+        "description": "The flag country of the vessel, in French.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselFlagID": {
+        "full_name": "Vessel flag identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": "VesselFlagDisplayEng",
+        "display_to_id_map": null
+      },
+      "VesselIceRelatedDamageIND": {
+        "full_name": "Vessel ice-related damage indicator",
+        "description": "Indicates whether the vessel sustained ice-related damage (0=no, 1=yes).",
+        "data_type": "smallint",
+        "category": "environmental",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselPhaseDisplayEng": {
+        "full_name": "Vessel phase (English)",
+        "description": "The part of the voyage that the vessel was in at the time of the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "VesselPhaseID"
+      },
+      "VesselPhaseDisplayFre": {
+        "full_name": "Vessel phase (French)",
+        "description": "The part of the voyage that the vessel was in at the time of the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselPhaseID": {
+        "full_name": "Vessel phase identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "voyage_activity",
+        "is_boolean": false,
+        "id_to_display_map": "VesselPhaseDisplayEng",
+        "display_to_id_map": null
+      },
+      "VesselSubTypeDisplayEng": {
+        "full_name": "Vessel subtype (English)",
+        "description": "The subtype of the vessel, in English.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "VesselSubTypeID"
+      },
+      "VesselSubTypeDisplayFre": {
+        "full_name": "Vessel subtype (French)",
+        "description": "The subtype of the vessel, in French.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselSubTypeID": {
+        "full_name": "Vessel subtype identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": "VesselSubTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "VesselTypeDisplayEng": {
+        "full_name": "Vessel type (English)",
+        "description": "The type of the vessel, in English.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "VesselTypeID"
+      },
+      "VesselTypeDisplayFre": {
+        "full_name": "Vessel type (French)",
+        "description": "The type of the vessel, in French.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselTypeID": {
+        "full_name": "Vessel type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": "VesselTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "VesselVersion": {
+        "full_name": "Vessel version",
+        "description": "The version of the vessel.",
+        "data_type": "int",
+        "category": "admin",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VRN": {
+        "full_name": "Vessel registration number",
+        "description": "The vessel registration number issued by Fisheries and Oceans Canada.",
+        "data_type": "varchar",
+        "category": "other",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "Width_Meters": {
+        "full_name": "Width (metres)",
+        "description": "The width of the vessel, in metres.",
+        "data_type": "numeric",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "WidthTypeDisplayEng": {
+        "full_name": "Width type (English)",
+        "description": "The type of vessel width, in English.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "WidthTypeID"
+      },
+      "WidthTypeDisplayFre": {
+        "full_name": "Width type (French)",
+        "description": "The type of vessel width, in French.",
+        "data_type": "varchar",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "WidthTypeID": {
+        "full_name": "Width type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "vessel_profile",
+        "is_boolean": false,
+        "id_to_display_map": "WidthTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "XrfActvityID": {
+        "full_name": "Activity identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "admin",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "xrfTowedVesselID": {
+        "full_name": "Towed vessel identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "admin",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "YearBuilt": {
+        "full_name": "Year built",
+        "description": "The year in which the vessel was built.",
+        "data_type": "smallint",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "YearRebuilt": {
+        "full_name": "Year rebuilt",
+        "description": "The year in which the vessel was rebuilt.",
+        "data_type": "smallint",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      }
+    },
+    "MDOTW_VW_OCCURRENCE_VESSEL_LSA_EQUIPMENT_PUBLIC": {
+      "ApprovedEnum": {
+        "full_name": "Approved enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "ApprovedEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "ApprovedEnumDisplayEng": {
+        "full_name": "Approved (English)",
+        "description": "Indicates whether the vessel had approved life-saving equipment on board at the time of the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "ApprovedEnum"
+      },
+      "ApprovedEnumDisplayFre": {
+        "full_name": "Approved (French)",
+        "description": "Indicates whether the vessel had approved life-saving equipment on board at the time of the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "LsApplianceDisplayEng": {
+        "full_name": "Life-saving appliance (English)",
+        "description": "The life-saving appliance on board the occurrence vessel, in English. A life-saving appliance is any device that may be used to aid an individual or vessel in an occurrence.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "LsApplianceID"
+      },
+      "LsApplianceDisplayFre": {
+        "full_name": "Life-saving appliance (French)",
+        "description": "The life-saving appliance on board the occurrence vessel, in French. A life-saving appliance is any device that may be used to aid an individual or vessel in an occurrence.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "LsApplianceID": {
+        "full_name": "Life-saving appliance identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "LsApplianceDisplayEng",
+        "display_to_id_map": null
+      },
+      "OccID": {
+        "full_name": "Occurrence identification number",
+        "description": "The occurrence identification number; a unique identifier for the occurrence assigned by MARSIS.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OccNo": {
+        "full_name": "Occurrence number",
+        "description": "The TSB occurrence number; a unique identifier for the occurrence. The \"M\" is to identify Marine mode followed by 2 digits to identify the year of the occurrence. The letter after the year is to identify the TSB region responsible for investigating the occurrence. This is followed by the sequential number assigned by the MARSIS application.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "UsedEnum": {
+        "full_name": "Used enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "UsedEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "UsedEnumDisplayEng": {
+        "full_name": "Used (English)",
+        "description": "Indicates whether the lifesaving appliance was used, in English.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "UsedEnum"
+      },
+      "UsedEnumDisplayFre": {
+        "full_name": "Used (French)",
+        "description": "Indicates whether the lifesaving appliance was used, in French.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselID": {
+        "full_name": "Vessel identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselName": {
+        "full_name": "Vessel name",
+        "description": "The name of the vessel.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "XrfOccVesselLsApplianceID": {
+        "full_name": "Occurrence vessel lifesaving appliance identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "admin",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      }
+    },
+    "MDOTW_VW_OCCURRENCE_VESSEL_REC_EQUIPMENT_PUBLIC": {
+      "CapsuleAudioFilesDelEnum": {
+        "full_name": "Capsule audio files deleted enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "CapsuleAudioFilesDelEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "CapsuleAudioFilesDelEnumDisplayEng": {
+        "full_name": "Capsule audio files deleted (English)",
+        "description": "Indicates whether the files on the voice data recorder's float-free capsule were deleted, in English.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "CapsuleAudioFilesDelEnum"
+      },
+      "CapsuleAudioFilesDelEnumDisplayFre": {
+        "full_name": "Capsule audio files deleted (French)",
+        "description": "Indicates whether the files on the voice data recorder's float-free capsule were deleted, in French.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "CapsuleAudioFilesSegregatedEnum": {
+        "full_name": "Capsule audio files segregated enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "CapsuleAudioFilesSegregatedEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "CapsuleAudioFilesSegregatedEnumDisplayEng": {
+        "full_name": "Capsule audio files segregated (English)",
+        "description": "Indicates whether the audio files on the voice data recorder's float-free capsule were segregated, in English. ",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "CapsuleAudioFilesSegregatedEnum"
+      },
+      "CapsuleAudioFilesSegregatedEnumDisplayFre": {
+        "full_name": "Capsule audio files segregated (French)",
+        "description": "Indicates whether the audio files on the voice data recorder's float-free capsule were segregated, in French.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "CapsuleRecCapacity_NumberOfDays": {
+        "full_name": "Capsule recording capacity in number of days",
+        "description": "The storage capacity of the voice data recorder's float-free capsule, in days.",
+        "data_type": "numeric",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "DataExtractedEnum": {
+        "full_name": "Data extracted enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "DataExtractedEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "DataExtractedEnumDisplayEng": {
+        "full_name": "Data extracted (English)",
+        "description": "Indicates whether data were extracted from the vessel's video data recorder float-free device, in English. ",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "DataExtractedEnum"
+      },
+      "DataExtractedEnumDisplayFre": {
+        "full_name": "Data extracted (French)",
+        "description": "Indicates whether data were extracted from the vessel's video data recorder float-free device, in French. ",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "EquipSeizedEnum": {
+        "full_name": "Equipment seized enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "EquipSeizedEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "EquipSeizedEnumDisplayEng": {
+        "full_name": "Equipment seized (English)",
+        "description": "Indicates whether voyage data recorder equipment was seized by the TSB, in English.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "EquipSeizedEnum"
+      },
+      "EquipSeizedEnumDisplayFre": {
+        "full_name": "Equipment seized (French)",
+        "description": "Indicates whether voyage data recorder equipment was seized by the TSB, in French.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "InstructionAvailableEnum": {
+        "full_name": "Instruction available enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "InstructionAvailableEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "InstructionAvailableEnumDisplayEng": {
+        "full_name": "Instruction available (English)",
+        "description": "Indicates whether the instructions for the VDR equipment were available, in English.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "InstructionAvailableEnum"
+      },
+      "InstructionAvailableEnumDisplayFre": {
+        "full_name": "Instruction available (French)",
+        "description": "Indicates whether the instructions for the VDR equipment were available, in French.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "InstructionsPostedEnum": {
+        "full_name": "Instructions posted enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "InstructionsPostedEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "InstructionsPostedEnumDisplayEng": {
+        "full_name": "Instructions posted (English)",
+        "description": "Indicates whether the instructions for the VDR equipment were posted, in English.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "InstructionsPostedEnum"
+      },
+      "InstructionsPostedEnumDisplayFre": {
+        "full_name": "Instructions posted (French)",
+        "description": "Indicates whether the instructions for the VDR equipment were posted, in French.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OccID": {
+        "full_name": "Occurrence identification number",
+        "description": "The occurrence identification number; a unique identifier for the occurrence assigned by MARSIS.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OccNo": {
+        "full_name": "Occurrence number",
+        "description": "The TSB occurrence number; a unique identifier for the occurrence. The \"M\" is to identify Marine mode followed by 2 digits to identify the year of the occurrence. The letter after the year is to identify the TSB region responsible for investigating the occurrence. This is followed by the sequential number assigned by the MARSIS application.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ReasonNotExtractedDisplayEng": {
+        "full_name": "Reason not extracted (English)",
+        "description": "The reason that data was not extracted from the vessel's recording equipment, in English.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "ReasonNotExtractedID"
+      },
+      "ReasonNotExtractedDisplayFre": {
+        "full_name": "Reason not extracted (French)",
+        "description": "The reason that data was not extracted from the vessel's recording equipment, in French.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "ReasonNotExtractedID": {
+        "full_name": "Reason not extracted identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "ReasonNotExtractedDisplayEng",
+        "display_to_id_map": null
+      },
+      "RecAudioFilesDelEnum": {
+        "full_name": "Recorder audio files deleted enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "RecAudioFilesDelEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "RecAudioFilesDelEnumDisplayEng": {
+        "full_name": "Recorder audio files deleted enumerated display (English)",
+        "description": "Indicates whether the vessel's voyage data recorder audio files were deleted, in English.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "RecAudioFilesDelEnum"
+      },
+      "RecAudioFilesDelEnumDisplayFre": {
+        "full_name": "Recorder audio files deleted enumerated display (French)",
+        "description": "Indicates whether the vessel's voyage data recorder audio files were deleted, in French.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "RecAudioFilesSegregatedEnum": {
+        "full_name": "Recorder audio files segregated enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "RecAudioFilesSegregatedEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "RecAudioFilesSegregatedEnumDisplayEng": {
+        "full_name": "Recorder audio files segregated enumerated  (English)",
+        "description": "Indicates whether the vessel's voyage data recorder audio files were segregated, in English.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "RecAudioFilesSegregatedEnum"
+      },
+      "RecAudioFilesSegregatedEnumDisplayFre": {
+        "full_name": "Recorder audio files segregated enumerated (French)",
+        "description": "Indicates whether the vessel's voyage data recorder audio files were segregated, in French.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "RecCapacity_NumberOfDays": {
+        "full_name": "Recording capacity number of days",
+        "description": "The storage capacity of the voyage data recorder, in days.",
+        "data_type": "numeric",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "RecordingEquipDisplayEng": {
+        "full_name": "Recording equipment (English)",
+        "description": "The type of recording equipment on board the vessel, in English.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "RecordingEquipID"
+      },
+      "RecordingEquipDisplayFre": {
+        "full_name": "Recording equipment  (French)",
+        "description": "The type of recording equipment on board the vessel, in French.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "RecordingEquipID": {
+        "full_name": "Recording equipment identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "RecordingEquipDisplayEng",
+        "display_to_id_map": null
+      },
+      "SerialNumber": {
+        "full_name": "Serial number",
+        "description": "The serial number of the voyage data recorder.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "SoftwareAudioMakeDisplayEng": {
+        "full_name": "Software audio make (English)",
+        "description": "The make of the audio software used on the vessel, in English.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "SoftwareAudioMakeID"
+      },
+      "SoftwareAudioMakeDisplayFre": {
+        "full_name": "Software audio make (French)",
+        "description": "The make of the audio software used on the vessel, in French.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "SoftwareAudioMakeID": {
+        "full_name": "Software audio make identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "SoftwareAudioMakeDisplayEng",
+        "display_to_id_map": null
+      },
+      "SoftwareAudioModelDisplayEng": {
+        "full_name": "Software audio model (English)",
+        "description": "The model of the audio software used on the vessel, in English.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "SoftwareAudioModelID"
+      },
+      "SoftwareAudioModelDisplayFre": {
+        "full_name": "Software audio model (French)",
+        "description": "The model of the audio software used on the vessel, in French.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "SoftwareAudioModelID": {
+        "full_name": "Software audio model identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "SoftwareAudioModelDisplayEng",
+        "display_to_id_map": null
+      },
+      "SoftwareVersion": {
+        "full_name": "Software version",
+        "description": "The version number of the software used on the vessel.",
+        "data_type": "varchar",
+        "category": "admin",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VdrDetailID": {
+        "full_name": "Voyage data recorder detail identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselID": {
+        "full_name": "Vessel identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselName": {
+        "full_name": "Vessel name",
+        "description": "The name of the vessel.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselSoftwareAudioID": {
+        "full_name": "Vessel software audio identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      }
+    },
+    "MDOTW_VW_INJURIES_PUBLIC": {
+      "ManuallyEnteredStatsIND": {
+        "full_name": "Manually entered statistics indicator",
+        "description": "Indicates whether the number of injuries was entered manually (0=no, 1=yes).",
+        "data_type": "smallint",
+        "category": "casualty",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OccID": {
+        "full_name": "Occurrence identification number",
+        "description": "The occurrence identification number; a unique identifier for the occurrence assigned by MARSIS.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OccNo": {
+        "full_name": "Occurrence number",
+        "description": "The TSB occurrence number; a unique identifier for the occurrence. The \"M\" is to identify Marine mode followed by 2 digits to identify the year of the occurrence. The letter after the year is to identify the TSB region responsible for investigating the occurrence. This is followed by the sequential number assigned by the MARSIS application.",
+        "data_type": "varchar",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "PeopleInWaterDontKnowLSE": {
+        "full_name": "People in water life-saving equipment unknown",
+        "description": "The number of people for whom it is not known whether they were wearing life-saving equipment.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "PeopleInWaterLseTypeDisplayEng": {
+        "full_name": "People in water life-saving equipment type (English)",
+        "description": "The type of life-saving equipment that people in the water were wearing, in English.",
+        "data_type": "varchar",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "PeopleInWaterLseTypeID"
+      },
+      "PeopleInWaterLseTypeDisplayFre": {
+        "full_name": "People in water life-saving equipment type (French)",
+        "description": "The type of life-saving equipment that people in the water were wearing, in French.",
+        "data_type": "varchar",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "PeopleInWaterLseTypeID": {
+        "full_name": "People in water life-saving equipment type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": "PeopleInWaterLseTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "PeopleInWaterNoLSE": {
+        "full_name": "People in water not wearing life-saving equipment",
+        "description": "The number of people in the water who were not wearing life-saving equipment.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "PeopleInWaterWearingLSE": {
+        "full_name": "People in water wearing life-saving equipment",
+        "description": "The number of people in the water who were wearing life-saving equipment.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TotalPeopleInWater": {
+        "full_name": "Total people in water",
+        "description": "The total number of persons in the water as a result of the occurrence.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "TotalVesselInjuries": {
+        "full_name": "Total vessel injuries",
+        "description": "The total number of persons on board the vessel who were injured as a result of the occurrence.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselID": {
+        "full_name": "Vessel identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselName": {
+        "full_name": "Vessel name",
+        "description": "The name of the vessel.",
+        "data_type": "varchar",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VictimDeath": {
+        "full_name": "Victim death",
+        "description": "The number of persons on board the vessel at the time of the occurrence who were reported dead.",
+        "data_type": "int",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VictimMinorInjuries": {
+        "full_name": "Victim minor injuries",
+        "description": "The number of persons on board the vessel at the time of the occurrence who sustained minor injuries.",
+        "data_type": "int",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VictimMissing": {
+        "full_name": "Victim missing",
+        "description": "The number of persons on board the vessel at the timing of the occurrence who were reported missing.",
+        "data_type": "int",
+        "category": "casualty",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VictimSeriousInjuries": {
+        "full_name": "Victim serious injuries",
+        "description": "The number of persons on board the vessel at the time of the occurrence who sustained serious injuries.",
+        "data_type": "int",
+        "category": "temporal",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "XrfOccVesselVictimCountID": {
+        "full_name": "Occurrence vessel victim count identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "admin",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      }
+    },
+    "MDOTW_VW_OCCURRENCE_VESSEL_NAV_EQUIPMENT_PUBLIC": {
+      "NavigationAidSubTypeDisplayEng": {
+        "full_name": "Navigation aid subtype (English)",
+        "description": "The subtype of navigation aid, in English.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "NavigationAidSubTypeID"
+      },
+      "NavigationAidSubTypeDisplayFre": {
+        "full_name": "Navigation aid subtype (French)",
+        "description": "The subtype of navigation aid, in French.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "NavigationAidSubTypeID": {
+        "full_name": "Navigation aid subtype identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "NavigationAidSubTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "NavigationAidTypeDisplayEng": {
+        "full_name": "Navigation aid type (English)",
+        "description": "The type of navigation aid, in English.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": "NavigationAidTypeID"
+      },
+      "NavigationAidTypeDisplayFre": {
+        "full_name": "Navigation aid type (French)",
+        "description": "The type of navigation aid, in French.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "NavigationAidTypeID": {
+        "full_name": "Navigation aid type identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "NavigationAidTypeDisplayEng",
+        "display_to_id_map": null
+      },
+      "OccID": {
+        "full_name": "Occurrence identification number",
+        "description": "The occurrence identification number; a unique identifier for the occurrence assigned by MARSIS.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OccNo": {
+        "full_name": "Occurrence number",
+        "description": "The TSB occurrence number; a unique identifier for the occurrence. The \"M\" is to identify Marine mode followed by 2 digits to identify the year of the occurrence. The letter after the year is to identify the TSB region responsible for investigating the occurrence. This is followed by the sequential number assigned by the MARSIS application.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "OnOffEnum": {
+        "full_name": "On or off enumerated",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": "OnOffEnumDisplayEng",
+        "display_to_id_map": null
+      },
+      "OnOffEnumDisplayEng": {
+        "full_name": "On or off (English)",
+        "description": "Indicates whether the navigation aids were on or off at the time of the occurrence, in English.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": "OnOffEnum"
+      },
+      "OnOffEnumDisplayFre": {
+        "full_name": "On or off (French)",
+        "description": "Indicates whether the navigation aids were on or off at the time of the occurrence, in French.",
+        "data_type": "varchar",
+        "category": "temporal",
+        "is_boolean": true,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselID": {
+        "full_name": "Vessel identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "VesselName": {
+        "full_name": "Vessel name",
+        "description": "The name of the vessel.",
+        "data_type": "varchar",
+        "category": "equipment",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      },
+      "XrfOccVesselNavAidID": {
+        "full_name": "Occurrence vessel navigation aid identification number",
+        "description": "A system-generated number for the purposes of database administration.",
+        "data_type": "int",
+        "category": "admin",
+        "is_boolean": false,
+        "id_to_display_map": null,
+        "display_to_id_map": null
+      }
+    }
+  },
+  "id_to_display": {
+    "MDOTW_VW_INJURIES_PUBLIC": {
+      "PeopleInWaterLseTypeID": "PeopleInWaterLseTypeDisplayEng"
+    },
+    "MDOTW_VW_OCCURRENCE_PUBLIC": {
+      "AccIncTypeID": "AccIncTypeDisplayEng",
+      "AreaTypeID": "AreaTypeDisplayEng",
+      "BearingID": "BearingDisplay",
+      "BeaufortScaleID": "BeaufortScaleDisplayEng",
+      "BergyBitsEnum": "BergyBitsEnumDisplayEng",
+      "DamageIND": "DamageIND_DisplayEng",
+      "DeployedIND": "DeployedIND_DisplayEng",
+      "FatigueContFactorEnum": "FatigueContFactorEnum_DisplayEng",
+      "FatigueInvestEnum": "FatigueInvestEnum_DisplayEng",
+      "GrowlersEnum": "GrowlersEnumDisplayEng",
+      "IcebergEnum": "IcebergEnumDisplayEng",
+      "ImoClassLevelID": "ImoClasslevelDisplayEng",
+      "IncludedInDailyEnum": "IncludedInDailyEnumDisplayEng",
+      "InjuriesIND": "InjuriesIND_DisplayEng",
+      "LightConditionID": "LightConditionDisplayEng",
+      "LongEnum": "LongEnum_Bearing_DisplayEng",
+      "ObservedByID": "ObservedByDisplayEng",
+      "OccClassID": "OccClassDisplayEng",
+      "OccurrenceTypeID": "OccTypeDisplayEng",
+      "OtherStateInvestigatingID": "OtherStateInvestigatingDisplayEng",
+      "PollutionIND": "PollutionIND_DisplayEng",
+      "PositionEstimatedIND": "PositionEstimatedIND_DisplayEng",
+      "PositionTypeEnum": "PositionTypeDisplayEng",
+      "ProvinceID": "ProvinceDisplayEng",
+      "RegionOfOccurrenceID": "RegionOfOccurrenceDisplayEng",
+      "RegionResponsibilityID": "RegionResponsibilityDisplayEng",
+      "ReportedByID": "ReportedByDisplayEng",
+      "ReportSourceID": "ReportSourceDisplayEng",
+      "RoutingID": "RoutingDisplayEng",
+      "SafetyCommIssuedIND": "SafetyCommIssuedIND_DisplayEng",
+      "SearchAndRescueIND": "SearchAndRescueIND_DisplayEng",
+      "SeaStateID": "SeaStateDisplayEng",
+      "SubstantiallyInterestedStateID": "SubstantiallyInterestedStateDisplayEng",
+      "TimeZoneID": "TimeZoneDisplayEng",
+      "UnderIceRegimeEnum": "UnderIceRegimeEnumDisplayEng",
+      "VesselIcingPresentEnum": "VesselIcingPresentEnumDisplayEng",
+      "VesselIcingQualificationID": "VesselIcingQualificationDisplayEng",
+      "WeatherConditionID": "WeatherConditionDisplayEng",
+      "WeatherFactorEnum": "WeatherFactorEnum_DisplayEng",
+      "WindSpeedTypeID": "WindSpeedTypeDisplayEng",
+      "WithInPilotBoardingAreaEnum": "WithInPilotBoardingAreaEnum_DisplayEng"
+    },
+    "MDOTW_VW_OCCURRENCE_VESSEL_LSA_EQUIPMENT_PUBLIC": {
+      "ApprovedEnum": "ApprovedEnumDisplayEng",
+      "LsApplianceID": "LsApplianceDisplayEng",
+      "UsedEnum": "UsedEnumDisplayEng"
+    },
+    "MDOTW_VW_OCCURRENCE_VESSEL_NAV_EQUIPMENT_PUBLIC": {
+      "NavigationAidSubTypeID": "NavigationAidSubTypeDisplayEng",
+      "NavigationAidTypeID": "NavigationAidTypeDisplayEng",
+      "OnOffEnum": "OnOffEnumDisplayEng"
+    },
+    "MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC": {
+      "AccIncTypeID": "AccIncTypeDisplayEng",
+      "ActivityCategoryID": "ActivityCategoryDisplayEng",
+      "ActivityTypeID": "ActivityTypeDisplayEng",
+      "AirPollutionEnum": "AirPollutionDisplayEng",
+      "CargoCategoryID": "CargoCategoryDisplayEng",
+      "CargoProductTypeID": "CargoProductTypeDisplayEng",
+      "ClassSocietyID": "ClassSocietyDisplayEng",
+      "DepartureCountryID": "DepartureCountryDisplayEng",
+      "DepartureLocationTypeID": "DepartureLocationTypeDisplayEng",
+      "DeparturePortID": "DeparturePortDisplayEng",
+      "DepartureTimeZoneID": "DepartureTimeZoneDisplayEng",
+      "DestinationCountryID": "DestinationCountryDisplayEng",
+      "DestinationLocationTypeID": "DestinationLocationTypeDisplayEng",
+      "DestinationPortID": "DestinationPortDisplayEng",
+      "DestinationTimeZoneID": "DestinationTimeZoneDisplayEng",
+      "FisheryTypeID": "FisheryTypeDisplayEng",
+      "GearTypeID": "GearTypeDisplayEng",
+      "HullMaterialID": "HullMaterialDisplayEng",
+      "LengthTypeID": "LengthTypeDisplayEng",
+      "MultipleFishingOpsEnum": "MultipleFishingOpsDisplayEng",
+      "OccTypeID": "OccTypeDisplayEng",
+      "OtherObjectDamageDegreeID": "OtherObjectDamageDegreeDisplayEng",
+      "OtherObjectID": "OtherObjectDisplayEng",
+      "OtherObjectTypeID": "OtherObjectTypeDisplayEng",
+      "PortOfRegistryID": "PortOfRegistryDisplayEng",
+      "ProdReleaseEnum": "ProdReleaseEnumDisplayEng",
+      "ProdReleaseLocEnum": "ProdReleaseLocEnumDisplayEng",
+      "ProductDetailID": "ProductDetailDisplayEng",
+      "PropulsionTypeID": "PropulsionTypeDisplayEng",
+      "QuantityOnBoardUnitsEnum": "QuantityOnBoardUnitsDisplayEng",
+      "QuantityReleasedUnitsEnum": "QuantReleasedUnitsDisplayEng",
+      "SeaPollutionDegreeID": "SeaPollutionDegreeDisplayEng",
+      "SmsOnBoardEnum": "SmsOnBoardDisplayEng",
+      "SmsTypeEnum": "SmsTypeDisplayEng",
+      "StowedOnDeckEnum": "StowedOnDeckEnumDisplayEng",
+      "TowedVesselTypeID": "TowedVesselTypeDisplayEng",
+      "VesselBuilderCountryID": "VesselBuilderCountryDisplayEng",
+      "VesselDamageDegreeID": "VesselDamageDegreeDisplayEng",
+      "VesselDamageLocationCategoryID": "VesselDamageLocationCategoryDisplayEng",
+      "VesselDamageLocationID": "VesselDamageLocationDisplayEng",
+      "VesselDamageLocationSubCategoryID": "VesselDamageLocationSubCategoryDisplayEng",
+      "VesselFlagID": "VesselFlagDisplayEng",
+      "VesselPhaseID": "VesselPhaseDisplayEng",
+      "VesselSubTypeID": "VesselSubTypeDisplayEng",
+      "VesselTypeID": "VesselTypeDisplayEng",
+      "WidthTypeID": "WidthTypeDisplayEng"
+    },
+    "MDOTW_VW_OCCURRENCE_VESSEL_REC_EQUIPMENT_PUBLIC": {
+      "CapsuleAudioFilesDelEnum": "CapsuleAudioFilesDelEnumDisplayEng",
+      "CapsuleAudioFilesSegregatedEnum": "CapsuleAudioFilesSegregatedEnumDisplayEng",
+      "DataExtractedEnum": "DataExtractedEnumDisplayEng",
+      "EquipSeizedEnum": "EquipSeizedEnumDisplayEng",
+      "InstructionAvailableEnum": "InstructionAvailableEnumDisplayEng",
+      "InstructionsPostedEnum": "InstructionsPostedEnumDisplayEng",
+      "ReasonNotExtractedID": "ReasonNotExtractedDisplayEng",
+      "RecAudioFilesDelEnum": "RecAudioFilesDelEnumDisplayEng",
+      "RecAudioFilesSegregatedEnum": "RecAudioFilesSegregatedEnumDisplayEng",
+      "RecordingEquipID": "RecordingEquipDisplayEng",
+      "SoftwareAudioMakeID": "SoftwareAudioMakeDisplayEng",
+      "SoftwareAudioModelID": "SoftwareAudioModelDisplayEng"
+    }
+  },
+  "display_to_id": {
+    "MDOTW_VW_INJURIES_PUBLIC": {
+      "PeopleInWaterLseTypeDisplayEng": "PeopleInWaterLseTypeID"
+    },
+    "MDOTW_VW_OCCURRENCE_PUBLIC": {
+      "AccIncTypeDisplayEng": "AccIncTypeID",
+      "AreaTypeDisplayEng": "AreaTypeID",
+      "BearingDisplay": "BearingID",
+      "BeaufortScaleDisplayEng": "BeaufortScaleID",
+      "BergyBitsEnumDisplayEng": "BergyBitsEnum",
+      "DamageIND_DisplayEng": "DamageIND",
+      "DeployedIND_DisplayEng": "DeployedIND",
+      "FatigueContFactorEnum_DisplayEng": "FatigueContFactorEnum",
+      "FatigueInvestEnum_DisplayEng": "FatigueInvestEnum",
+      "GrowlersEnumDisplayEng": "GrowlersEnum",
+      "IcebergEnumDisplayEng": "IcebergEnum",
+      "ImoClasslevelDisplayEng": "ImoClassLevelID",
+      "IncludedInDailyEnumDisplayEng": "IncludedInDailyEnum",
+      "InjuriesIND_DisplayEng": "InjuriesIND",
+      "LightConditionDisplayEng": "LightConditionID",
+      "LongEnum_Bearing_DisplayEng": "LongEnum",
+      "ObservedByDisplayEng": "ObservedByID",
+      "OccClassDisplayEng": "OccClassID",
+      "OccTypeDisplayEng": "OccurrenceTypeID",
+      "OtherStateInvestigatingDisplayEng": "OtherStateInvestigatingID",
+      "PollutionIND_DisplayEng": "PollutionIND",
+      "PositionEstimatedIND_DisplayEng": "PositionEstimatedIND",
+      "PositionTypeDisplayEng": "PositionTypeEnum",
+      "ProvinceDisplayEng": "ProvinceID",
+      "RegionOfOccurrenceDisplayEng": "RegionOfOccurrenceID",
+      "RegionResponsibilityDisplayEng": "RegionResponsibilityID",
+      "ReportedByDisplayEng": "ReportedByID",
+      "ReportSourceDisplayEng": "ReportSourceID",
+      "RoutingDisplayEng": "RoutingID",
+      "SafetyCommIssuedIND_DisplayEng": "SafetyCommIssuedIND",
+      "SearchAndRescueIND_DisplayEng": "SearchAndRescueIND",
+      "SeaStateDisplayEng": "SeaStateID",
+      "SubstantiallyInterestedStateDisplayEng": "SubstantiallyInterestedStateID",
+      "TimeZoneDisplayEng": "TimeZoneID",
+      "UnderIceRegimeEnumDisplayEng": "UnderIceRegimeEnum",
+      "VesselIcingPresentEnumDisplayEng": "VesselIcingPresentEnum",
+      "VesselIcingQualificationDisplayEng": "VesselIcingQualificationID",
+      "WeatherConditionDisplayEng": "WeatherConditionID",
+      "WeatherFactorEnum_DisplayEng": "WeatherFactorEnum",
+      "WindSpeedTypeDisplayEng": "WindSpeedTypeID",
+      "WithInPilotBoardingAreaEnum_DisplayEng": "WithInPilotBoardingAreaEnum"
+    },
+    "MDOTW_VW_OCCURRENCE_VESSEL_LSA_EQUIPMENT_PUBLIC": {
+      "ApprovedEnumDisplayEng": "ApprovedEnum",
+      "LsApplianceDisplayEng": "LsApplianceID",
+      "UsedEnumDisplayEng": "UsedEnum"
+    },
+    "MDOTW_VW_OCCURRENCE_VESSEL_NAV_EQUIPMENT_PUBLIC": {
+      "NavigationAidSubTypeDisplayEng": "NavigationAidSubTypeID",
+      "NavigationAidTypeDisplayEng": "NavigationAidTypeID",
+      "OnOffEnumDisplayEng": "OnOffEnum"
+    },
+    "MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC": {
+      "AccIncTypeDisplayEng": "AccIncTypeID",
+      "ActivityCategoryDisplayEng": "ActivityCategoryID",
+      "ActivityTypeDisplayEng": "ActivityTypeID",
+      "AirPollutionDisplayEng": "AirPollutionEnum",
+      "CargoCategoryDisplayEng": "CargoCategoryID",
+      "CargoProductTypeDisplayEng": "CargoProductTypeID",
+      "ClassSocietyDisplayEng": "ClassSocietyID",
+      "DepartureCountryDisplayEng": "DepartureCountryID",
+      "DepartureLocationTypeDisplayEng": "DepartureLocationTypeID",
+      "DeparturePortDisplayEng": "DeparturePortID",
+      "DepartureTimeZoneDisplayEng": "DepartureTimeZoneID",
+      "DestinationCountryDisplayEng": "DestinationCountryID",
+      "DestinationLocationTypeDisplayEng": "DestinationLocationTypeID",
+      "DestinationPortDisplayEng": "DestinationPortID",
+      "DestinationTimeZoneDisplayEng": "DestinationTimeZoneID",
+      "FisheryTypeDisplayEng": "FisheryTypeID",
+      "GearTypeDisplayEng": "GearTypeID",
+      "HullMaterialDisplayEng": "HullMaterialID",
+      "LengthTypeDisplayEng": "LengthTypeID",
+      "MultipleFishingOpsDisplayEng": "MultipleFishingOpsEnum",
+      "OccTypeDisplayEng": "OccTypeID",
+      "OtherObjectDamageDegreeDisplayEng": "OtherObjectDamageDegreeID",
+      "OtherObjectDisplayEng": "OtherObjectID",
+      "OtherObjectTypeDisplayEng": "OtherObjectTypeID",
+      "PortOfRegistryDisplayEng": "PortOfRegistryID",
+      "ProdReleaseEnumDisplayEng": "ProdReleaseEnum",
+      "ProdReleaseLocEnumDisplayEng": "ProdReleaseLocEnum",
+      "ProductDetailDisplayEng": "ProductDetailID",
+      "PropulsionTypeDisplayEng": "PropulsionTypeID",
+      "QuantityOnBoardUnitsDisplayEng": "QuantityOnBoardUnitsEnum",
+      "QuantReleasedUnitsDisplayEng": "QuantityReleasedUnitsEnum",
+      "SeaPollutionDegreeDisplayEng": "SeaPollutionDegreeID",
+      "SmsOnBoardDisplayEng": "SmsOnBoardEnum",
+      "SmsTypeDisplayEng": "SmsTypeEnum",
+      "StowedOnDeckEnumDisplayEng": "StowedOnDeckEnum",
+      "TowedVesselTypeDisplayEng": "TowedVesselTypeID",
+      "VesselBuilderCountryDisplayEng": "VesselBuilderCountryID",
+      "VesselDamageDegreeDisplayEng": "VesselDamageDegreeID",
+      "VesselDamageLocationCategoryDisplayEng": "VesselDamageLocationCategoryID",
+      "VesselDamageLocationDisplayEng": "VesselDamageLocationID",
+      "VesselDamageLocationSubCategoryDisplayEng": "VesselDamageLocationSubCategoryID",
+      "VesselFlagDisplayEng": "VesselFlagID",
+      "VesselPhaseDisplayEng": "VesselPhaseID",
+      "VesselSubTypeDisplayEng": "VesselSubTypeID",
+      "VesselTypeDisplayEng": "VesselTypeID",
+      "WidthTypeDisplayEng": "WidthTypeID"
+    },
+    "MDOTW_VW_OCCURRENCE_VESSEL_REC_EQUIPMENT_PUBLIC": {
+      "CapsuleAudioFilesDelEnumDisplayEng": "CapsuleAudioFilesDelEnum",
+      "CapsuleAudioFilesSegregatedEnumDisplayEng": "CapsuleAudioFilesSegregatedEnum",
+      "DataExtractedEnumDisplayEng": "DataExtractedEnum",
+      "EquipSeizedEnumDisplayEng": "EquipSeizedEnum",
+      "InstructionAvailableEnumDisplayEng": "InstructionAvailableEnum",
+      "InstructionsPostedEnumDisplayEng": "InstructionsPostedEnum",
+      "ReasonNotExtractedDisplayEng": "ReasonNotExtractedID",
+      "RecAudioFilesDelEnumDisplayEng": "RecAudioFilesDelEnum",
+      "RecAudioFilesSegregatedEnumDisplayEng": "RecAudioFilesSegregatedEnum",
+      "RecordingEquipDisplayEng": "RecordingEquipID",
+      "SoftwareAudioMakeDisplayEng": "SoftwareAudioMakeID",
+      "SoftwareAudioModelDisplayEng": "SoftwareAudioModelID"
+    }
+  }
+}

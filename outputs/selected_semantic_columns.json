@@ -1,0 +1,265 @@
+{
+  "MDOTW_VW_OCCURRENCE_PUBLIC": {
+    "join_keys": [
+      "OccID",
+      "OccNo"
+    ],
+    "display_cols": [
+      "AccIncTypeDisplayEng",
+      "AreaTypeDisplayEng",
+      "BearingDisplay",
+      "BeaufortScaleDisplayEng",
+      "BergyBitsEnumDisplayEng",
+      "DamageIND_DisplayEng",
+      "DeployedIND_DisplayEng",
+      "FatigueContFactorEnum_DisplayEng",
+      "FatigueInvestEnum_DisplayEng",
+      "GrowlersEnumDisplayEng",
+      "IcebergEnumDisplayEng",
+      "ImoClasslevelDisplayEng",
+      "IncludedInDailyEnumDisplayEng",
+      "InjuriesIND_DisplayEng",
+      "LatEnum_Bearing_DisplayEng",
+      "LightConditionDisplayEng",
+      "LongEnum_Bearing_DisplayEng",
+      "ObservedByDisplayEng",
+      "OccClassDisplayEng",
+      "OccTypeDisplayEng",
+      "OtherStateInvestigatingDisplayEng",
+      "PollutionIND_DisplayEng",
+      "PositionEstimatedIND_DisplayEng",
+      "PositionTypeDisplayEng",
+      "ProvinceDisplayEng",
+      "RegionOfOccurrenceDisplayEng",
+      "RegionResponsibilityDisplayEng",
+      "ReportedByDisplayEng",
+      "ReportSourceDisplayEng",
+      "RoutingDisplayEng",
+      "SafetyCommIssuedIND_DisplayEng",
+      "SearchAndRescueIND_DisplayEng",
+      "SeaStateDisplayEng",
+      "SubstantiallyInterestedStateDisplayEng",
+      "TimeZoneDisplayEng",
+      "UnderIceRegimeEnumDisplayEng",
+      "VesselIcingPresentEnumDisplayEng",
+      "VesselIcingQualificationDisplayEng",
+      "WeatherConditionDisplayEng",
+      "WeatherFactorEnum_DisplayEng",
+      "WindSpeedTypeDisplayEng",
+      "WithInPilotBoardingAreaEnum_DisplayEng"
+    ],
+    "numeric_attrs": [
+      "NearestLocationDistance_Nm",
+      "SwellDirectionID",
+      "TotalDeaths",
+      "TotalMinorInjuries",
+      "TotalMissingIndividuals",
+      "TotalSeriousInjuries",
+      "WindDirectionID"
+    ],
+    "boolean_attrs": [
+      "MajorChangesIncludedInDaily",
+      "SubstantiallyInsterestedStateIND"
+    ],
+    "narrative_cols": [
+      "Summary"
+    ],
+    "other_semantic": [
+      "Latitude",
+      "Longitude",
+      "NearestLocationDescription",
+      "Position",
+      "PositionInText"
+    ]
+  },
+  "MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC": {
+    "join_keys": [
+      "OccID",
+      "OccNo",
+      "VesselID",
+      "ParentVesselID"
+    ],
+    "display_cols": [
+      "AccIncTypeDisplayEng",
+      "ActivityCategoryDisplayEng",
+      "ActivityTypeDisplayEng",
+      "AirPollutionDisplayEng",
+      "CargoCategoryDisplayEng",
+      "CargoProductTypeDisplayEng",
+      "ClassSocietyDisplayEng",
+      "DepartureCountryDisplayEng",
+      "DepartureLocationTypeDisplayEng",
+      "DeparturePortDisplayEng",
+      "DepartureTimeZoneDisplayEng",
+      "DestinationCountryDisplayEng",
+      "DestinationLocationTypeDisplayEng",
+      "DestinationPortDisplayEng",
+      "DestinationTimeZoneDisplayEng",
+      "FisheryTypeDisplayEng",
+      "GearTypeDisplayEng",
+      "HullMaterialDisplayEng",
+      "LengthTypeDisplayEng",
+      "MultipleFishingOpsDisplayEng",
+      "OccTypeDisplayEng",
+      "OtherObjectDamageDegreeDisplayEng",
+      "OtherObjectDisplayEng",
+      "OtherObjectTypeDisplayEng",
+      "PortOfRegistryDisplayEng",
+      "ProdReleaseEnumDisplayEng",
+      "ProdReleaseLocEnumDisplayEng",
+      "ProductDetailDisplayEng",
+      "PropulsionTypeDisplayEng",
+      "QuantityOnBoardUnitsDisplayEng",
+      "SeaPollutionDegreeDisplayEng",
+      "SmsOnBoardDisplayEng",
+      "SmsTypeDisplayEng",
+      "StowedOnDeckEnumDisplayEng",
+      "TowedVesselTypeDisplayEng",
+      "VesselBuilderCountryDisplayEng",
+      "VesselDamageDegreeDisplayEng",
+      "VesselDamageLocationCategoryDisplayEng",
+      "VesselDamageLocationDisplayEng",
+      "VesselDamageLocationSubCategoryDisplayEng",
+      "VesselFlagDisplayEng",
+      "VesselPhaseDisplayEng",
+      "VesselSubTypeDisplayEng",
+      "VesselTypeDisplayEng",
+      "WidthTypeDisplayEng"
+    ],
+    "numeric_attrs": [
+      "GrossTonnage",
+      "Length_Meters",
+      "OtherDamageObjectID",
+      "TotalLength_Meters",
+      "TotalVesselDeaths",
+      "TotalVesselMinorInjuries",
+      "TotalVesselMissingIndividuals",
+      "TotalVesselSeriousInjuries",
+      "TowedSequence",
+      "TowedVesselID",
+      "TowlineLength_Meters",
+      "VesselBuilderID",
+      "VesselCargoID",
+      "VesselDamageID",
+      "Width_Meters"
+    ],
+    "boolean_attrs": [
+      "OccurrencePrimaryAccIncIND",
+      "OfficialNo",
+      "OtherObjectIceRelatedDamageIND",
+      "VesselPrimaryAccIncTypeIND",
+      "TowingPushingInd",
+      "VesselIceRelatedDamageIND"
+    ],
+    "narrative_cols": [],
+    "other_semantic": [
+      "CallSign",
+      "ImoClass",
+      "VesselName",
+      "ParentVesselName",
+      "TowedVesselName",
+      "VesselBuilderAddressLine1",
+      "VesselBuilderAddressLine2",
+      "VesselBuilderCity",
+      "VesselBuilderEmailAddress",
+      "VesselBuilderName",
+      "VesselBuilderPhoneNumber",
+      "VesselBuilderPostalZipCode",
+      "VesselBuilderProvince"
+    ]
+  },
+  "MDOTW_VW_OCCURRENCE_VESSEL_LSA_EQUIPMENT_PUBLIC": {
+    "join_keys": [
+      "OccID",
+      "OccNo",
+      "VesselID"
+    ],
+    "display_cols": [
+      "ApprovedEnumDisplayEng",
+      "LsApplianceDisplayEng",
+      "UsedEnumDisplayEng"
+    ],
+    "numeric_attrs": [],
+    "boolean_attrs": [],
+    "narrative_cols": [],
+    "other_semantic": [
+      "VesselName"
+    ]
+  },
+  "MDOTW_VW_OCCURRENCE_VESSEL_REC_EQUIPMENT_PUBLIC": {
+    "join_keys": [
+      "OccID",
+      "OccNo",
+      "VesselID"
+    ],
+    "display_cols": [
+      "CapsuleAudioFilesDelEnumDisplayEng",
+      "CapsuleAudioFilesSegregatedEnumDisplayEng",
+      "DataExtractedEnumDisplayEng",
+      "EquipSeizedEnumDisplayEng",
+      "InstructionAvailableEnumDisplayEng",
+      "InstructionsPostedEnumDisplayEng",
+      "ReasonNotExtractedDisplayEng",
+      "RecAudioFilesDelEnumDisplayEng",
+      "RecAudioFilesSegregatedEnumDisplayEng",
+      "RecordingEquipDisplayEng",
+      "SoftwareAudioMakeDisplayEng",
+      "SoftwareAudioModelDisplayEng"
+    ],
+    "numeric_attrs": [
+      "CapsuleRecCapacity_NumberOfDays",
+      "RecCapacity_NumberOfDays",
+      "VdrDetailID",
+      "VesselSoftwareAudioID"
+    ],
+    "boolean_attrs": [],
+    "narrative_cols": [],
+    "other_semantic": [
+      "SerialNumber",
+      "VesselName"
+    ]
+  },
+  "MDOTW_VW_INJURIES_PUBLIC": {
+    "join_keys": [
+      "OccID",
+      "OccNo",
+      "VesselID"
+    ],
+    "display_cols": [
+      "PeopleInWaterLseTypeDisplayEng"
+    ],
+    "numeric_attrs": [
+      "PeopleInWaterDontKnowLSE",
+      "PeopleInWaterNoLSE",
+      "PeopleInWaterWearingLSE",
+      "TotalPeopleInWater",
+      "TotalVesselInjuries",
+      "VictimMissing"
+    ],
+    "boolean_attrs": [
+      "ManuallyEnteredStatsIND"
+    ],
+    "narrative_cols": [],
+    "other_semantic": [
+      "VesselName"
+    ]
+  },
+  "MDOTW_VW_OCCURRENCE_VESSEL_NAV_EQUIPMENT_PUBLIC": {
+    "join_keys": [
+      "OccID",
+      "OccNo",
+      "VesselID"
+    ],
+    "display_cols": [
+      "NavigationAidSubTypeDisplayEng",
+      "NavigationAidTypeDisplayEng",
+      "OnOffEnumDisplayEng"
+    ],
+    "numeric_attrs": [],
+    "boolean_attrs": [],
+    "narrative_cols": [],
+    "other_semantic": [
+      "VesselName"
+    ]
+  }
+}

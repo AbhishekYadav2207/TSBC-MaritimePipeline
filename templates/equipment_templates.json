@@ -1,0 +1,24 @@
+{
+  "nav_active_group": [
+    "Active navigation equipment on board included {on_list}.",
+    "During the voyage, the vessel utilized {on_list}.",
+    "The ship's {on_list} were reported as active.",
+    "Navigation aids in use during transit included {on_list}."
+  ],
+  "nav_inactive_group": [
+    "Meanwhile, the {off_list} were reported as inactive.",
+    "The {off_list} were noted to be off.",
+    "The vessel's {off_list} were turned off or inactive.",
+    "Equipment reported as inactive included {off_list}."
+  ],
+  "lsa_equipment_status": [
+    "Life-saving appliances included {lse_type}, which was {lse_used} and {lse_approved}.",
+    "The vessel carried {lse_type} ({lse_approved} status) on board; it was {lse_used}.",
+    "Life-saving equipment on board featured {lse_type}, which was {lse_used} and recorded as {lse_approved}."
+  ],
+  "rec_equipment_status": [
+    "Recording equipment on board included {rec_type}. {rec_extract_status}.",
+    "A Voyage Data Recorder ({rec_type}) was installed. {rec_extract_status}.",
+    "The vessel carried a {rec_type} device. {rec_extract_status}."
+  ]
+}

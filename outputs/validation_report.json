@@ -1,0 +1,25 @@
+{
+  "status": "WARNING",
+  "missing_primary_keys": {
+    "MDOTW_VW_OCCURRENCE_PUBLIC": 0,
+    "MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC": 0
+  },
+  "orphan_counts": {
+    "vessels_without_occurrence": 0,
+    "injuries_without_occurrence": 0,
+    "injuries_without_vessel": 2,
+    "lsa_without_occurrence": 0,
+    "lsa_without_vessel": 0,
+    "nav_without_occurrence": 0,
+    "nav_without_vessel": 0,
+    "rec_without_occurrence": 0,
+    "rec_without_vessel": 0
+  },
+  "total_occurrences_processed": 48594,
+  "duplicate_occurrence_ids_count": 0,
+  "total_value_warnings": 2,
+  "value_warnings_sample": [
+    "OccID 44767, Vessel LEVERKUSEN EXPRESS (27176): Implausible gross tonnage (1422295.0)",
+    "OccID 50205, Vessel R.G.L. FAIRWEATHER (21847): Implausible gross tonnage (301287.0)"
+  ]
+}
