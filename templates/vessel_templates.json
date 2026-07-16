@@ -1,0 +1,41 @@
+{
+  "basic_profiles": [
+    "The vessel '{vessel_name}' is a {vessel_flag} {vessel_type} constructed of {hull_material} with a gross tonnage of {gross_tonnage}.",
+    "Built in {year_built}, '{vessel_name}' is a {vessel_type} ({vessel_flag}) featuring a {hull_material} hull.",
+    "'{vessel_name}' is a {vessel_type} vessel, flag state {vessel_flag}, constructed with {hull_material}.",
+    "The {vessel_flag}-registered {vessel_type} vessel '{vessel_name}' has a gross tonnage of {gross_tonnage} and was built in {year_built}.",
+    "The {vessel_type} '{vessel_name}' was built in {year_built}, operates under the {vessel_flag} flag, and is constructed of {hull_material}.",
+    "Constructed with a {hull_material} hull, '{vessel_name}' is a {vessel_flag}-registered {vessel_type} of {gross_tonnage}.",
+    "The vessel '{vessel_name}' is a {vessel_type} registered in {vessel_flag}, built in {year_built} with a {hull_material} hull."
+  ],
+  "voyage_activity": [
+    "At the time of the occurrence, the vessel was {vessel_phase} during a {activity_type} voyage.",
+    "During the voyage, '{vessel_name}' was operating in the {vessel_phase} phase, engaged in {activity_type}.",
+    "The ship was {vessel_phase} while performing {activity_type} operations.",
+    "While engaged in {activity_type}, the vessel was operating in the {vessel_phase} phase.",
+    "The vessel '{vessel_name}' was {vessel_phase} and engaged in {activity_type} operations at the time of the occurrence.",
+    "During {activity_type} operations, the ship was in the {vessel_phase} phase."
+  ],
+  "cargo_info": [
+    "On board was {quantity} of {cargo_product} cargo.",
+    "The vessel was carrying {quantity} of {cargo_product} in the cargo holds.",
+    "A cargo of {quantity} of {cargo_product} was loaded on board.",
+    "The ship was laden with {quantity} of {cargo_product} cargo.",
+    "A shipment consisting of {quantity} of {cargo_product} was on board."
+  ],
+  "damage_info": [
+    "The vessel sustained {damage_degree} damage in the {damage_location} area.",
+    "Damage to the vessel was categorized as {damage_degree}, centered around the {damage_location}.",
+    "Hull inspection revealed {damage_degree} damage to the {damage_location}.",
+    "The incident resulted in {damage_degree} damage to the vessel's {damage_location}.",
+    "The vessel suffered {damage_degree} damage, primarily located at the {damage_location}.",
+    "Post-occurrence inspection indicated {damage_degree} damage affecting the {damage_location}."
+  ],
+  "pollution_info": [
+    "The incident resulted in {pollution_degree} sea pollution.",
+    "Sea pollution was reported as {pollution_degree}.",
+    "There was {pollution_degree} environmental sea pollution from the vessel.",
+    "Environmental reports indicated {pollution_degree} sea pollution.",
+    "The occurrence resulted in sea pollution categorized as {pollution_degree}."
+  ]
+}

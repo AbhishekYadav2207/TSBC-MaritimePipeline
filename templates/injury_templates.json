@@ -1,0 +1,35 @@
+{
+  "personnel_count": [
+    "There were {crew_count} people on board the vessel.",
+    "A crew of {crew_count} was on board at the time.",
+    "The vessel carried {crew_count} crew and passengers.",
+    "The vessel had a total of {crew_count} persons on board.",
+    "At the time of the occurrence, {crew_count} individuals were on board the vessel."
+  ],
+  "no_injuries": [
+    "No injuries or fatalities were reported from the occurrence.",
+    "There were no injuries, and all personnel were reported safe.",
+    "The incident occurred without any casualties or missing individuals.",
+    "No injuries, fatalities, or missing persons were reported in connection with the incident.",
+    "All crew members and passengers on board were reported unharmed.",
+    "There were no reports of injury or loss of life resulting from the occurrence.",
+    "No casualties or missing persons were reported from the vessel."
+  ],
+  "injuries_reported": [
+    "The occurrence resulted in {details}.",
+    "Casualties reported include {details}.",
+    "As a result of the incident, {details}.",
+    "The incident resulted in casualties, specifically {details}.",
+    "The following casualties were recorded: {details}."
+  ],
+  "water_entry": [
+    "During the event, {water_count} people entered the water.",
+    "The occurrence involved {water_count} individuals entering the water.",
+    "{water_count} crew members ended up in the water."
+  ],
+  "life_saving_use": [
+    "Of those in the water, {lse_count} were using life-saving appliances, specifically {lse_type}.",
+    "Life-saving equipment ({lse_type}) was used by {lse_count} individuals in the water.",
+    "It was noted that {lse_count} people in the water wore {lse_type}."
+  ]
+}

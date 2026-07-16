@@ -1,0 +1,23 @@
+{
+  "data_dir": "data",
+  "output_dir": "outputs",
+  "log_dir": "outputs/logs",
+  "log_file": "pipeline.log",
+  "log_level": "INFO",
+  "text_cleaning": {
+    "min_doc_length": 50,
+    "remove_duplicates": true
+  },
+  "generation": {
+    "template_vessel_path": "templates/vessel_templates.json",
+    "template_injury_path": "templates/injury_templates.json",
+    "template_equipment_path": "templates/equipment_templates.json",
+    "default_language": "Eng"
+  },
+  "validation": {
+    "max_vessel_speed_knots": 100.0,
+    "max_tonnage": 300000.0,
+    "max_crew": 1000,
+    "max_injuries": 1000
+  }
+}
