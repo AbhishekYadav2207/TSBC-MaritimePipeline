@@ -98,9 +98,9 @@ python run_pipeline.py --stage 09
 2. **`02_profile_dataset.py`**: Analyzes the CSV datasets, computing row/column counts, missing percentage, unique counts, cardinality, and inferring primary/foreign keys.
 3. **`03_discover_relationships.py`**: Builds a schema relationship graph using `networkx` to map joins.
 4. **`04_select_semantic_columns.py`**: Discards system/admin columns and French duplicates, preserving only NLP semantic fields.
-5. **`05_merge_tables.py`**: Merges occurrences, vessels, and child tables into a nested schema, saved to `merged_records.jsonl`.
-6. **`05a_validate_records.py`**: Assesses join integrity, orphan rows, missing primary keys, impossible dates, and implausible numeric values.
-7. **`06_generate_documents.py`**: Generates fluent natural-language paragraphs from structured fields using randomized template families to maximize linguistic diversity.
+5. **`05_merge_tables.py`**: Merges occurrences, vessels, and child tables into a nested schema, saved to `merged_records.jsonl`. Guarantees 100% occurrence data retention via Left Outer Join semantics and aggregates orphan child records into a single synthetic placeholder vessel.
+6. **`05a_validate_records.py`**: Assesses join integrity, orphan rows, missing primary keys, impossible dates, and implausible numeric values, gracefully handling placeholder occurrences.
+7. **`06_generate_documents.py`**: Synthesizes structured occurrence and vessel records into multiple semantically focused documents per occurrence (such as profiles, characteristics, weather environment, cargo, voyage activity, equipment, injuries, and integrated operational contexts) to maximize MLM training diversity. Enforces adaptive granularity, information density thresholds, and local deduplication.
 8. **`07_clean_documents.py`**: Normalizes whitespace, cleans encoding artifacts, deduplicates duplicate sentences, and filters short documents.
 9. **`08_export_corpus.py`**: Exports the final plain text `maritime_corpus.txt` (BERT MLM format) and metadata-preserving `maritime_corpus.jsonl`, writing `manifest.json`.
 10. **`09_statistics.py`**: Computes Shannon entropy, Type-Token Ratio, common bigrams/trigrams, and generates `corpus_quality_report.md`.

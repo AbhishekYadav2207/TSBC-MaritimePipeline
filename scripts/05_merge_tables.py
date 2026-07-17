@@ -110,40 +110,75 @@ def main():
     rec_table = "MDOTW_VW_OCCURRENCE_VESSEL_REC_EQUIPMENT_PUBLIC"
     df_rec = read_csv_safe(datasets[rec_table], usecols=get_cols_to_read(rec_table))
     
-    # 5. Group child tables by VesselID for O(1) nested lookup
-    # We clean nan values to keep json clean
+    # 5. Group child tables and identify all unique IDs
+    # We clean nan values and convert numpy types to standard python types to keep json clean and serializable
     def clean_dict(d):
-        return {k: (None if pd.isna(v) or v == "nan" else v) for k, v in d.items()}
+        cleaned = {}
+        for k, v in d.items():
+            if pd.isna(v) or v == "nan":
+                cleaned[k] = None
+            elif hasattr(v, "item"):
+                cleaned[k] = v.item()
+            else:
+                cleaned[k] = v
+        return cleaned
         
-    logger.info("Grouping child records by VesselID...")
+    logger.info("Identifying unique IDs and grouping records...")
     
+    # Track standard vessel IDs to distinguish orphans
+    vessels_set = set(df_vessel_agg["VesselID"].dropna().unique().astype(int))
+    
+    # Group standard child tables by VesselID
     inj_grouped = {}
+    lsa_grouped = {}
+    nav_grouped = {}
+    rec_grouped = {}
+    
+    # Group orphan child tables by OccID (for child records with missing/invalid VesselID)
+    orphan_inj_by_occ = {}
+    orphan_lsa_by_occ = {}
+    orphan_nav_by_occ = {}
+    orphan_rec_by_occ = {}
+    
+    # Group injuries
     for _, row in df_inj.iterrows():
         vid = row.get("VesselID")
-        if pd.notna(vid):
-            vid = int(vid)
-            inj_grouped.setdefault(vid, []).append(clean_dict(row.to_dict()))
+        oid = row.get("OccID")
+        cleaned_row = clean_dict(row.to_dict())
+        if pd.notna(vid) and int(vid) in vessels_set:
+            inj_grouped.setdefault(int(vid), []).append(cleaned_row)
+        elif pd.notna(oid):
+            orphan_inj_by_occ.setdefault(int(oid), []).append(cleaned_row)
             
-    lsa_grouped = {}
+    # Group LSA
     for _, row in df_lsa.iterrows():
         vid = row.get("VesselID")
-        if pd.notna(vid):
-            vid = int(vid)
-            lsa_grouped.setdefault(vid, []).append(clean_dict(row.to_dict()))
+        oid = row.get("OccID")
+        cleaned_row = clean_dict(row.to_dict())
+        if pd.notna(vid) and int(vid) in vessels_set:
+            lsa_grouped.setdefault(int(vid), []).append(cleaned_row)
+        elif pd.notna(oid):
+            orphan_lsa_by_occ.setdefault(int(oid), []).append(cleaned_row)
             
-    nav_grouped = {}
+    # Group Nav
     for _, row in df_nav.iterrows():
         vid = row.get("VesselID")
-        if pd.notna(vid):
-            vid = int(vid)
-            nav_grouped.setdefault(vid, []).append(clean_dict(row.to_dict()))
+        oid = row.get("OccID")
+        cleaned_row = clean_dict(row.to_dict())
+        if pd.notna(vid) and int(vid) in vessels_set:
+            nav_grouped.setdefault(int(vid), []).append(cleaned_row)
+        elif pd.notna(oid):
+            orphan_nav_by_occ.setdefault(int(oid), []).append(cleaned_row)
             
-    rec_grouped = {}
+    # Group Rec
     for _, row in df_rec.iterrows():
         vid = row.get("VesselID")
-        if pd.notna(vid):
-            vid = int(vid)
-            rec_grouped.setdefault(vid, []).append(clean_dict(row.to_dict()))
+        oid = row.get("OccID")
+        cleaned_row = clean_dict(row.to_dict())
+        if pd.notna(vid) and int(vid) in vessels_set:
+            rec_grouped.setdefault(int(vid), []).append(cleaned_row)
+        elif pd.notna(oid):
+            orphan_rec_by_occ.setdefault(int(oid), []).append(cleaned_row)
             
     # 6. Group Vessels by OccID
     logger.info("Grouping vessels by OccID...")
@@ -163,18 +198,55 @@ def main():
             
             vessels_by_occ.setdefault(oid, []).append(vessel_record)
             
-    # 7. Merge everything into Occurrences and write to JSONL
+    # 7. Merge everything into Occurrences and write to JSONL (Left Outer Join)
+    # Collect all unique OccIDs from all sources to ensure 100% data retention
+    occ_ids_set = set(df_occ_agg["OccID"].dropna().unique().astype(int))
+    vessel_occ_ids = set(df_vessel_agg["OccID"].dropna().unique().astype(int))
+    inj_occ_ids = set(df_inj["OccID"].dropna().unique().astype(int))
+    lsa_occ_ids = set(df_lsa["OccID"].dropna().unique().astype(int))
+    nav_occ_ids = set(df_nav["OccID"].dropna().unique().astype(int))
+    rec_occ_ids = set(df_rec["OccID"].dropna().unique().astype(int))
+    
+    all_occ_ids = sorted([int(x) for x in (occ_ids_set | vessel_occ_ids | inj_occ_ids | lsa_occ_ids | nav_occ_ids | rec_occ_ids)])
+    logger.info(f"Total unique occurrences to merge (including placeholders): {len(all_occ_ids)}")
+    
+    occ_by_id = {int(row["OccID"]): clean_dict(row.to_dict()) for _, row in df_occ_agg.iterrows()}
+    
     out_file = output_dir / "merged_records.jsonl"
     logger.info(f"Merging everything and exporting to {out_file}...")
     
     with open(out_file, "w", encoding="utf-8") as f:
-        for _, row in tqdm(df_occ_agg.iterrows(), total=len(df_occ_agg), desc="Merging Records"):
-            oid = int(row["OccID"])
-            occurrence_record = clean_dict(row.to_dict())
-            
+        for oid in tqdm(all_occ_ids, desc="Merging Records"):
+            # Check if this is a real occurrence or a placeholder
+            if oid in occ_by_id:
+                occurrence_record = occ_by_id[oid]
+                is_placeholder_occurrence = False
+            else:
+                occurrence_record = None
+                is_placeholder_occurrence = True
+                
             # Find associated vessels
-            occ_vessels = vessels_by_occ.get(oid, [])
+            occ_vessels = list(vessels_by_occ.get(oid, []))
             
+            # Check for any orphan child records for this OccID to synthesize a single placeholder vessel
+            orph_inj = orphan_inj_by_occ.get(oid, [])
+            orph_lsa = orphan_lsa_by_occ.get(oid, [])
+            orph_nav = orphan_nav_by_occ.get(oid, [])
+            orph_rec = orphan_rec_by_occ.get(oid, [])
+            
+            if orph_inj or orph_lsa or orph_nav or orph_rec:
+                placeholder_vessel = {
+                    "VesselID": None,
+                    "VesselName": "Unknown Vessel",
+                    "_placeholder": True,
+                    "_reason": "orphan_child_records",
+                    "injuries": orph_inj,
+                    "lsa_equipment": orph_lsa,
+                    "navigation_equipment": orph_nav,
+                    "rec_equipment": orph_rec
+                }
+                occ_vessels.append(placeholder_vessel)
+                
             # Build the nested object
             merged = {
                 "occurrence_id": oid,
@@ -182,6 +254,9 @@ def main():
                 "vessels": occ_vessels
             }
             
+            if is_placeholder_occurrence:
+                merged["_placeholder_occurrence"] = True
+                
             # Write to JSONL
             f.write(json.dumps(merged) + "\n")
             

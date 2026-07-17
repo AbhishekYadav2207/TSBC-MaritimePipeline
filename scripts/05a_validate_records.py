@@ -114,7 +114,7 @@ def validate_merged_records(merged_path: Path, config: dict) -> dict:
                 duplicate_occ_ids += 1
             seen_occ_ids.add(oid)
             
-            occ = record.get("occurrence", {})
+            occ = record.get("occurrence") or {}
             vessels = record.get("vessels", [])
             
             # 1. Date check

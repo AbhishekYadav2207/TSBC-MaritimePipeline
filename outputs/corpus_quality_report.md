@@ -4,29 +4,29 @@ This report summarizes the size, linguistic quality, and validation health of th
 
 ## 1. Corpus Summary Metrics
 
-* **Total Documents (Occurrences)**: 48441
-* **Total Words (Tokens)**: 3315982
-* **Total Characters**: 21023833
-* **Average Document Length**: 68.45 words
-* **Median Document Length**: 61.00 words
-* **Vocabulary Size**: 43905 unique words
-* **Type-Token Ratio (Lexical Diversity)**: 0.01324
-* **Shannon Entropy**: 8.5288 bits
+* **Total Documents (Occurrences)**: 310035
+* **Total Words (Tokens)**: 8273295
+* **Total Characters**: 52586651
+* **Average Document Length**: 26.69 words
+* **Median Document Length**: 17.00 words
+* **Vocabulary Size**: 43933 unique words
+* **Type-Token Ratio (Lexical Diversity)**: 0.00531
+* **Shannon Entropy**: 8.3590 bits
 
 ### Document Length Distribution
-* **0-50 words**: 19486 documents
-* **50-100 words**: 18281 documents
-* **100-200 words**: 10194 documents
-* **200-500 words**: 478 documents
-* **500-1000 words**: 2 documents
+* **0-50 words**: 277440 documents
+* **50-100 words**: 20180 documents
+* **100-200 words**: 11604 documents
+* **200-500 words**: 792 documents
+* **500-1000 words**: 19 documents
 * **1000+ words**: 0 documents
 
 ---
 
 ## 2. Redundancy & Deduplication Metrics
 
-* **Duplicate Sentence Ratio**: 52.30%
-* **Duplicate Paragraph Ratio**: 31.21%
+* **Duplicate Sentence Ratio**: 35.07%
+* **Duplicate Paragraph Ratio**: 0.05%
 
 ---
 
@@ -35,51 +35,51 @@ This report summarizes the size, linguistic quality, and validation health of th
 ### Top 15 Terms
 | Rank | Term | Frequency |
 |---|---|---|
-| 1 | the | 266462 |
-| 2 | of | 93350 |
-| 3 | in | 77150 |
-| 4 | a | 74120 |
-| 5 | was | 72083 |
-| 6 | vessel | 70537 |
-| 7 | reported | 56818 |
-| 8 | to | 50255 |
-| 9 | with | 47566 |
-| 10 | as | 45595 |
-| 11 | on | 43871 |
-| 12 | and | 43417 |
-| 13 | were | 42693 |
-| 14 | conditions | 41376 |
-| 15 | weather | 32348 |
+| 1 | the | 684559 |
+| 2 | of | 255784 |
+| 3 | was | 238789 |
+| 4 | a | 215375 |
+| 5 | vessel | 196725 |
+| 6 | and | 164389 |
+| 7 | on | 148372 |
+| 8 | in | 148128 |
+| 9 | with | 117024 |
+| 10 | radio | 104647 |
+| 11 | compass | 104257 |
+| 12 | reported | 101401 |
+| 13 | radar | 89212 |
+| 14 | gt | 88453 |
+| 15 | gross | 88439 |
 
 
 ### Top 10 Bigrams
 | Rank | Bigram | Frequency |
 |---|---|---|
-| 1 | the vessel | 52444 |
-| 2 | the incident | 30775 |
-| 3 | the occurrence | 28358 |
-| 4 | is a | 27864 |
-| 5 | registered in | 26810 |
-| 6 | at the | 26418 |
-| 7 | of the | 26147 |
-| 8 | were reported | 26059 |
-| 9 | with a | 25388 |
-| 10 | constructed of | 23961 |
+| 1 | the vessel | 150795 |
+| 2 | a gross | 88439 |
+| 3 | gross tonnage | 88439 |
+| 4 | tonnage of | 88439 |
+| 5 | on board | 76332 |
+| 6 | constructed of | 71058 |
+| 7 | magnetic compass | 67735 |
+| 8 | the occurrence | 65586 |
+| 9 | vhf radio | 63655 |
+| 10 | with a | 59013 |
 
 
 ### Top 10 Trigrams
 | Rank | Trigram | Frequency |
 |---|---|---|
-| 1 | at the time | 23290 |
-| 2 | with a gross | 23211 |
-| 3 | a gross tonnage | 23211 |
-| 4 | gross tonnage of | 23211 |
-| 5 | the time of | 23209 |
-| 6 | time of the | 23199 |
-| 7 | registered in canada | 19742 |
-| 8 | note formerly occno | 19209 |
-| 9 | the incident occurred | 17477 |
-| 10 | in canada constructed | 17252 |
+| 1 | a gross tonnage | 88439 |
+| 2 | gross tonnage of | 88439 |
+| 3 | at the time | 52066 |
+| 4 | the time of | 51985 |
+| 5 | time of the | 51975 |
+| 6 | with a gross | 47135 |
+| 7 | of the occurrence | 42595 |
+| 8 | has a gross | 41304 |
+| 9 | registered in canada | 40996 |
+| 10 | underway moving ahead | 37929 |
 
 
 ---
@@ -112,16 +112,14 @@ This report summarizes the size, linguistic quality, and validation health of th
 FELL OVERBOARD AND DROWNED WHILE ON DUTY. Note: formerly OccNo : 9704-7
 ```
 
-### Occurrence ID: 2
+### Occurrence ID: 3
 ```text
-INJURED DURING MOORING OPERATIONS. Note: formerly OccNo : 9704-7
+DAMAGED DOCK AND BULBOUS BOW. Note: formerly OccNo : 9708-26-1 The weather at the time of the occurrence was clear. The sea state was described as ice covered - heavy.
 ```
 
 ### Occurrence ID: 3
 ```text
-DAMAGED DOCK AND BULBOUS BOW. Note: formerly OccNo : 9708-26-1
-
-The weather at the time of the occurrence was clear. The sea state was described as ice covered - heavy.
+During the occurrence, weather was reported as clear. The sea state was described as ice covered - heavy.
 ```
 
 

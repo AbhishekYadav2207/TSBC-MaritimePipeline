@@ -1,306 +1,306 @@
 {
-  "total_documents": 48441,
-  "total_characters": 21023833,
-  "total_tokens_words": 3315982,
-  "average_document_length_words": 68.45403686959393,
-  "median_document_length_words": 61.0,
-  "vocabulary_size": 43905,
-  "type_token_ratio_lexical_diversity": 0.0132404216910707,
-  "shannon_entropy": 8.52880828470884,
-  "duplicate_sentence_ratio": 0.5230263879043868,
-  "duplicate_paragraph_ratio": 0.3121162969164225,
+  "total_documents": 310035,
+  "total_characters": 52586651,
+  "total_tokens_words": 8273295,
+  "average_document_length_words": 26.685035560501234,
+  "median_document_length_words": 17.0,
+  "vocabulary_size": 43933,
+  "type_token_ratio_lexical_diversity": 0.005310217996578147,
+  "shannon_entropy": 8.358963562272137,
+  "duplicate_sentence_ratio": 0.3507239511839575,
+  "duplicate_paragraph_ratio": 0.0005257470930701835,
   "document_length_distribution": {
-    "0-50 words": 19486,
-    "50-100 words": 18281,
-    "100-200 words": 10194,
-    "200-500 words": 478,
-    "500-1000 words": 2,
+    "0-50 words": 277440,
+    "50-100 words": 20180,
+    "100-200 words": 11604,
+    "200-500 words": 792,
+    "500-1000 words": 19,
     "1000-10000 words": 0
   },
   "top_50_terms": [
     [
       "the",
-      266462
+      684559
     ],
     [
       "of",
-      93350
-    ],
-    [
-      "in",
-      77150
-    ],
-    [
-      "a",
-      74120
+      255784
     ],
     [
       "was",
-      72083
+      238789
+    ],
+    [
+      "a",
+      215375
     ],
     [
       "vessel",
-      70537
-    ],
-    [
-      "reported",
-      56818
-    ],
-    [
-      "to",
-      50255
-    ],
-    [
-      "with",
-      47566
-    ],
-    [
-      "as",
-      45595
-    ],
-    [
-      "on",
-      43871
+      196725
     ],
     [
       "and",
-      43417
+      164389
     ],
     [
-      "were",
-      42693
+      "on",
+      148372
     ],
     [
-      "conditions",
-      41376
+      "in",
+      148128
     ],
     [
-      "weather",
-      32348
-    ],
-    [
-      "at",
-      31684
-    ],
-    [
-      "sea",
-      31275
-    ],
-    [
-      "incident",
-      31040
-    ],
-    [
-      "fishing",
-      29627
-    ],
-    [
-      "during",
-      29044
-    ],
-    [
-      "occurrence",
-      28448
-    ],
-    [
-      "is",
-      28255
-    ],
-    [
-      "registered",
-      26853
-    ],
-    [
-      "meters",
-      26643
-    ],
-    [
-      "constructed",
-      23965
-    ],
-    [
-      "time",
-      23586
-    ],
-    [
-      "gt",
-      23225
-    ],
-    [
-      "gross",
-      23211
-    ],
-    [
-      "tonnage",
-      23211
-    ],
-    [
-      "clear",
-      21949
+      "with",
+      117024
     ],
     [
       "radio",
-      20549
-    ],
-    [
-      "underway",
-      20150
-    ],
-    [
-      "canada",
-      19862
-    ],
-    [
-      "no",
-      19430
-    ],
-    [
-      "formerly",
-      19217
-    ],
-    [
-      "note",
-      19211
-    ],
-    [
-      "occno",
-      19209
-    ],
-    [
-      "damage",
-      18737
-    ],
-    [
-      "described",
-      18722
+      104647
     ],
     [
       "compass",
-      18045
+      104257
     ],
     [
-      "or",
-      17673
-    ],
-    [
-      "occurred",
-      17586
-    ],
-    [
-      "0",
-      14302
-    ],
-    [
-      "calm",
-      14279
-    ],
-    [
-      "while",
-      14164
+      "reported",
+      101401
     ],
     [
       "radar",
-      13877
+      89212
+    ],
+    [
+      "gt",
+      88453
+    ],
+    [
+      "gross",
+      88439
+    ],
+    [
+      "tonnage",
+      88439
+    ],
+    [
+      "as",
+      88438
+    ],
+    [
+      "is",
+      79699
+    ],
+    [
+      "board",
+      76447
+    ],
+    [
+      "during",
+      73818
+    ],
+    [
+      "canada",
+      71812
+    ],
+    [
+      "to",
+      71757
+    ],
+    [
+      "constructed",
+      71062
+    ],
+    [
+      "fishing",
+      69330
+    ],
+    [
+      "magnetic",
+      67735
+    ],
+    [
+      "occurrence",
+      65675
+    ],
+    [
+      "vhf",
+      63685
+    ],
+    [
+      "at",
+      62691
+    ],
+    [
+      "underway",
+      60074
+    ],
+    [
+      "navigation",
+      59209
+    ],
+    [
+      "hull",
+      57395
+    ],
+    [
+      "incident",
+      56656
+    ],
+    [
+      "registered",
+      55522
+    ],
+    [
+      "time",
+      52549
+    ],
+    [
+      "were",
+      52504
+    ],
+    [
+      "conditions",
+      50337
+    ],
+    [
+      "weather",
+      49086
+    ],
+    [
+      "echosounder",
+      47637
+    ],
+    [
+      "included",
+      47431
+    ],
+    [
+      "inactive",
+      42902
+    ],
+    [
+      "propulsion",
+      42246
     ],
     [
       "voyage",
-      13772
+      41639
+    ],
+    [
+      "has",
+      41433
+    ],
+    [
+      "steel",
+      41266
+    ],
+    [
+      "sea",
+      40139
+    ],
+    [
+      "for",
+      38978
     ],
     [
       "under",
-      13660
+      38896
     ],
     [
-      "ship",
-      13250
+      "propeller",
+      38601
     ],
     [
       "moving",
-      12797
+      38272
+    ],
+    [
+      "ahead",
+      38020
     ]
   ],
   "top_10_bigrams": [
     [
       "the vessel",
-      52444
+      150795
     ],
     [
-      "the incident",
-      30775
+      "a gross",
+      88439
     ],
     [
-      "the occurrence",
-      28358
+      "gross tonnage",
+      88439
     ],
     [
-      "is a",
-      27864
+      "tonnage of",
+      88439
     ],
     [
-      "registered in",
-      26810
-    ],
-    [
-      "at the",
-      26418
-    ],
-    [
-      "of the",
-      26147
-    ],
-    [
-      "were reported",
-      26059
-    ],
-    [
-      "with a",
-      25388
+      "on board",
+      76332
     ],
     [
       "constructed of",
-      23961
+      71058
+    ],
+    [
+      "magnetic compass",
+      67735
+    ],
+    [
+      "the occurrence",
+      65586
+    ],
+    [
+      "vhf radio",
+      63655
+    ],
+    [
+      "with a",
+      59013
     ]
   ],
   "top_10_trigrams": [
     [
-      "at the time",
-      23290
-    ],
-    [
-      "with a gross",
-      23211
-    ],
-    [
       "a gross tonnage",
-      23211
+      88439
     ],
     [
       "gross tonnage of",
-      23211
+      88439
+    ],
+    [
+      "at the time",
+      52066
     ],
     [
       "the time of",
-      23209
+      51985
     ],
     [
       "time of the",
-      23199
+      51975
+    ],
+    [
+      "with a gross",
+      47135
+    ],
+    [
+      "of the occurrence",
+      42595
+    ],
+    [
+      "has a gross",
+      41304
     ],
     [
       "registered in canada",
-      19742
+      40996
     ],
     [
-      "note formerly occno",
-      19209
-    ],
-    [
-      "the incident occurred",
-      17477
-    ],
-    [
-      "in canada constructed",
-      17252
+      "underway moving ahead",
+      37929
     ]
   ]
 }
