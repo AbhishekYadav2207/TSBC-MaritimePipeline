@@ -1,9 +1,9 @@
 {
   "version": "1.0",
   "created": "2026-07-21",
-  "documents": 74548,
+  "documents": 73316,
   "source": "MARSIS",
   "language": "English",
   "pipeline_version": "1.0",
-  "git_commit": "1f63f296b5081493053445177d8e7525a047a67d"
+  "git_commit": "b279aa0a544753cdb06d9c71abfa151620f09cc8"
 }

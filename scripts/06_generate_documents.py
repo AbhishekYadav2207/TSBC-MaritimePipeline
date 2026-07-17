@@ -711,16 +711,32 @@ def generate_occurrence_summary(oid: int, record: dict, v_tpl: dict, i_tpl: dict
     return ""
 
 def generate_environment(oid: int, record: dict, dictionary_metadata: dict = None) -> str:
-    """Generates environment weather and condition document."""
+    """Generates environment weather and condition document for orphan occurrences, only if they describe non-trivial conditions."""
     occ = record.get("occurrence")
     if not occ:
         return ""
+    weather_raw = occ.get("WeatherConditionDisplayEng")
+    weather_clean = clean_placeholder(weather_raw)
+    sea_raw = occ.get("SeaStateDisplayEng")
+    sea_clean = clean_placeholder(sea_raw)
+    
+    is_hazardous = False
+    if weather_clean and weather_clean.upper() not in ["CLEAR", "CLOUDY", "SUNNY", "FAIR", "FINE", "NORMAL", "UNKNOWN"]:
+        is_hazardous = True
+    if sea_clean and sea_clean.upper() not in ["CALM", "SMOOTH", "UNKNOWN", "NORMAL"]:
+        is_hazardous = True
+        
+    if not is_hazardous:
+        return "" # suppress benign weather for orphan occurrences
+        
     return format_environmental(occ, dictionary_metadata)
 
 def build_integrated_context_for_vessel(oid: int, occ: dict, v: dict, v_tpl: dict, i_tpl: dict, e_tpl: dict, dictionary_metadata: dict = None) -> str:
-    """Builds a single, rich integrated context document for a vessel, combining specs, voyage, environment, equipment, and outcomes."""
-    parts = []
-    
+    """Builds a single, rich integrated narrative context document for a vessel, applying relationship-first logic,
+
+    narrative compression, weather importance, and conditional negative facts.
+    """
+    # 1. Basic properties
     vname = v.get("VesselName") or "An unnamed vessel"
     vtype = (v.get("VesselTypeDisplayEng") or "vessel").lower()
     vflag = clean_placeholder(v.get("VesselFlagDisplayEng"))
@@ -729,44 +745,76 @@ def build_integrated_context_for_vessel(oid: int, occ: dict, v: dict, v_tpl: dic
     tonnage = v.get("GrossTonnage")
     built = v.get("YearBuilt")
     
-    # 1. Vessel Profile and Characteristics
+    is_placeholder = v.get("_placeholder", False)
     vflag_str = vflag.title() if vflag else None
     hull_str = hull.lower() if hull else None
     prop_str = prop.lower() if prop else None
     ton_str = f"{float(tonnage):.0f} GT" if tonnage and pd.notna(tonnage) and float(tonnage) > 0 else None
     built_str = str(int(float(built))) if built and pd.notna(built) and int(float(built)) > 0 else None
     
-    profile_parts = []
-    is_placeholder = v.get("_placeholder", False)
-    if is_placeholder:
-        profile_parts.append("The vessel involved in the occurrence had the following specifications:")
-    else:
-        if built_str and ton_str and vflag_str and hull_str:
-            profile_parts.append(f"Built in {built_str}, '{vname}' is a {vtype} ({vflag_str}) featuring a {hull_str} hull and a gross tonnage of {ton_str}.")
-        elif built_str and ton_str:
-            profile_parts.append(f"Built in {built_str}, '{vname}' is a {vtype} of {ton_str}.")
-        else:
-            pieces = [f"'{vname}' is a {vtype}"]
-            if vflag_str: pieces.append(f"registered in {vflag_str}")
-            if hull_str: pieces.append(f"constructed of {hull_str}")
-            if ton_str: pieces.append(f"with a gross tonnage of {ton_str}")
-            if built_str: pieces.append(f"built in {built_str}")
-            profile_parts.append(", ".join(pieces) + ".")
-            
-    parts.append(" ".join(profile_parts))
+    # 2. Significant events detection
+    occ_no = occ.get("OccNo") or f"ID {oid}"
+    occ_type = occ.get("OccurrenceTypeDisplayEng")
+    occ_type_clean = clean_placeholder(occ_type)
     
-    # Cargo
-    cargo_prod = v.get("CargoProductTypeDisplayEng")
-    cargo_qty = v.get("QuantityOnBoard")
-    cargo_prod = clean_placeholder(cargo_prod)
-    if cargo_prod:
-        cargo_prod = cargo_prod.lower()
-        if cargo_qty is not None and str(cargo_qty).strip() not in ["", "nan", "NaN"]:
-            parts.append(f"The vessel was laden with {cargo_qty} of {cargo_prod} cargo.")
-        else:
-            parts.append(f"The vessel was carrying {cargo_prod} cargo during the transit.")
+    is_significant_event = False
+    event_name = None
+    if occ_type_clean and occ_type_clean.upper() not in ["UNKNOWN", "UNSPECIFIED", "OTHER"]:
+        is_significant_event = True
+        event_name = occ_type_clean.lower()
+        
+    dmg_degree = clean_placeholder(v.get("VesselDamageDegreeDisplayEng"))
+    dmg_loc = clean_placeholder(v.get("VesselDamageLocationDisplayEng"))
+    has_damage = dmg_degree and dmg_degree.upper() not in ["NONE", "NONE APPARENT"]
+    if has_damage:
+        is_significant_event = True
+        
+    pollution = clean_placeholder(v.get("SeaPollutionDegreeDisplayEng"))
+    has_pollution = pollution and pollution.upper() not in ["NONE", "NONE APPARENT", "UNKNOWN"]
+    if has_pollution:
+        is_significant_event = True
+
+    # Casualties count
+    injuries = v.get("injuries", [])
+    minor_count = sum(int(inj.get("VictimMinorInjuries") or 0) for inj in injuries)
+    serious_count = sum(int(inj.get("VictimSeriousInjuries") or 0) for inj in injuries)
+    death_count = sum(int(inj.get("VictimDeath") or 0) for inj in injuries)
+    missing_count = sum(int(inj.get("VictimMissing") or 0) for inj in injuries)
+    total_casualties = minor_count + serious_count + death_count + missing_count
+    
+    if total_casualties > 0:
+        is_significant_event = True
+
+    # 3. Weather assessment
+    weather_raw = occ.get("WeatherConditionDisplayEng")
+    weather_clean = clean_placeholder(weather_raw)
+    sea_raw = occ.get("SeaStateDisplayEng")
+    sea_clean = clean_placeholder(sea_raw)
+    
+    is_weather_hazardous = False
+    weather_desc_list = []
+    
+    if weather_clean:
+        if weather_clean.upper() not in ["UNKNOWN"]:
+            weather_desc_list.append(f"{weather_clean.lower()} weather")
+        if weather_clean.upper() not in ["CLEAR", "CLOUDY", "SUNNY", "FAIR", "FINE", "NORMAL", "UNKNOWN"]:
+            is_weather_hazardous = True
             
-    # 2. Voyage Activity + Environment
+    if sea_clean:
+        if sea_clean.upper() not in ["UNKNOWN"]:
+            weather_desc_list.append(f"{sea_clean.lower()} seas")
+        if sea_clean.upper() not in ["CALM", "SMOOTH", "UNKNOWN", "NORMAL"]:
+            is_weather_hazardous = True
+            
+    weather_summary = " and ".join(weather_desc_list)
+    
+    # Weather Importance Rule: Suppress clear/benign weather unless part of an integrated narrative or contrasts with an incident
+    include_weather = False
+    if weather_summary:
+        if is_weather_hazardous or is_significant_event:
+            include_weather = True
+
+    # 4. Voyage phase and cargo
     phase = v.get("VesselPhaseDisplayEng")
     activity = v.get("ActivityTypeDisplayEng")
     phase = clean_placeholder(phase)
@@ -774,76 +822,153 @@ def build_integrated_context_for_vessel(oid: int, occ: dict, v: dict, v_tpl: dic
     phase_valid = phase and phase.upper() not in ["UNKNOWN", "UNSPECIFIED"]
     act_valid = activity and activity.upper() not in ["UNKNOWN", "UNSPECIFIED"]
     
-    voy_text = ""
+    activity_clause = ""
     if phase_valid and act_valid:
-        voy_text = f"At the time of the occurrence, the vessel was {phase.lower()} during a {activity.lower()} voyage"
+        activity_clause = f"underway {phase.lower()} while engaged in {activity.lower()}"
     elif phase_valid:
-        voy_text = f"At the time of the occurrence, the vessel was {phase.lower()}"
+        activity_clause = f"underway {phase.lower()}"
     elif act_valid:
-        voy_text = f"The vessel was performing {activity.lower()} operations"
+        activity_clause = f"engaged in {activity.lower()} operations"
         
-    env_text = ""
-    if occ:
-        env_text = format_environmental(occ, dictionary_metadata)
-        
-    if voy_text and env_text:
-        merged_voy_env = f"{voy_text} while encountering environmental conditions: {env_text[0].lower() + env_text[1:]}"
-        parts.append(merged_voy_env)
-    elif voy_text:
-        parts.append(voy_text + ".")
-    elif env_text:
-        parts.append(env_text)
-        
-    # 3. Equipment (Navigation + LSA + Recording)
-    equip_parts = []
+    cargo_prod = v.get("CargoProductTypeDisplayEng")
+    cargo_qty = v.get("QuantityOnBoard")
+    cargo_prod = clean_placeholder(cargo_prod)
     
-    # Navigation equipment summary
+    cargo_clause = ""
+    if cargo_prod:
+        if cargo_qty is not None and str(cargo_qty).strip() not in ["", "nan", "NaN"]:
+            cargo_clause = f"carrying {cargo_qty} of {cargo_prod.lower()}"
+        else:
+            cargo_clause = f"carrying a cargo of {cargo_prod.lower()}"
+
+    # 5. Active/failed equipment
     nav_list = v.get("navigation_equipment", [])
     on_raw = [n.get("NavigationAidTypeDisplayEng") for n in nav_list if n.get("OnOffEnumDisplayEng") == "On"]
     off_raw = [n.get("NavigationAidTypeDisplayEng") for n in nav_list if n.get("OnOffEnumDisplayEng") == "Off"]
     on_devices = normalize_equipment_list(on_raw, dictionary_metadata)
     off_devices = normalize_equipment_list(off_raw, dictionary_metadata)
     
+    nav_clause = ""
     if on_devices:
-        equip_parts.append(f"The navigation aids active on board included {join_words(on_devices)}.")
-    if off_devices:
-        equip_parts.append(f"Navigation aids reported as inactive included {join_words(off_devices)}.")
+        nav_clause = f"relying on active {join_words(on_devices)}"
+
+    # 6. Build Narrative Blocks (Operational Narrative)
+    # Block A: The vessel specifications
+    v_noun = f"'{vname}'"
+    if vtype and vtype.upper() not in ["UNKNOWN", "UNSPECIFIED"]:
+        v_noun = f"the {vtype} '{vname}'"
         
-    # Navigation Level 3 individual subtypes (retained if introducing specific subtypes)
-    for nav in nav_list:
-        nav_type = nav.get("NavigationAidTypeDisplayEng")
-        nav_status = nav.get("OnOffEnumDisplayEng")
-        nav_sub = nav.get("NavigationAidSubTypeDisplayEng")
-        if nav_type and nav_sub:
-            nav_name = normalize_label(nav_type, dictionary_metadata)
-            sub_str = clean_placeholder(nav_sub)
-            status_str = nav_status.lower().strip() if nav_status else "not specified"
-            if sub_str:
-                if status_str in ["on", "active"]:
-                    equip_parts.append(f"An active {sub_str.lower()} {nav_name} was utilized.")
-                else:
-                    equip_parts.append(f"The {sub_str.lower()} {nav_name} was inactive.")
-                    
-    # LSA summary & details
+    spec_details = []
+    if built_str:
+        spec_details.append(f"built in {built_str}")
+    if ton_str:
+        spec_details.append(f"with a gross tonnage of {ton_str}")
+    if vflag_str:
+        spec_details.append(f"registered in {vflag_str}")
+        
+    vessel_desc = ""
+    if is_placeholder:
+        if spec_details:
+            vessel_desc = f"An unnamed vessel, {', '.join(spec_details)},"
+        else:
+            vessel_desc = "An unnamed vessel"
+    else:
+        if spec_details:
+            vessel_desc = f"{v_noun[0].upper() + v_noun[1:]}, {', '.join(spec_details)},"
+        else:
+            vessel_desc = f"{v_noun[0].upper() + v_noun[1:]}"
+
+    # Block B: Operational Transit (Narrative Compression)
+    transit_parts = []
+    if activity_clause:
+        transit_parts.append(activity_clause)
+    if cargo_clause:
+        transit_parts.append(cargo_clause)
+    if include_weather and weather_summary:
+        transit_parts.append(f"in {weather_summary}")
+    if nav_clause:
+        transit_parts.append(nav_clause)
+        
+    transit_sentence = ""
+    if transit_parts:
+        transit_sentence = f"While {', '.join(transit_parts)}, {vessel_desc.lower() if vessel_desc.startswith('The') or vessel_desc.startswith('An') else vessel_desc}"
+    else:
+        transit_sentence = vessel_desc
+
+    # Block C: Incident outcome
+    outcome_sentence = ""
+    if event_name:
+        if event_name in ["grounding", "grounded"]:
+            outcome_sentence = "grounded"
+        elif event_name in ["collision", "collided"]:
+            outcome_sentence = "was involved in a collision"
+        elif event_name in ["fire", "explosion"]:
+            outcome_sentence = f"experienced a {event_name}"
+        else:
+            outcome_sentence = f"was involved in a {event_name} occurrence"
+            
+    # Combine Block B and C:
+    main_narrative = ""
+    if transit_sentence and outcome_sentence:
+        main_narrative = f"{transit_sentence} {outcome_sentence}."
+    elif transit_sentence:
+        main_narrative = f"{transit_sentence} was involved in an occurrence."
+    elif outcome_sentence:
+        main_narrative = f"The vessel '{vname}' {outcome_sentence}."
+        
+    # Block D: Consequence (Damage + Pollution + Casualties)
+    consequence_parts = []
+    
+    if has_damage:
+        loc = f" to the {dmg_loc.lower()}" if dmg_loc else ""
+        consequence_parts.append(f"sustained {dmg_degree.lower()} damage{loc}")
+        
+    if has_pollution:
+        consequence_parts.append(f"caused {pollution.lower()} sea pollution")
+        
+    consequence_clause = ""
+    if consequence_parts:
+        consequence_clause = f"The vessel {join_words(consequence_parts)}"
+        
+    casualty_clause = ""
+    if total_casualties > 0:
+        counts = []
+        if minor_count > 0: counts.append(f"{minor_count} minor injuries")
+        if serious_count > 0: counts.append(f"{serious_count} serious injuries")
+        if death_count > 0: counts.append(f"{death_count} fatalities")
+        if missing_count > 0: counts.append(f"{missing_count} missing persons")
+        casualty_clause = f"resulting in {join_words(counts)}"
+    elif is_significant_event:
+        # Contrast zero injuries with the severe event
+        templates = [
+            "although no injuries or fatalities were reported",
+            "and all crew members were safely accounted for without injury",
+            "but no casualties resulted from the incident"
+        ]
+        casualty_clause = random.choice(templates)
+        
+    consequence_sentence = ""
+    if consequence_clause and casualty_clause:
+        consequence_sentence = f"{consequence_clause}, {casualty_clause}."
+    elif consequence_clause:
+        consequence_sentence = f"{consequence_clause}."
+    elif casualty_clause:
+        if casualty_clause.startswith("resulting"):
+            consequence_sentence = f"The occurrence was resolved, {casualty_clause}."
+        else:
+            consequence_sentence = f"The occurrence took place, {casualty_clause}."
+
+    # Block E: Inactive / recording equipment details
+    additional_details = []
+    if off_devices:
+        additional_details.append(f"Navigation equipment reported as inactive included {join_words(off_devices)}.")
+        
     lsa_list = v.get("lsa_equipment", [])
     lsa_raw = [lsa.get("LsApplianceDisplayEng") for lsa in lsa_list]
     lsa_names = normalize_equipment_list(lsa_raw, dictionary_metadata)
     if lsa_names:
-        equip_parts.append(f"Life-saving appliances carried on board consisted of {join_words(lsa_names)}.")
+        additional_details.append(f"Life-saving appliances carried on board consisted of {join_words(lsa_names)}.")
         
-    for lsa in lsa_list:
-        lse_type = lsa.get("LsApplianceDisplayEng")
-        lse_used = lsa.get("UsedEnumDisplayEng")
-        lse_approved = lsa.get("ApprovedEnumDisplayEng")
-        if lse_type:
-            lse_name = normalize_label(lse_type, dictionary_metadata)
-            used_str = "deployed and used" if lse_used == "Yes" else None
-            approved_str = "not approved" if lse_approved == "No" else None
-            if used_str or approved_str:
-                state_desc = " and ".join([x for x in [used_str, approved_str] if x])
-                equip_parts.append(f"The lifesaving equipment '{lse_name}' was {state_desc}.")
-                
-    # VDR / Recording
     rec_list = v.get("rec_equipment", [])
     for rec in rec_list:
         rec_type = rec.get("RecordingEquipDisplayEng")
@@ -853,50 +978,17 @@ def build_integrated_context_for_vessel(oid: int, occ: dict, v: dict, v_tpl: dic
             rec_name = normalize_label(rec_type, dictionary_metadata)
             ext_str = "data was successfully extracted" if extracted == "Yes" else "data could not be extracted"
             if seized == "Yes":
-                ext_str += " and the equipment was seized by investigators"
-            ext_sent = ext_str[0].upper() + ext_str[1:] + "."
-            equip_parts.append(f"A '{rec_name}' recording device was present; {ext_sent}")
-            
-    if equip_parts:
-        parts.append(" ".join(equip_parts))
-        
-    # 4. Injuries, Damage & Casualties
-    dmg_degree = v.get("VesselDamageDegreeDisplayEng")
-    dmg_loc = v.get("VesselDamageLocationDisplayEng")
-    dmg_degree = clean_placeholder(dmg_degree)
-    if dmg_degree and dmg_degree.upper() not in ["NONE", "NONE APPARENT"]:
-        loc_str = dmg_loc.lower() if dmg_loc else "hull"
-        parts.append(f"The vessel sustained {dmg_degree.lower()} damage to the {loc_str}.")
-        
-    pollution = v.get("SeaPollutionDegreeDisplayEng")
-    pollution = clean_placeholder(pollution)
-    if pollution and pollution.upper() not in ["NONE", "NONE APPARENT", "UNKNOWN"]:
-        parts.append(f"The occurrence led to {pollution.lower()} sea pollution.")
-        
-    injuries = v.get("injuries", [])
-    inj_parts = []
-    for inj in injuries:
-        minor = inj.get("VictimMinorInjuries") or 0
-        serious = inj.get("VictimSeriousInjuries") or 0
-        deaths = inj.get("VictimDeath") or 0
-        missing = inj.get("VictimMissing") or 0
-        if minor > 0 or serious > 0 or deaths > 0 or missing > 0:
-            counts = []
-            if minor > 0: counts.append(f"{minor} minor injuries")
-            if serious > 0: counts.append(f"{serious} serious injuries")
-            if deaths > 0: counts.append(f"{deaths} fatalities")
-            if missing > 0: counts.append(f"{missing} missing persons")
-            inj_parts.append(f"The incident resulted in the following casualties: {join_words(counts)}.")
-            
-    if inj_parts:
-        parts.append(" ".join(inj_parts))
-    elif should_emit_no_casualty(occ, [v]):
-        parts.append("No injuries or fatalities occurred in connection with this vessel.")
-        
-    if not parts:
-        return ""
-        
-    full_text = " ".join(parts)
+                ext_str += " and the equipment was seized"
+            additional_details.append(f"A '{rec_name}' recording device was on board; {ext_str[0].upper() + ext_str[1:]}.")
+
+    if not transit_parts and not outcome_sentence:
+        if not additional_details:
+            return ""
+
+    final_sentences = [main_narrative, consequence_sentence] + additional_details
+    final_sentences = [s.strip() for s in final_sentences if s.strip()]
+    
+    full_text = " ".join(final_sentences)
     return " ".join(full_text.strip().split())
 
 def main():
@@ -990,7 +1082,8 @@ def main():
                     emit = True
                 else:
                     score = calculate_information_density(concepts, occurrence_fingerprints)
-                    emit = (score >= 2)
+                    # Redefined Semantic Density Rule: At least one relationship or two facts (score >= 1)
+                    emit = (score >= 1)
                     
                 if emit:
                     seen_texts_for_occurrence.add(text_hash)

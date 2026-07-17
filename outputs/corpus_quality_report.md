@@ -4,20 +4,20 @@ This report summarizes the size, linguistic quality, and validation health of th
 
 ## 1. Corpus Summary Metrics
 
-* **Total Documents (Occurrences)**: 74548
-* **Total Words (Tokens)**: 3143904
-* **Total Characters**: 20081181
-* **Average Document Length**: 42.17 words
-* **Median Document Length**: 35.00 words
-* **Vocabulary Size**: 42853 unique words
-* **Type-Token Ratio (Lexical Diversity)**: 0.01363
-* **Shannon Entropy**: 8.3799 bits
+* **Total Documents (Occurrences)**: 73316
+* **Total Words (Tokens)**: 2555505
+* **Total Characters**: 16218036
+* **Average Document Length**: 34.86 words
+* **Median Document Length**: 31.00 words
+* **Vocabulary Size**: 42702 unique words
+* **Type-Token Ratio (Lexical Diversity)**: 0.01671
+* **Shannon Entropy**: 8.7457 bits
 
 ### Document Length Distribution
-* **0-50 words**: 51868 documents
-* **50-100 words**: 17875 documents
-* **100-200 words**: 4739 documents
-* **200-500 words**: 64 documents
+* **0-50 words**: 58189 documents
+* **50-100 words**: 14229 documents
+* **100-200 words**: 872 documents
+* **200-500 words**: 24 documents
 * **500-1000 words**: 2 documents
 * **1000+ words**: 0 documents
 
@@ -25,7 +25,7 @@ This report summarizes the size, linguistic quality, and validation health of th
 
 ## 2. Redundancy & Deduplication Metrics
 
-* **Duplicate Sentence Ratio**: 51.32%
+* **Duplicate Sentence Ratio**: 29.77%
 * **Duplicate Paragraph Ratio**: 0.01%
 
 ---
@@ -35,51 +35,51 @@ This report summarizes the size, linguistic quality, and validation health of th
 ### Top 15 Terms
 | Rank | Term | Frequency |
 |---|---|---|
-| 1 | the | 249506 |
-| 2 | vessel | 99258 |
-| 3 | of | 98831 |
-| 4 | a | 79935 |
-| 5 | in | 66073 |
-| 6 | was | 63290 |
-| 7 | with | 59674 |
-| 8 | to | 50488 |
-| 9 | on | 49339 |
-| 10 | conditions | 47631 |
-| 11 | at | 39488 |
-| 12 | reported | 38849 |
-| 13 | and | 36977 |
-| 14 | occurrence | 35398 |
-| 15 | time | 33722 |
+| 1 | the | 131430 |
+| 2 | in | 99092 |
+| 3 | and | 55021 |
+| 4 | on | 51663 |
+| 5 | a | 50597 |
+| 6 | of | 48865 |
+| 7 | was | 46582 |
+| 8 | while | 45843 |
+| 9 | underway | 44426 |
+| 10 | to | 43952 |
+| 11 | vessel | 43492 |
+| 12 | with | 41137 |
+| 13 | reported | 35504 |
+| 14 | an | 28826 |
+| 15 | fishing | 28614 |
 
 
 ### Top 10 Bigrams
 | Rank | Bigram | Frequency |
 |---|---|---|
-| 1 | the vessel | 65510 |
-| 2 | vessel was | 36658 |
-| 3 | of the | 36215 |
-| 4 | the occurrence | 35310 |
-| 5 | at the | 34339 |
-| 6 | the time | 33453 |
-| 7 | time of | 33367 |
-| 8 | is a | 26532 |
-| 9 | registered in | 25713 |
-| 10 | with a | 24789 |
+| 1 | involved in | 26411 |
+| 2 | was involved | 26268 |
+| 3 | in an | 26258 |
+| 4 | an occurrence | 26206 |
+| 5 | the vessel | 25939 |
+| 6 | registered in | 25270 |
+| 7 | while underway | 24923 |
+| 8 | with a | 24463 |
+| 9 | a gross | 22289 |
+| 10 | gross tonnage | 22289 |
 
 
 ### Top 10 Trigrams
 | Rank | Trigram | Frequency |
 |---|---|---|
-| 1 | the vessel was | 36033 |
-| 2 | at the time | 33441 |
-| 3 | the time of | 33360 |
-| 4 | time of the | 33351 |
-| 5 | of the occurrence | 28533 |
-| 6 | the occurrence the | 24610 |
-| 7 | occurrence the vessel | 24603 |
-| 8 | with a gross | 22615 |
-| 9 | a gross tonnage | 22615 |
-| 10 | gross tonnage of | 22615 |
+| 1 | was involved in | 26267 |
+| 2 | involved in an | 26208 |
+| 3 | in an occurrence | 26204 |
+| 4 | with a gross | 22289 |
+| 5 | a gross tonnage | 22289 |
+| 6 | gross tonnage of | 22289 |
+| 7 | gt registered in | 22260 |
+| 8 | while underway underway | 19412 |
+| 9 | registered in canada | 18481 |
+| 10 | in canada was | 18481 |
 
 
 ---
