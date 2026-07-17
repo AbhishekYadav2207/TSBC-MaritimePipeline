@@ -111,6 +111,8 @@ def main():
     
     with open(raw_path, "r", encoding="utf-8") as fin, open(clean_path, "w", encoding="utf-8") as fout:
         for line in tqdm(fin, desc="Cleaning Documents"):
+            if not line.strip():
+                continue
             num_input += 1
             record = json.loads(line)
             doc_text = record["document"]

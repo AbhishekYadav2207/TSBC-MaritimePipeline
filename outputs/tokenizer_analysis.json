@@ -1,9 +1,9 @@
 {
   "model_name": "bert-base-uncased",
   "sampled_documents": 1000,
-  "total_raw_words_analyzed": 24395,
-  "total_subword_tokens_analyzed": 34828,
-  "average_subwords_per_word": 1.4276696044271366,
+  "total_raw_words_analyzed": 35423,
+  "total_subword_tokens_analyzed": 49432,
+  "average_subwords_per_word": 1.3954775146091523,
   "unk_token_count": 0,
   "oov_rate": 0.0,
   "maritime_vocabulary_splits": [
@@ -15,23 +15,30 @@
       "num_pieces": 1
     },
     {
-      "term": "radio",
+      "term": "conditions",
       "tokens": [
-        "radio"
+        "conditions"
       ],
       "num_pieces": 1
     },
     {
-      "term": "compass",
+      "term": "occurrence",
       "tokens": [
-        "compass"
+        "occurrence"
       ],
       "num_pieces": 1
     },
     {
-      "term": "radar",
+      "term": "fishing",
       "tokens": [
-        "radar"
+        "fishing"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "registered",
+      "tokens": [
+        "registered"
       ],
       "num_pieces": 1
     },
@@ -51,37 +58,30 @@
       "num_pieces": 2
     },
     {
-      "term": "board",
+      "term": "sea",
       "tokens": [
-        "board"
+        "sea"
       ],
       "num_pieces": 1
     },
     {
-      "term": "canada",
+      "term": "environmental",
       "tokens": [
-        "canada"
+        "environmental"
       ],
       "num_pieces": 1
     },
     {
-      "term": "occurrence",
+      "term": "radio",
       "tokens": [
-        "occurrence"
+        "radio"
       ],
       "num_pieces": 1
     },
     {
-      "term": "fishing",
+      "term": "injuries",
       "tokens": [
-        "fishing"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "vhf",
-      "tokens": [
-        "vhf"
+        "injuries"
       ],
       "num_pieces": 1
     },
@@ -93,37 +93,72 @@
       "num_pieces": 1
     },
     {
-      "term": "hull",
-      "tokens": [
-        "hull"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "registered",
-      "tokens": [
-        "registered"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "incident",
-      "tokens": [
-        "incident"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "conditions",
-      "tokens": [
-        "conditions"
-      ],
-      "num_pieces": 1
-    },
-    {
       "term": "weather",
       "tokens": [
         "weather"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "aids",
+      "tokens": [
+        "aids"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "included",
+      "tokens": [
+        "included"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "canada",
+      "tokens": [
+        "canada"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "board",
+      "tokens": [
+        "board"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "damage",
+      "tokens": [
+        "damage"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "compass",
+      "tokens": [
+        "compass"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "cargo",
+      "tokens": [
+        "cargo"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "radar",
+      "tokens": [
+        "radar"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "ahead",
+      "tokens": [
+        "ahead"
       ],
       "num_pieces": 1
     },
@@ -137,16 +172,16 @@
       "num_pieces": 3
     },
     {
-      "term": "included",
+      "term": "vhf",
       "tokens": [
-        "included"
+        "vhf"
       ],
       "num_pieces": 1
     },
     {
-      "term": "propulsion",
+      "term": "incident",
       "tokens": [
-        "propulsion"
+        "incident"
       ],
       "num_pieces": 1
     },
@@ -158,9 +193,9 @@
       "num_pieces": 1
     },
     {
-      "term": "sea",
+      "term": "minor",
       "tokens": [
-        "sea"
+        "minor"
       ],
       "num_pieces": 1
     },
@@ -172,23 +207,79 @@
       "num_pieces": 1
     },
     {
-      "term": "propeller",
+      "term": "towed",
       "tokens": [
-        "propeller"
+        "towed"
       ],
       "num_pieces": 1
     },
     {
-      "term": "ahead",
+      "term": "pilot",
       "tokens": [
-        "ahead"
+        "pilot"
       ],
       "num_pieces": 1
     },
     {
-      "term": "ship",
+      "term": "hull",
       "tokens": [
-        "ship"
+        "hull"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "state",
+      "tokens": [
+        "state"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "its",
+      "tokens": [
+        "its"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "people",
+      "tokens": [
+        "people"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "off",
+      "tokens": [
+        "off"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "crew",
+      "tokens": [
+        "crew"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "tug",
+      "tokens": [
+        "tug"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "gps",
+      "tokens": [
+        "gps"
+      ],
+      "num_pieces": 1
+    },
+    {
+      "term": "port",
+      "tokens": [
+        "port"
       ],
       "num_pieces": 1
     },
@@ -202,142 +293,58 @@
       "num_pieces": 3
     },
     {
-      "term": "damage",
+      "term": "water",
       "tokens": [
-        "damage"
+        "water"
       ],
       "num_pieces": 1
     },
     {
-      "term": "cargo",
+      "term": "total",
       "tokens": [
-        "cargo"
+        "total"
       ],
       "num_pieces": 1
     },
     {
-      "term": "phase",
+      "term": "pollution",
       "tokens": [
-        "phase"
+        "pollution"
       ],
       "num_pieces": 1
     },
     {
-      "term": "equipment",
+      "term": "being",
       "tokens": [
-        "equipment"
+        "being"
       ],
       "num_pieces": 1
     },
     {
-      "term": "gps",
+      "term": "ship",
       "tokens": [
-        "gps"
+        "ship"
       ],
       "num_pieces": 1
     },
     {
-      "term": "pilot",
+      "term": "barge",
       "tokens": [
-        "pilot"
+        "barge"
       ],
       "num_pieces": 1
     },
     {
-      "term": "its",
+      "term": "harbour",
       "tokens": [
-        "its"
+        "harbour"
       ],
       "num_pieces": 1
     },
     {
-      "term": "material",
+      "term": "bay",
       "tokens": [
-        "material"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "flag",
-      "tokens": [
-        "flag"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "aids",
-      "tokens": [
-        "aids"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "off",
-      "tokens": [
-        "off"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "when",
-      "tokens": [
-        "when"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "minor",
-      "tokens": [
-        "minor"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "engaged",
-      "tokens": [
-        "engaged"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "operations",
-      "tokens": [
-        "operations"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "crew",
-      "tokens": [
-        "crew"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "injuries",
-      "tokens": [
-        "injuries"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "towed",
-      "tokens": [
-        "towed"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "safety",
-      "tokens": [
-        "safety"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "state",
-      "tokens": [
-        "state"
+        "bay"
       ],
       "num_pieces": 1
     },
@@ -349,18 +356,12 @@
       "num_pieces": 1
     },
     {
-      "term": "missing",
+      "term": "berthed",
       "tokens": [
-        "missing"
+        "berth",
+        "##ed"
       ],
-      "num_pieces": 1
-    },
-    {
-      "term": "barge",
-      "tokens": [
-        "barge"
-      ],
-      "num_pieces": 1
+      "num_pieces": 2
     }
   ]
 }

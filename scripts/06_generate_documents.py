@@ -58,6 +58,125 @@ def clean_placeholder(val, default_str=None):
         return default_str
     return clean_db_label(str(val).strip())
 
+# Core vocabulary maps for concept classification
+CONCEPT_MAPPING = {
+    # Entity Concepts
+    "entities": {
+        "equipment": ["radar", "compass", "vhf", "radio", "gps", "ecdis", "ais", "vdr", "sounder", "lifeboat", "liferaft", "suit", "jacket", "beacon", "epirb", "sart", "recorder", "device", "systems"],
+        "cargo": ["cargo", "timber", "oil", "goods", "coal", "ore", "container", "wheat", "grain", "chemical", "gas", "passenger", "fish", "logs", "lumber"],
+        "vessel": ["vessel", "ship", "boat", "barge", "tug", "tanker", "bulk", "cargo", "passenger", "ferry", "fishing", "carrier", "trawler"],
+        "people": ["crew", "passenger", "person", "people", "crewmember", "captain", "pilot", "master", "seaman", "officer"],
+        "location": ["river", "harbour", "port", "gulf", "channel", "bay", "sea", "ocean", "anchorage", "dock", "berth", "bridge"]
+    },
+    # Attribute Concepts
+    "attributes": {
+        "operational": ["active", "operational", "on", "functioning", "rely", "utilized", "deployed", "used"],
+        "inactive": ["inactive", "off", "non-operational", "failure", "fail", "not used", "not deployed", "deactivated"],
+        "approved": ["approved", "certified"],
+        "vessel_characteristics": ["steel", "aluminum", "wood", "fiberglass", "tonnage", "gt", "gross", "built", "propulsion", "diesel", "engine", "flag", "registry", "length", "breadth"]
+    },
+    # Relation Concepts
+    "relations": {
+        "action": ["transporting", "carrying", "laden", "laden with", "encountered", "navigated", "relied", "operating", "berthed", "docked", "anchored", "damaged by", "collision with", "sunk after", "fell from", "boarded by"]
+    },
+    # Outcome Concepts
+    "outcomes": {
+        "events": ["grounded", "grounding", "collision", "fire", "sinking", "capsizing", "explosion", "flooding", "leak", "strike", "contact"],
+        "casualties": ["fatality", "fatalities", "death", "injury", "injuries", "casualty", "casualties", "missing", "unharmed", "safe", "survived"]
+    }
+}
+
+def normalize_equipment_list(raw_list: list, dictionary_metadata: dict = None) -> list:
+    """Cleans, normalizes, trims, case-normalizes, deduplicates, and consistently sorts equipment records."""
+    if not raw_list:
+        return []
+    normalized_set = set()
+    for item in raw_list:
+        if not item:
+            continue
+        cleaned = clean_db_label(str(item).strip())
+        if not cleaned:
+            continue
+        normalized = normalize_label(cleaned, dictionary_metadata)
+        if normalized:
+            words = normalized.split()
+            c_words = []
+            for w in words:
+                if w.isupper() and len(w) > 1:
+                    c_words.append(w)
+                else:
+                    c_words.append(w.capitalize())
+            normalized_clean = " ".join(c_words)
+            if normalized_clean:
+                normalized_set.add(normalized_clean)
+    return sorted(list(normalized_set))
+
+def extract_concepts(text: str) -> set:
+    """Parses text and extracts a set of semantic concept strings (e.g. 'entity:equipment:radar')."""
+    if not text:
+        return set()
+    
+    words = re.findall(r'\b\w+\b', text.lower())
+    extracted = set()
+    
+    for category, subcategories in CONCEPT_MAPPING.items():
+        for subcat, keywords in subcategories.items():
+            for kw in keywords:
+                if kw in words or any(kw in w for w in words):
+                    extracted.add(f"{category}:{subcat}:{kw}")
+                    
+    if re.search(r'\d+\s*(gt|gross|tons)', text.lower()):
+        extracted.add("attribute:vessel_characteristics:tonnage_val")
+    if re.search(r'\b(19\d{2}|20\d{2})\b', text):
+        extracted.add("attribute:vessel_characteristics:built_year_val")
+    if re.search(r'\d+\s*(knots|kt)', text.lower()):
+        extracted.add("attribute:vessel_characteristics:speed_val")
+        
+    return extracted
+
+def calculate_information_density(concepts: set, occurrence_fingerprints: list) -> int:
+    """Calculates the Information Density Score for a set of concepts."""
+    if not concepts:
+        return 0
+        
+    all_accepted = set()
+    for fp in occurrence_fingerprints:
+        all_accepted.update(fp)
+        
+    score = 0
+    new_concepts = concepts - all_accepted
+    
+    if not new_concepts:
+        score -= 2
+    else:
+        for c in new_concepts:
+            parts = c.split(":")
+            if len(parts) >= 2:
+                cat = parts[0]
+                subcat = parts[1]
+                if cat in ["entities", "outcomes"]:
+                    score += 2
+                elif subcat == "action":
+                    score += 2
+                elif subcat in ["vessel_characteristics", "operational", "inactive"]:
+                    score += 1
+            else:
+                score += 1
+                
+    for c in concepts:
+        if c in ["attribute:vessel_characteristics:tonnage_val", 
+                 "attribute:vessel_characteristics:built_year_val", 
+                 "attribute:vessel_characteristics:speed_val"]:
+            if c not in all_accepted:
+                score += 1
+                
+    intersect = concepts & all_accepted
+    if len(intersect) > 3:
+        score -= 2
+        
+    return score
+
+
 
 def normalize_label(val: str, dictionary_metadata: dict = None) -> str:
     """Normalizes technical labels to natural English.
@@ -582,32 +701,14 @@ def format_vessel(v: dict, v_tpl: dict, i_tpl: dict, e_tpl: dict, dictionary_met
 # ----------------------------------------------------------------------
 
 def generate_occurrence_summary(oid: int, record: dict, v_tpl: dict, i_tpl: dict, e_tpl: dict, dictionary_metadata: dict = None) -> str:
-    """Generates the primary occurrence-level document summary."""
+    """Generates the primary occurrence-level document summary (raw TSB summary text only)."""
     occ = record.get("occurrence")
-    vessels = record.get("vessels", [])
-    
-    paragraphs = []
-    is_placeholder_occ = record.get("_placeholder_occurrence", False) or (occ is None)
-    
-    if is_placeholder_occ:
-        paragraphs.append("Vessel information is available, although no corresponding occurrence record exists.")
-    else:
-        raw_summary = occ.get("Summary") if occ else None
-        if raw_summary and str(raw_summary).strip() not in ["", "nan", "NaN"]:
-            paragraphs.append(str(raw_summary).strip())
-            
-        if occ:
-            env_desc = format_environmental(occ, dictionary_metadata)
-            if env_desc:
-                paragraphs.append(env_desc)
-                
-    for v in vessels:
-        other_vessels = [oth for oth in vessels if oth != v]
-        v_desc = format_vessel(v, v_tpl, i_tpl, e_tpl, dictionary_metadata, occurrence=occ, other_vessels=other_vessels)
-        if v_desc:
-            paragraphs.append(v_desc)
-            
-    return "\n\n".join(paragraphs)
+    if not occ:
+        return ""
+    raw_summary = occ.get("Summary")
+    if raw_summary and str(raw_summary).strip() not in ["", "nan", "NaN"]:
+        return str(raw_summary).strip()
+    return ""
 
 def generate_environment(oid: int, record: dict, dictionary_metadata: dict = None) -> str:
     """Generates environment weather and condition document."""
@@ -616,148 +717,10 @@ def generate_environment(oid: int, record: dict, dictionary_metadata: dict = Non
         return ""
     return format_environmental(occ, dictionary_metadata)
 
-def generate_vessel_profile(oid: int, v: dict, v_tpl: dict, occurrence: dict = None, dictionary_metadata: dict = None) -> str:
-    """Generates standalone vessel profile describing voyage, cargo, damage, and pollution."""
-    vname = v.get("VesselName") or "An unnamed vessel"
-    vtype = v.get("VesselTypeDisplayEng") or "vessel"
-    vflag = v.get("VesselFlagDisplayEng")
-    hull = v.get("HullMaterialDisplayEng")
-    prop = v.get("PropulsionTypeDisplayEng")
-    tonnage = v.get("GrossTonnage")
-    built = v.get("YearBuilt")
-    phase = v.get("VesselPhaseDisplayEng")
-    activity = v.get("ActivityTypeDisplayEng")
+def build_integrated_context_for_vessel(oid: int, occ: dict, v: dict, v_tpl: dict, i_tpl: dict, e_tpl: dict, dictionary_metadata: dict = None) -> str:
+    """Builds a single, rich integrated context document for a vessel, combining specs, voyage, environment, equipment, and outcomes."""
+    parts = []
     
-    vflag = clean_placeholder(vflag)
-    hull = clean_placeholder(hull)
-    prop = clean_placeholder(prop)
-    phase = clean_placeholder(phase)
-    activity = clean_placeholder(activity)
-    
-    vtype = vtype.lower()
-    if vflag: vflag = vflag.title()
-    if hull: hull = hull.lower()
-    if prop: prop = prop.lower()
-    if phase: phase = phase.lower()
-    if activity: activity = activity.lower()
-        
-    vessel_paragraphs = []
-    is_placeholder = v.get("_placeholder", False)
-    
-    if is_placeholder:
-        vessel_paragraphs.append("The following details were reported for an unnamed vessel involved in the occurrence:")
-    else:
-        flag_str = vflag
-        hull_str = hull
-        
-        ton_str = f"{float(tonnage):.0f} GT" if tonnage and pd.notna(tonnage) and float(tonnage) > 0 else None
-        built_str = str(int(float(built))) if built and pd.notna(built) and int(float(built)) > 0 else None
-        
-        profile_parts = []
-        if built_str and ton_str and flag_str and hull_str:
-            tpl_basic = "Built in {year_built}, '{vessel_name}' is a {vessel_type} ({vessel_flag}) featuring a {hull_material} hull and a gross tonnage of {gross_tonnage}."
-            profile_parts.append(tpl_basic.format(
-                vessel_name=vname,
-                vessel_type=vtype,
-                vessel_flag=flag_str,
-                hull_material=hull_str,
-                gross_tonnage=ton_str,
-                year_built=built_str
-            ))
-        elif built_str and ton_str:
-            tpl_basic = random.choice(v_tpl["basic_profiles"])
-            profile_parts.append(tpl_basic.format(
-                vessel_name=vname,
-                vessel_type=vtype,
-                vessel_flag=flag_str or "unspecified flag",
-                hull_material=hull_str or "unspecified material",
-                gross_tonnage=ton_str,
-                year_built=built_str
-            ))
-        else:
-            desc_pieces = [f"'{vname}' is a {vtype}"]
-            if flag_str: desc_pieces.append(f"registered in {flag_str}")
-            if hull_str: desc_pieces.append(f"constructed of {hull_str}")
-            if ton_str: desc_pieces.append(f"with a gross tonnage of {ton_str}")
-            if built_str: desc_pieces.append(f"built in {built_str}")
-            profile_parts.append(", ".join(desc_pieces) + ".")
-            
-        vessel_paragraphs.append(" ".join(profile_parts))
-        
-        act_str = activity.lower().strip() if activity else ""
-        phase_valid = phase and phase.upper() not in ["UNKNOWN", "UNSPECIFIED"]
-        act_valid = activity and activity.upper() not in ["UNKNOWN", "UNSPECIFIED"]
-        
-        voyage_parts = []
-        if phase_valid and act_valid:
-            tpl_voyage = random.choice(v_tpl["voyage_activity"])
-            if "{activity_type} operations" in tpl_voyage and (act_str.endswith("operations") or act_str.endswith("ops")):
-                tpl_voyage = tpl_voyage.replace("{activity_type} operations", "{activity_type}")
-            voyage_parts.append(tpl_voyage.format(
-                vessel_name=vname,
-                vessel_phase=phase,
-                activity_type=act_str
-            ))
-        elif phase_valid:
-            tpl_options = [
-                "At the time of the occurrence, the vessel was {vessel_phase}.",
-                "The vessel '{vessel_name}' was operating in the {vessel_phase} phase during the voyage.",
-                "The ship was {vessel_phase} when the incident occurred."
-            ]
-            voyage_parts.append(random.choice(tpl_options).format(
-                vessel_name=vname,
-                vessel_phase=phase
-            ))
-        elif act_valid:
-            tpl_options = [
-                "During the voyage, the vessel was engaged in {activity_type}.",
-                "The ship was performing {activity_type} operations at the time of the incident.",
-                "'{vessel_name}' was engaged in {activity_type} when the occurrence took place."
-            ]
-            tpl_choice = random.choice(tpl_options)
-            if "{activity_type} operations" in tpl_choice and (act_str.endswith("operations") or act_str.endswith("ops")):
-                tpl_choice = tpl_choice.replace("{activity_type} operations", "{activity_type}")
-            voyage_parts.append(tpl_choice.format(
-                vessel_name=vname,
-                activity_type=act_str
-            ))
-            
-        if voyage_parts:
-            vessel_paragraphs.append(" ".join(voyage_parts))
-            
-        cargo_prod = v.get("CargoProductTypeDisplayEng")
-        cargo_qty = v.get("QuantityOnBoard")
-        cargo_prod = clean_placeholder(cargo_prod)
-        if cargo_prod and cargo_qty is not None and str(cargo_qty).strip() not in ["", "nan", "NaN"]:
-            tpl_cargo = random.choice(v_tpl["cargo_info"])
-            vessel_paragraphs.append(tpl_cargo.format(
-                quantity=f"{cargo_qty}",
-                cargo_product=cargo_prod.lower()
-            ))
-            
-        dmg_degree = v.get("VesselDamageDegreeDisplayEng")
-        dmg_loc = v.get("VesselDamageLocationDisplayEng")
-        dmg_degree = clean_placeholder(dmg_degree)
-        if dmg_degree and dmg_degree.upper() not in ["NONE", "NONE APPARENT"]:
-            tpl_dmg = random.choice(v_tpl["damage_info"])
-            loc_str = dmg_loc.lower() if dmg_loc else "hull"
-            vessel_paragraphs.append(tpl_dmg.format(
-                damage_degree=dmg_degree.lower(),
-                damage_location=loc_str
-            ))
-            
-        pollution = v.get("SeaPollutionDegreeDisplayEng")
-        pollution = clean_placeholder(pollution)
-        if pollution and pollution.upper() not in ["NONE", "NONE APPARENT", "UNKNOWN"]:
-            tpl_poll = random.choice(v_tpl["pollution_info"])
-            vessel_paragraphs.append(tpl_poll.format(
-                pollution_degree=pollution.lower()
-            ))
-            
-    return " ".join(vessel_paragraphs)
-
-def generate_vessel_characteristics(oid: int, v: dict, dictionary_metadata: dict = None) -> list:
-    """Generates focused vessel characteristics documents."""
     vname = v.get("VesselName") or "An unnamed vessel"
     vtype = (v.get("VesselTypeDisplayEng") or "vessel").lower()
     vflag = clean_placeholder(v.get("VesselFlagDisplayEng"))
@@ -766,381 +729,175 @@ def generate_vessel_characteristics(oid: int, v: dict, dictionary_metadata: dict
     tonnage = v.get("GrossTonnage")
     built = v.get("YearBuilt")
     
-    if vflag: vflag = vflag.title()
-    if hull: hull = hull.lower()
-    if prop: prop = prop.lower()
-    
+    # 1. Vessel Profile and Characteristics
+    vflag_str = vflag.title() if vflag else None
+    hull_str = hull.lower() if hull else None
+    prop_str = prop.lower() if prop else None
     ton_str = f"{float(tonnage):.0f} GT" if tonnage and pd.notna(tonnage) and float(tonnage) > 0 else None
     built_str = str(int(float(built))) if built and pd.notna(built) and int(float(built)) > 0 else None
     
-    attrs = [x for x in [vflag, hull, prop, ton_str, built_str] if x is not None]
-    if len(attrs) < 2:
-        return []
-        
-    templates = []
-    if hull and ton_str:
-        templates.append(f"The vessel '{vname}' is constructed of {hull} hull material and has a gross tonnage of {ton_str}.")
-    if built_str and vflag and hull:
-        templates.append(f"Built in {built_str}, the {vflag}-registered {vtype} '{vname}' features a {hull} hull.")
-    if vflag and prop:
-        templates.append(f"The {vtype} '{vname}' operates under the {vflag} flag and uses {prop} propulsion.")
-    if prop and hull and vflag and ton_str:
-        templates.append(f"With {prop} propulsion and a {hull} hull, the {vflag} vessel '{vname}' has a gross tonnage of {ton_str}.")
-    if vflag and built_str and hull:
-        templates.append(f"The ship '{vname}' is a {vtype} registered in {vflag}, built in {built_str} with a {hull} hull.")
-        
-    if not templates:
-        pieces = [f"'{vname}' is a {vtype}"]
-        if vflag: pieces.append(f"registered in {vflag}")
-        if hull: pieces.append(f"constructed of {hull}")
-        if ton_str: pieces.append(f"with a gross tonnage of {ton_str}")
-        if built_str: pieces.append(f"built in {built_str}")
-        templates.append(", ".join(pieces) + ".")
-        
-    return templates
-
-def generate_voyage_activity(oid: int, v: dict, dictionary_metadata: dict = None) -> str:
-    """Generates focused voyage activity descriptions."""
-    vname = v.get("VesselName") or "An unnamed vessel"
-    phase = v.get("VesselPhaseDisplayEng")
-    activity = v.get("ActivityTypeDisplayEng")
+    profile_parts = []
+    is_placeholder = v.get("_placeholder", False)
+    if is_placeholder:
+        profile_parts.append("The vessel involved in the occurrence had the following specifications:")
+    else:
+        if built_str and ton_str and vflag_str and hull_str:
+            profile_parts.append(f"Built in {built_str}, '{vname}' is a {vtype} ({vflag_str}) featuring a {hull_str} hull and a gross tonnage of {ton_str}.")
+        elif built_str and ton_str:
+            profile_parts.append(f"Built in {built_str}, '{vname}' is a {vtype} of {ton_str}.")
+        else:
+            pieces = [f"'{vname}' is a {vtype}"]
+            if vflag_str: pieces.append(f"registered in {vflag_str}")
+            if hull_str: pieces.append(f"constructed of {hull_str}")
+            if ton_str: pieces.append(f"with a gross tonnage of {ton_str}")
+            if built_str: pieces.append(f"built in {built_str}")
+            profile_parts.append(", ".join(pieces) + ".")
+            
+    parts.append(" ".join(profile_parts))
     
-    phase = clean_placeholder(phase)
-    activity = clean_placeholder(activity)
-    
-    phase_valid = phase and phase.upper() not in ["UNKNOWN", "UNSPECIFIED"]
-    act_valid = activity and activity.upper() not in ["UNKNOWN", "UNSPECIFIED"]
-    
-    if not phase_valid and not act_valid:
-        return ""
-        
-    if phase: phase = phase.lower()
-    if activity: activity = activity.lower()
-    
-    templates = []
-    if phase_valid and act_valid:
-        templates = [
-            f"At the time of the occurrence, the vessel '{vname}' was {phase} during a {activity} voyage.",
-            f"During the voyage, '{vname}' was operating in the {phase} phase, engaged in {activity}.",
-            f"The ship '{vname}' was {phase} while performing {activity} operations.",
-            f"While engaged in {activity}, the vessel '{vname}' was operating in the {phase} phase.",
-            f"The vessel '{vname}' was {phase} and engaged in {activity} operations at the time of the occurrence."
-        ]
-    elif phase_valid:
-        templates = [
-            f"At the time of the occurrence, the vessel '{vname}' was {phase}.",
-            f"The vessel '{vname}' was operating in the {phase} phase during the voyage.",
-            f"The ship '{vname}' was {phase} when the incident occurred."
-        ]
-    elif act_valid:
-        templates = [
-            f"During the voyage, the vessel '{vname}' was engaged in {activity}.",
-            f"The ship '{vname}' was performing {activity} operations at the time of the incident.",
-            f"'{vname}' was engaged in {activity} when the occurrence took place."
-        ]
-        
-    return random.choice(templates) if templates else ""
-
-def generate_cargo(oid: int, v: dict, dictionary_metadata: dict = None) -> str:
-    """Generates cargo-specific document descriptions."""
-    vname = v.get("VesselName") or "An unnamed vessel"
+    # Cargo
     cargo_prod = v.get("CargoProductTypeDisplayEng")
     cargo_qty = v.get("QuantityOnBoard")
-    
     cargo_prod = clean_placeholder(cargo_prod)
     if cargo_prod:
         cargo_prod = cargo_prod.lower()
         if cargo_qty is not None and str(cargo_qty).strip() not in ["", "nan", "NaN"]:
-            qty_str = str(cargo_qty)
-            templates = [
-                f"On board the vessel '{vname}' was {qty_str} of {cargo_prod} cargo.",
-                f"The vessel '{vname}' was carrying {qty_str} of {cargo_prod} in the cargo holds.",
-                f"A cargo of {qty_str} of {cargo_prod} was loaded on board '{vname}'.",
-                f"The ship '{vname}' was laden with {qty_str} of {cargo_prod} cargo.",
-                f"A shipment consisting of {qty_str} of {cargo_prod} was on board '{vname}'."
-            ]
+            parts.append(f"The vessel was laden with {cargo_qty} of {cargo_prod} cargo.")
         else:
-            templates = [
-                f"The vessel '{vname}' was carrying {cargo_prod} cargo during the transit.",
-                f"Cargo on board '{vname}' consisted of {cargo_prod}.",
-                f"The ship '{vname}' was transporting {cargo_prod} as its primary cargo.",
-                f"On board '{vname}' was a shipment of {cargo_prod}."
-            ]
-        return random.choice(templates)
-    return ""
-
-def generate_navigation_equipment(oid: int, v: dict, dictionary_metadata: dict = None) -> list:
-    """Generates navigation equipment documents with adaptive granularity levels."""
-    nav_list = v.get("navigation_equipment", [])
-    if not nav_list:
-        return []
-        
-    vname = v.get("VesselName") or "An unnamed vessel"
-    on_devices = []
-    off_devices = []
-    seen_nav = set()
+            parts.append(f"The vessel was carrying {cargo_prod} cargo during the transit.")
+            
+    # 2. Voyage Activity + Environment
+    phase = v.get("VesselPhaseDisplayEng")
+    activity = v.get("ActivityTypeDisplayEng")
+    phase = clean_placeholder(phase)
+    activity = clean_placeholder(activity)
+    phase_valid = phase and phase.upper() not in ["UNKNOWN", "UNSPECIFIED"]
+    act_valid = activity and activity.upper() not in ["UNKNOWN", "UNSPECIFIED"]
     
+    voy_text = ""
+    if phase_valid and act_valid:
+        voy_text = f"At the time of the occurrence, the vessel was {phase.lower()} during a {activity.lower()} voyage"
+    elif phase_valid:
+        voy_text = f"At the time of the occurrence, the vessel was {phase.lower()}"
+    elif act_valid:
+        voy_text = f"The vessel was performing {activity.lower()} operations"
+        
+    env_text = ""
+    if occ:
+        env_text = format_environmental(occ, dictionary_metadata)
+        
+    if voy_text and env_text:
+        merged_voy_env = f"{voy_text} while encountering environmental conditions: {env_text[0].lower() + env_text[1:]}"
+        parts.append(merged_voy_env)
+    elif voy_text:
+        parts.append(voy_text + ".")
+    elif env_text:
+        parts.append(env_text)
+        
+    # 3. Equipment (Navigation + LSA + Recording)
+    equip_parts = []
+    
+    # Navigation equipment summary
+    nav_list = v.get("navigation_equipment", [])
+    on_raw = [n.get("NavigationAidTypeDisplayEng") for n in nav_list if n.get("OnOffEnumDisplayEng") == "On"]
+    off_raw = [n.get("NavigationAidTypeDisplayEng") for n in nav_list if n.get("OnOffEnumDisplayEng") == "Off"]
+    on_devices = normalize_equipment_list(on_raw, dictionary_metadata)
+    off_devices = normalize_equipment_list(off_raw, dictionary_metadata)
+    
+    if on_devices:
+        equip_parts.append(f"The navigation aids active on board included {join_words(on_devices)}.")
+    if off_devices:
+        equip_parts.append(f"Navigation aids reported as inactive included {join_words(off_devices)}.")
+        
+    # Navigation Level 3 individual subtypes (retained if introducing specific subtypes)
     for nav in nav_list:
         nav_type = nav.get("NavigationAidTypeDisplayEng")
         nav_status = nav.get("OnOffEnumDisplayEng")
-        if nav_type:
+        nav_sub = nav.get("NavigationAidSubTypeDisplayEng")
+        if nav_type and nav_sub:
             nav_name = normalize_label(nav_type, dictionary_metadata)
+            sub_str = clean_placeholder(nav_sub)
             status_str = nav_status.lower().strip() if nav_status else "not specified"
-            if status_str == "not specified":
-                continue
-            key = (nav_name.lower(), status_str)
-            if key not in seen_nav:
-                seen_nav.add(key)
+            if sub_str:
                 if status_str in ["on", "active"]:
-                    on_devices.append(nav_name)
-                elif status_str in ["off", "inactive"]:
-                    off_devices.append(nav_name)
+                    equip_parts.append(f"An active {sub_str.lower()} {nav_name} was utilized.")
+                else:
+                    equip_parts.append(f"The {sub_str.lower()} {nav_name} was inactive.")
                     
-    if not on_devices and not off_devices:
-        return []
-        
-    docs = []
-    
-    # Level 1: Summary of all navigation aids on the vessel
-    level1_templates = [
-        f"The navigation systems active on board '{vname}' included {join_words(on_devices)}." if on_devices else "",
-        f"Navigation equipment reported as inactive on board '{vname}' included {join_words(off_devices)}." if off_devices else "",
-        f"Active navigation equipment on '{vname}' consisted of {join_words(on_devices)}, while {join_words(off_devices)} was inactive." if on_devices and off_devices else ""
-    ]
-    level1_text = random.choice([t for t in level1_templates if t])
-    if level1_text:
-        docs.append(level1_text)
-        
-    # Level 2: Grouping (e.g. radars vs communication vs positioning)
-    radars = [d for d in on_devices if "radar" in d.lower()]
-    radios = [d for d in on_devices if any(x in d.lower() for x in ["radio", "vhf", "hf", "inmarsat", "callsign"])]
-    positioning = [d for d in on_devices if any(x in d.lower() for x in ["gps", "ecdis", "ais", "gyro", "compass", "navig"])]
-    
-    level2_parts = []
-    if radars:
-        level2_parts.append(f"The radar systems operational on '{vname}' included {join_words(radars)}.")
-    if radios:
-        level2_parts.append(f"For external communication, '{vname}' relied on {join_words(radios)}.")
-    if positioning:
-        level2_parts.append(f"Positioning and pilotage navigation aids on board '{vname}' featured {join_words(positioning)}.")
-        
-    level2_text = " ".join(level2_parts)
-    if level2_text:
-        docs.append(level2_text)
-        
-    # Level 3: Individual status descriptions
-    for dev in on_devices:
-        level3_templates = [
-            f"The vessel '{vname}' carried an operational {dev} for navigation.",
-            f"The {dev} was reported as active on board the vessel '{vname}'.",
-            f"For positioning and safety, '{vname}' was equipped with an active {dev}.",
-            f"The {dev} equipment on board '{vname}' was functional during the voyage.",
-            f"The navigation aids on board '{vname}' included an operational {dev}."
-        ]
-        docs.append(random.choice(level3_templates))
-            
-    for dev in off_devices:
-        level3_templates_off = [
-            f"The {dev} on board '{vname}' was reported to be inactive.",
-            f"The vessel '{vname}' was equipped with a {dev}, which was turned off.",
-            f"At the time of the occurrence, '{vname}' was not relying on its {dev} as it was inactive.",
-            f"The {dev} system on '{vname}' was non-operational during the incident.",
-            f"The navigation suite of '{vname}' included a {dev} that was reported as inactive."
-        ]
-        docs.append(random.choice(level3_templates_off))
-            
-    return docs
-
-def generate_lsa_equipment(oid: int, v: dict, dictionary_metadata: dict = None) -> list:
-    """Generates LSA equipment documents."""
+    # LSA summary & details
     lsa_list = v.get("lsa_equipment", [])
-    if not lsa_list:
-        return []
+    lsa_raw = [lsa.get("LsApplianceDisplayEng") for lsa in lsa_list]
+    lsa_names = normalize_equipment_list(lsa_raw, dictionary_metadata)
+    if lsa_names:
+        equip_parts.append(f"Life-saving appliances carried on board consisted of {join_words(lsa_names)}.")
         
-    vname = v.get("VesselName") or "An unnamed vessel"
-    seen_lsa = set()
-    docs = []
-    
-    all_lsa_details = []
     for lsa in lsa_list:
         lse_type = lsa.get("LsApplianceDisplayEng")
         lse_used = lsa.get("UsedEnumDisplayEng")
         lse_approved = lsa.get("ApprovedEnumDisplayEng")
         if lse_type:
             lse_name = normalize_label(lse_type, dictionary_metadata)
-            used_str = "deployed and used" if lse_used == "Yes" else "not used"
-            approved_str = "approved" if lse_approved == "Yes" else "not approved"
-            
-            key = (lse_name.lower(), used_str, approved_str)
-            if key not in seen_lsa:
-                seen_lsa.add(key)
-                all_lsa_details.append((lse_name, used_str, approved_str))
+            used_str = "deployed and used" if lse_used == "Yes" else None
+            approved_str = "not approved" if lse_approved == "No" else None
+            if used_str or approved_str:
+                state_desc = " and ".join([x for x in [used_str, approved_str] if x])
+                equip_parts.append(f"The lifesaving equipment '{lse_name}' was {state_desc}.")
                 
-    if not all_lsa_details:
-        return []
-        
-    # Level 1 summary
-    lsa_names = [x[0] for x in all_lsa_details]
-    level1_templates = [
-        f"Life-saving appliances carried on board '{vname}' included {join_words(lsa_names)}.",
-        f"The safety equipment suite on '{vname}' consisted of {join_words(lsa_names)}.",
-        f"For emergency safety, '{vname}' was equipped with {join_words(lsa_names)}."
-    ]
-    docs.append(random.choice(level1_templates))
-        
-    # Level 3 details
-    for lse_name, used_str, approved_str in all_lsa_details:
-        level3_templates = [
-            f"The lifesaving equipment '{lse_name}' on board '{vname}' was {used_str}.",
-            f"'{vname}' carried '{lse_name}' which was reported as {used_str} and {approved_str}.",
-            f"The vessel '{vname}' was equipped with {lse_name}, which was {used_str}.",
-            f"Emergency gear on board '{vname}' included {lse_name}, which was {approved_str} and {used_str}.",
-            f"The {approved_str} {lse_name} on board '{vname}' was {used_str} during the incident."
-        ]
-        docs.append(random.choice(level3_templates))
-            
-    return docs
-
-def generate_recording_equipment(oid: int, v: dict, dictionary_metadata: dict = None) -> list:
-    """Generates recording equipment descriptions."""
+    # VDR / Recording
     rec_list = v.get("rec_equipment", [])
-    if not rec_list:
-        return []
-        
-    vname = v.get("VesselName") or "An unnamed vessel"
-    seen_rec = set()
-    docs = []
-    
     for rec in rec_list:
         rec_type = rec.get("RecordingEquipDisplayEng")
         extracted = rec.get("DataExtractedEnumDisplayEng")
         seized = rec.get("EquipSeizedEnumDisplayEng")
-        
         if rec_type:
             rec_name = normalize_label(rec_type, dictionary_metadata)
             ext_str = "data was successfully extracted" if extracted == "Yes" else "data could not be extracted"
             if seized == "Yes":
                 ext_str += " and the equipment was seized by investigators"
-                
-            key = (rec_name.lower(), ext_str)
-            if key not in seen_rec:
-                seen_rec.add(key)
-                
-                ext_sent = ext_str[0].upper() + ext_str[1:] + "."
-                
-                templates = [
-                    f"The vessel '{vname}' carried a '{rec_name}' recording device. {ext_sent}",
-                    f"Investigation logs indicate '{vname}' was fitted with a '{rec_name}'. {ext_sent}",
-                    f"The recording system '{rec_name}' on board '{vname}' was analyzed by investigators. {ext_sent}",
-                    f"A '{rec_name}' recording system was present on '{vname}', and {ext_str}.",
-                    f"Data recovery from the '{rec_name}' on '{vname}' was completed: {ext_sent}"
-                ]
-                docs.append(random.choice(templates))
-                    
-    return docs
-
-def generate_injury(oid: int, v: dict, dictionary_metadata: dict = None) -> list:
-    """Generates casualty and injury descriptions."""
-    injuries = v.get("injuries", [])
-    if not injuries:
-        return []
+            ext_sent = ext_str[0].upper() + ext_str[1:] + "."
+            equip_parts.append(f"A '{rec_name}' recording device was present; {ext_sent}")
+            
+    if equip_parts:
+        parts.append(" ".join(equip_parts))
         
-    vname = v.get("VesselName") or "An unnamed vessel"
-    docs = []
-    
+    # 4. Injuries, Damage & Casualties
+    dmg_degree = v.get("VesselDamageDegreeDisplayEng")
+    dmg_loc = v.get("VesselDamageLocationDisplayEng")
+    dmg_degree = clean_placeholder(dmg_degree)
+    if dmg_degree and dmg_degree.upper() not in ["NONE", "NONE APPARENT"]:
+        loc_str = dmg_loc.lower() if dmg_loc else "hull"
+        parts.append(f"The vessel sustained {dmg_degree.lower()} damage to the {loc_str}.")
+        
+    pollution = v.get("SeaPollutionDegreeDisplayEng")
+    pollution = clean_placeholder(pollution)
+    if pollution and pollution.upper() not in ["NONE", "NONE APPARENT", "UNKNOWN"]:
+        parts.append(f"The occurrence led to {pollution.lower()} sea pollution.")
+        
+    injuries = v.get("injuries", [])
+    inj_parts = []
     for inj in injuries:
         minor = inj.get("VictimMinorInjuries") or 0
         serious = inj.get("VictimSeriousInjuries") or 0
         deaths = inj.get("VictimDeath") or 0
         missing = inj.get("VictimMissing") or 0
-        
         if minor > 0 or serious > 0 or deaths > 0 or missing > 0:
             counts = []
-            if minor > 0: counts.append(f"{minor} minor injury/injuries")
-            if serious > 0: counts.append(f"{serious} serious injury/injuries")
-            if deaths > 0: counts.append(f"{deaths} fatality/fatalities")
-            if missing > 0: counts.append(f"{missing} person/people missing")
+            if minor > 0: counts.append(f"{minor} minor injuries")
+            if serious > 0: counts.append(f"{serious} serious injuries")
+            if deaths > 0: counts.append(f"{deaths} fatalities")
+            if missing > 0: counts.append(f"{missing} missing persons")
+            inj_parts.append(f"The incident resulted in the following casualties: {join_words(counts)}.")
             
-            details = "; ".join(counts)
-            
-            templates = [
-                f"The occurrence involving '{vname}' resulted in the following casualties: {details}.",
-                f"Casualties reported for the vessel '{vname}' included: {details}.",
-                f"An assessment of personnel on '{vname}' following the incident revealed: {details}.",
-                f"The incident involving '{vname}' led to the following crew or passenger casualties: {details}.",
-                f"Medical reports in connection with '{vname}' confirm the following injury metrics: {details}."
-            ]
-            docs.append(random.choice(templates))
-                
-    return docs
-
-def generate_integrated_context(oid: int, record: dict, dictionary_metadata: dict = None) -> list:
-    """Generates rich integrated operational contexts combining multiple entity attributes."""
-    occ = record.get("occurrence")
-    vessels = record.get("vessels", [])
-    if not occ or not vessels:
-        return []
+    if inj_parts:
+        parts.append(" ".join(inj_parts))
+    elif should_emit_no_casualty(occ, [v]):
+        parts.append("No injuries or fatalities occurred in connection with this vessel.")
         
-    weather = clean_placeholder(occ.get("WeatherConditionDisplayEng"))
-    sea_state = clean_placeholder(occ.get("SeaStateDisplayEng"))
-    
-    docs = []
-    
-    for v in vessels:
-        vname = v.get("VesselName") or "An unnamed vessel"
-        vtype = (v.get("VesselTypeDisplayEng") or "vessel").lower()
-        vflag = clean_placeholder(v.get("VesselFlagDisplayEng"))
-        cargo = clean_placeholder(v.get("CargoProductTypeDisplayEng"))
+    if not parts:
+        return ""
         
-        nav_list = v.get("navigation_equipment", [])
-        on_devices = []
-        for nav in nav_list:
-            nav_type = nav.get("NavigationAidTypeDisplayEng")
-            nav_status = nav.get("OnOffEnumDisplayEng")
-            if nav_type and nav_status == "On":
-                on_devices.append(normalize_label(nav_type, dictionary_metadata))
-                
-        if vflag: vflag = vflag.title()
-        if cargo: cargo = cargo.lower()
-        if weather: weather = weather.lower()
-        if sea_state: sea_state = sea_state.lower()
-        
-        # Weather + Navigation
-        if weather and on_devices:
-            nav_aids = join_words(on_devices)
-            templates_w_n = [
-                f"The vessel '{vname}' encountered {weather} weather, requiring the crew to rely heavily on its navigation equipment, including {nav_aids}.",
-                f"Under {weather} conditions, navigation on board '{vname}' was maintained using {nav_aids}.",
-                f"Weather conditions during the occurrence featured {weather} weather, complicating navigation for '{vname}' as they operated {nav_aids}.",
-                f"The crew of '{vname}' navigated through {weather} weather using the vessel's operational {nav_aids}.",
-                f"Operational logs for '{vname}' show that the vessel relied on {nav_aids} to navigate through {weather} weather."
-            ]
-            docs.append(random.choice(templates_w_n))
-            
-        # Cargo + Weather
-        if cargo and weather:
-            templates_c_w = [
-                f"The {vtype} '{vname}' was carrying a cargo of {cargo} when it encountered {weather} weather.",
-                f"While transporting {cargo}, the vessel '{vname}' encountered challenging {weather} weather.",
-                f"Under {weather} weather conditions, the cargo vessel '{vname}' was laden with {cargo}.",
-                f"The vessel '{vname}' encountered {weather} weather while transporting a shipment of {cargo}.",
-                f"The transit of {cargo} on board '{vname}' occurred during reported {weather} weather."
-            ]
-            docs.append(random.choice(templates_c_w))
-            
-        # Integrated Operational Context: Vessel Flag/Type + Cargo + Weather + Navigation
-        if vflag and cargo and weather and on_devices:
-            nav_aids = join_words(on_devices)
-            templates_int = [
-                f"The {vflag}-registered {vtype} '{vname}' was transporting {cargo} in {weather} weather, relying on {nav_aids} for positioning.",
-                f"While navigating through {weather} weather with {cargo} cargo, the {vflag} vessel '{vname}' operated its {nav_aids}.",
-                f"The crew of the {vflag} {vtype} '{vname}' utilized {nav_aids} to transport {cargo} during {weather} conditions.",
-                f"Under {weather} conditions, the {vflag}-registered cargo ship '{vname}' carried {cargo} using its operational {nav_aids}.",
-                f"The transit of '{vname}' ({vflag} flag, laden with {cargo}) encountered {weather} weather while utilizing its {nav_aids} navigation systems."
-            ]
-            docs.append(random.choice(templates_int))
-            
-    return docs
+    full_text = " ".join(parts)
+    return " ".join(full_text.strip().split())
 
 def main():
     # Set seed for deterministic reproducibility
@@ -1180,8 +937,10 @@ def main():
             vessels = record["vessels"]
             
             seen_texts_for_occurrence = set()
+            candidates = []
             
-            def write_doc(text, doc_type, source_table, vessel_id=None):
+            # Helper to add candidate
+            def add_candidate(text, doc_type, source_table, vessel_id=None):
                 if not text:
                     return
                 norm_text = " ".join(text.strip().split())
@@ -1190,75 +949,62 @@ def main():
                 words = norm_text.split()
                 if len(words) < 10:
                     return
-                    
-                text_hash = hashlib.md5(norm_text.encode("utf-8")).hexdigest()
+                candidates.append({
+                    "text": norm_text,
+                    "type": doc_type,
+                    "source": source_table,
+                    "vessel_id": vessel_id
+                })
+            
+            # 1. Occurrence Summary (Raw TSB Summary only)
+            occ_summary = generate_occurrence_summary(oid, record, v_tpl, i_tpl, e_tpl, dictionary_metadata)
+            add_candidate(occ_summary, "occurrence_summary", "MDOTW_VW_OCCURRENCE_PUBLIC")
+            
+            # 2. Vessels (Fully Integrated Contexts)
+            if vessels:
+                for v in vessels:
+                    vid = v.get("VesselID")
+                    vid_val = int(vid) if vid is not None and pd.notna(vid) else None
+                    v_int_ctx = build_integrated_context_for_vessel(oid, occ, v, v_tpl, i_tpl, e_tpl, dictionary_metadata)
+                    add_candidate(v_int_ctx, "integrated_context", "MULTIPLE_TABLES", vessel_id=vid_val)
+            else:
+                # Orphan occurrence with no vessels -> export environment details if available
+                env_desc = generate_environment(oid, record, dictionary_metadata)
+                add_candidate(env_desc, "environment", "MDOTW_VW_OCCURRENCE_PUBLIC")
+            
+            occurrence_fingerprints = []
+            
+            for cand in candidates:
+                text = cand["text"]
+                doc_type = cand["type"]
+                source_table = cand["source"]
+                vessel_id = cand["vessel_id"]
                 
-                if text_hash not in seen_texts_for_occurrence:
+                text_hash = hashlib.md5(text.encode("utf-8")).hexdigest()
+                if text_hash in seen_texts_for_occurrence:
+                    continue
+                
+                concepts = extract_concepts(text)
+                
+                if doc_type == "occurrence_summary":
+                    emit = True
+                else:
+                    score = calculate_information_density(concepts, occurrence_fingerprints)
+                    emit = (score >= 2)
+                    
+                if emit:
                     seen_texts_for_occurrence.add(text_hash)
+                    occurrence_fingerprints.append(concepts)
+                    
                     output_obj = {
                         "occurrence_id": oid,
                         "vessel_id": vessel_id,
                         "document_type": doc_type,
                         "source_table": source_table,
-                        "document": norm_text,
+                        "document": text,
                         "structured": record
                     }
                     fout.write(json.dumps(output_obj) + "\n")
-            
-            # 1. Occurrence Summary
-            occ_summary = generate_occurrence_summary(oid, record, v_tpl, i_tpl, e_tpl, dictionary_metadata)
-            write_doc(occ_summary, "occurrence_summary", "MDOTW_VW_OCCURRENCE_PUBLIC")
-            
-            # 2. Environmental description
-            env_desc = generate_environment(oid, record, dictionary_metadata)
-            write_doc(env_desc, "environment", "MDOTW_VW_OCCURRENCE_PUBLIC")
-            
-            # 3. Integrated Context
-            int_contexts = generate_integrated_context(oid, record, dictionary_metadata)
-            for int_text in int_contexts:
-                write_doc(int_text, "integrated_context", "MULTIPLE_TABLES")
-                
-            # 4. Vessel-specific documents
-            for v in vessels:
-                vid = v.get("VesselID")
-                vid_val = int(vid) if vid is not None and pd.notna(vid) else None
-                
-                # Vessel Profile
-                v_prof = generate_vessel_profile(oid, v, v_tpl, occurrence=occ, dictionary_metadata=dictionary_metadata)
-                write_doc(v_prof, "vessel_profile", "MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC", vessel_id=vid_val)
-                
-                # Vessel Characteristics
-                v_chars = generate_vessel_characteristics(oid, v, dictionary_metadata=dictionary_metadata)
-                for v_char in v_chars:
-                    write_doc(v_char, "vessel_characteristics", "MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC", vessel_id=vid_val)
-                    
-                # Voyage Activity
-                v_voy = generate_voyage_activity(oid, v, dictionary_metadata=dictionary_metadata)
-                write_doc(v_voy, "voyage_activity", "MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC", vessel_id=vid_val)
-                    
-                # Cargo
-                v_cargo = generate_cargo(oid, v, dictionary_metadata=dictionary_metadata)
-                write_doc(v_cargo, "cargo", "MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC", vessel_id=vid_val)
-                    
-                # Navigation Equipment
-                v_navs = generate_navigation_equipment(oid, v, dictionary_metadata=dictionary_metadata)
-                for v_nav in v_navs:
-                    write_doc(v_nav, "navigation_equipment", "MDOTW_VW_OCCURRENCE_VESSEL_NAV_EQUIPMENT_PUBLIC", vessel_id=vid_val)
-                    
-                # LSA Equipment
-                v_lsas = generate_lsa_equipment(oid, v, dictionary_metadata=dictionary_metadata)
-                for v_lsa in v_lsas:
-                    write_doc(v_lsa, "lsa_equipment", "MDOTW_VW_OCCURRENCE_VESSEL_LSA_EQUIPMENT_PUBLIC", vessel_id=vid_val)
-                    
-                # Recording Equipment
-                v_recs = generate_recording_equipment(oid, v, dictionary_metadata=dictionary_metadata)
-                for v_rec in v_recs:
-                    write_doc(v_rec, "recording_equipment", "MDOTW_VW_OCCURRENCE_VESSEL_REC_EQUIPMENT_PUBLIC", vessel_id=vid_val)
-                    
-                # Injury
-                v_injs = generate_injury(oid, v, dictionary_metadata=dictionary_metadata)
-                for v_inj in v_injs:
-                    write_doc(v_inj, "injury", "MDOTW_VW_INJURIES_PUBLIC", vessel_id=vid_val)
             
     logger.info("Raw documents generation completed successfully!")
 

@@ -208,3 +208,105 @@
 [2026-07-21 00:07:47] INFO [11_tokenizer_analysis]: Tokenizer analysis completed successfully. Saved to C:\--Files--\Programming\pipeline\outputs\tokenizer_analysis.json
 [2026-07-21 00:07:47] INFO [11_tokenizer_analysis]:   BERT Subwords/Word Ratio: 1.4277
 [2026-07-21 00:07:47] INFO [11_tokenizer_analysis]:   BERT UNK/OOV Rate: 0.000000
+[2026-07-21 00:09:27] INFO [01_parse_dictionary]: Parsing dictionary: MDOTW-MARSIS-Master-dataset-inventory-and-dictionary-English.csv
+[2026-07-21 00:09:27] WARNING [01_parse_dictionary]: Could not map display column: MDOTW_VW_OCCURRENCE_PUBLIC.LatEnum_Bearing_DisplayEng
+[2026-07-21 00:09:28] INFO [01_parse_dictionary]: Data dictionary metadata saved successfully to C:\--Files--\Programming\pipeline\outputs\dictionary_metadata.json
+[2026-07-21 00:09:28] INFO [01_parse_dictionary]: Processed registry for 6 tables and 456 columns.
+[2026-07-21 00:09:28] INFO [02_profile_dataset]: Found 6 tables to profile.
+[2026-07-21 00:09:28] INFO [02_profile_dataset]: Profiling table: MARSISdb_MDOTW_VW_INJURIES_PUBLIC.csv
+[2026-07-21 00:09:28] INFO [02_profile_dataset]: Profiling table: MARSISdb_MDOTW_VW_OCCURRENCE_PUBLIC.csv
+[2026-07-21 00:09:32] INFO [02_profile_dataset]: Profiling table: MARSISdb_MDOTW_VW_OCCURRENCE_VESSEL_LSA_EQUIPMENT_PUBLIC.csv
+[2026-07-21 00:09:32] INFO [02_profile_dataset]: Profiling table: MARSISdb_MDOTW_VW_OCCURRENCE_VESSEL_NAV_EQUIPMENT_PUBLIC.csv
+[2026-07-21 00:09:33] INFO [02_profile_dataset]: Profiling table: MARSISdb_MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC.csv
+[2026-07-21 00:09:39] INFO [02_profile_dataset]: Profiling table: MARSISdb_MDOTW_VW_OCCURRENCE_VESSEL_REC_EQUIPMENT_PUBLIC.csv
+[2026-07-21 00:09:40] INFO [02_profile_dataset]: Inferring foreign key relationships...
+[2026-07-21 00:09:40] INFO [02_profile_dataset]:   Table 'MDOTW_VW_INJURIES_PUBLIC': found 0 foreign key candidates.
+[2026-07-21 00:09:40] INFO [02_profile_dataset]:   Table 'MDOTW_VW_OCCURRENCE_PUBLIC': found 0 foreign key candidates.
+[2026-07-21 00:09:40] INFO [02_profile_dataset]:   Table 'MDOTW_VW_OCCURRENCE_VESSEL_LSA_EQUIPMENT_PUBLIC': found 0 foreign key candidates.
+[2026-07-21 00:09:40] INFO [02_profile_dataset]:   Table 'MDOTW_VW_OCCURRENCE_VESSEL_NAV_EQUIPMENT_PUBLIC': found 0 foreign key candidates.
+[2026-07-21 00:09:40] INFO [02_profile_dataset]:   Table 'MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC': found 0 foreign key candidates.
+[2026-07-21 00:09:40] INFO [02_profile_dataset]:   Table 'MDOTW_VW_OCCURRENCE_VESSEL_REC_EQUIPMENT_PUBLIC': found 0 foreign key candidates.
+[2026-07-21 00:09:40] INFO [02_profile_dataset]: Profiling report saved successfully to C:\--Files--\Programming\pipeline\outputs\profiling_report.json
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Discovering table relationships...
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Identifier columns per table:
+[2026-07-21 00:09:41] INFO [03_discover_relationships]:   MDOTW_VW_INJURIES_PUBLIC: ['OccNo', 'OccID', 'VesselID', 'XrfOccVesselVictimCountID', 'VictimMinorInjuries', 'PeopleInWaterLseTypeID', 'PeopleInWaterNoLSE']
+[2026-07-21 00:09:41] INFO [03_discover_relationships]:   MDOTW_VW_OCCURRENCE_PUBLIC: ['OccID', 'OccNo', 'OccClassID', 'TimeZoneID', 'ProvinceID', 'OccurrenceTypeID', 'AccIncTypeID', 'ImoClassLevelID', 'AreaTypeID', 'RoutingID', 'BearingID', 'RegionResponsibilityID', 'RegionOfOccurrenceID', 'RegionOfOccurrenceDisplayEng', 'RegionOfOccurrenceDisplayFre', 'ReportSourceID', 'EnvironmentalConditionID', 'LightConditionID', 'WeatherConditionID', 'WindDirectionID', 'WindSpeedTypeID', 'BeaufortScaleID', 'WindSpeed_Knots', 'SeaStateID', 'SwellDirectionID', 'ObservedByID', 'VesselIcingQualificationID', 'NotificationDetailID', 'ReportedByID', 'OtherStateInvestigatingID', 'SubstantiallyInterestedStateID', 'TotalMinorInjuries', 'TotalMissingIndividuals']
+[2026-07-21 00:09:41] INFO [03_discover_relationships]:   MDOTW_VW_OCCURRENCE_VESSEL_LSA_EQUIPMENT_PUBLIC: ['OccNo', 'OccID', 'VesselID', 'XrfOccVesselLsApplianceID', 'LsApplianceID']
+[2026-07-21 00:09:41] INFO [03_discover_relationships]:   MDOTW_VW_OCCURRENCE_VESSEL_NAV_EQUIPMENT_PUBLIC: ['OccNo', 'OccID', 'VesselID', 'XrfOccVesselNavAidID', 'NavigationAidTypeID', 'NavigationAidTypeDisplayEng', 'NavigationAidTypeDisplayFre', 'NavigationAidSubTypeID', 'NavigationAidSubTypeDisplayEng', 'NavigationAidSubTypeDisplayFre', 'OnOffEnum', 'OnOffEnumDisplayEng', 'OnOffEnumDisplayFre']
+[2026-07-21 00:09:41] INFO [03_discover_relationships]:   MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC: ['OccNo', 'OccID', 'VesselID', 'ParentVesselID', 'OfficialNo', 'VesselTypeID', 'VesselSubTypeID', 'VesselFlagID', 'PortOfRegistryID', 'ClassSocietyID', 'LengthTypeID', 'Width_Meters', 'WidthTypeID', 'WidthTypeDisplayEng', 'WidthTypeDisplayFre', 'UnknownGrossTonnageIND', 'PropulsionTypeID', 'HullMaterialID', 'VesselBuilderID', 'VesselBuilderCountryID', 'AccIncTypeID', 'OccTypeID', 'SeaPollutionDegreeID', 'TotalVesselMissingIndividuals', 'TotalVesselMinorInjuries', 'DepartureLocationTypeID', 'DepartureCountryID', 'DeparturePortID', 'DepartureTimeZoneID', 'DestinationLocationTypeID', 'DestinationCountryID', 'DestinationPortID', 'DestinationTimeZoneID', 'VesselPhaseID', 'Speed_Knots', 'XrfActvityID', 'ActivityCategoryID', 'ActivityTypeID', 'FisheryTypeID', 'GearTypeID', 'xrfTowedVesselID', 'TowedVesselId', 'TowedVesselTypeID', 'VesselCargoID', 'CargoCategoryID', 'CargoProductTypeID', 'ProductDetailID', 'VesselDamageID', 'VesselDamageLocationCategoryID', 'VesselDamageLocationSubCategoryID', 'VesselDamageLocationID', 'VesselDamageDegreeID', 'OtherDamageObjectID', 'OtherObjectTypeID', 'OtherObjectID', 'OtherObjectDamageDegreeID']
+[2026-07-21 00:09:41] INFO [03_discover_relationships]:   MDOTW_VW_OCCURRENCE_VESSEL_REC_EQUIPMENT_PUBLIC: ['OccNo', 'OccID', 'VesselID', 'VesselSoftwareAudioID', 'RecordingEquipID', 'SoftwareAudioMakeID', 'SoftwareAudioModelID', 'VdrDetailID', 'ReasonNotExtractedID', 'ReasonNotExtractedDisplayEng', 'ReasonNotExtractedDisplayFre']
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Key 'OccNo' parent inferred as 'MDOTW_VW_OCCURRENCE_PUBLIC' with 48581 unique values.
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Key 'AccIncTypeID' parent inferred as 'MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC' with 37 unique values.
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Key 'VesselID' parent inferred as 'MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC' with 27879 unique values.
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Key 'OccID' parent inferred as 'MDOTW_VW_OCCURRENCE_PUBLIC' with 48594 unique values.
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Inferred relationship: 'MDOTW_VW_OCCURRENCE_PUBLIC' --(OccNo)--> 'MDOTW_VW_INJURIES_PUBLIC' (One-to-Many)
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Inferred relationship: 'MDOTW_VW_OCCURRENCE_PUBLIC' --(OccNo)--> 'MDOTW_VW_OCCURRENCE_VESSEL_LSA_EQUIPMENT_PUBLIC' (One-to-Many)
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Inferred relationship: 'MDOTW_VW_OCCURRENCE_PUBLIC' --(OccNo)--> 'MDOTW_VW_OCCURRENCE_VESSEL_NAV_EQUIPMENT_PUBLIC' (One-to-Many)
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Inferred relationship: 'MDOTW_VW_OCCURRENCE_PUBLIC' --(OccNo)--> 'MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC' (One-to-Many)
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Inferred relationship: 'MDOTW_VW_OCCURRENCE_PUBLIC' --(OccNo)--> 'MDOTW_VW_OCCURRENCE_VESSEL_REC_EQUIPMENT_PUBLIC' (One-to-Many)
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Inferred relationship: 'MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC' --(AccIncTypeID)--> 'MDOTW_VW_OCCURRENCE_PUBLIC' (One-to-Many)
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Inferred relationship: 'MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC' --(VesselID)--> 'MDOTW_VW_INJURIES_PUBLIC' (One-to-Many)
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Inferred relationship: 'MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC' --(VesselID)--> 'MDOTW_VW_OCCURRENCE_VESSEL_LSA_EQUIPMENT_PUBLIC' (One-to-Many)
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Inferred relationship: 'MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC' --(VesselID)--> 'MDOTW_VW_OCCURRENCE_VESSEL_NAV_EQUIPMENT_PUBLIC' (One-to-Many)
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Inferred relationship: 'MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC' --(VesselID)--> 'MDOTW_VW_OCCURRENCE_VESSEL_REC_EQUIPMENT_PUBLIC' (One-to-Many)
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Inferred relationship: 'MDOTW_VW_OCCURRENCE_PUBLIC' --(OccID)--> 'MDOTW_VW_INJURIES_PUBLIC' (One-to-Many)
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Inferred relationship: 'MDOTW_VW_OCCURRENCE_PUBLIC' --(OccID)--> 'MDOTW_VW_OCCURRENCE_VESSEL_LSA_EQUIPMENT_PUBLIC' (One-to-Many)
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Inferred relationship: 'MDOTW_VW_OCCURRENCE_PUBLIC' --(OccID)--> 'MDOTW_VW_OCCURRENCE_VESSEL_NAV_EQUIPMENT_PUBLIC' (One-to-Many)
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Inferred relationship: 'MDOTW_VW_OCCURRENCE_PUBLIC' --(OccID)--> 'MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC' (One-to-Many)
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Inferred relationship: 'MDOTW_VW_OCCURRENCE_PUBLIC' --(OccID)--> 'MDOTW_VW_OCCURRENCE_VESSEL_REC_EQUIPMENT_PUBLIC' (One-to-Many)
+[2026-07-21 00:09:41] INFO [03_discover_relationships]: Relationships discovered and saved successfully to C:\--Files--\Programming\pipeline\outputs\relationships.json
+[2026-07-21 00:09:41] INFO [04_select_semantic_columns]: Selecting semantic NLP columns...
+[2026-07-21 00:09:41] INFO [04_select_semantic_columns]: Table 'MDOTW_VW_OCCURRENCE_PUBLIC': selected 59 semantic/key columns out of 159
+[2026-07-21 00:09:41] INFO [04_select_semantic_columns]: Table 'MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC': selected 83 semantic/key columns out of 205
+[2026-07-21 00:09:41] INFO [04_select_semantic_columns]: Table 'MDOTW_VW_OCCURRENCE_VESSEL_LSA_EQUIPMENT_PUBLIC': selected 7 semantic/key columns out of 14
+[2026-07-21 00:09:41] INFO [04_select_semantic_columns]: Table 'MDOTW_VW_OCCURRENCE_VESSEL_REC_EQUIPMENT_PUBLIC': selected 21 semantic/key columns out of 46
+[2026-07-21 00:09:41] INFO [04_select_semantic_columns]: Table 'MDOTW_VW_INJURIES_PUBLIC': selected 12 semantic/key columns out of 18
+[2026-07-21 00:09:41] INFO [04_select_semantic_columns]: Table 'MDOTW_VW_OCCURRENCE_VESSEL_NAV_EQUIPMENT_PUBLIC': selected 7 semantic/key columns out of 14
+[2026-07-21 00:09:41] INFO [04_select_semantic_columns]: Selected semantic columns saved successfully to C:\--Files--\Programming\pipeline\outputs\selected_semantic_columns.json
+[2026-07-21 00:09:41] INFO [05_merge_tables]: Loading Occurrence table with 59 columns...
+[2026-07-21 00:09:45] INFO [05_merge_tables]: Deduplicating Occurrence table (original shape: (87760, 58))...
+[2026-07-21 00:10:46] INFO [05_merge_tables]: Occurrence table aggregated. Unique OccID count: 48594
+[2026-07-21 00:10:46] INFO [05_merge_tables]: Loading Vessel table with 83 columns...
+[2026-07-21 00:10:49] INFO [05_merge_tables]: Deduplicating Vessel table (original shape: (73926, 82))...
+[2026-07-21 00:11:04] INFO [05_merge_tables]: Vessel table aggregated. Unique VesselID count: 27879
+[2026-07-21 00:11:04] INFO [05_merge_tables]: Loading child tables...
+[2026-07-21 00:11:06] INFO [05_merge_tables]: Identifying unique IDs and grouping records...
+[2026-07-21 00:12:18] INFO [05_merge_tables]: Grouping vessels by OccID...
+[2026-07-21 00:12:37] INFO [05_merge_tables]: Total unique occurrences to merge (including placeholders): 48594
+[2026-07-21 00:12:59] INFO [05_merge_tables]: Merging everything and exporting to C:\--Files--\Programming\pipeline\outputs\merged_records.jsonl...
+[2026-07-21 00:13:08] INFO [05_merge_tables]: Tables merged and saved successfully!
+[2026-07-21 00:13:09] INFO [05a_validate_records]: Performing orphan and broken join analysis on raw CSV identifiers...
+[2026-07-21 00:13:39] INFO [05a_validate_records]: Validating merged occurrence records...
+[2026-07-21 00:13:45] INFO [05a_validate_records]: Validation report saved successfully to C:\--Files--\Programming\pipeline\outputs\validation_report.json
+[2026-07-21 00:13:45] INFO [05a_validate_records]: Validation status: WARNING with 2 value warnings.
+[2026-07-21 00:13:45] INFO [06_generate_documents]: Loading text templates...
+[2026-07-21 00:13:45] INFO [06_generate_documents]: Loading dictionary metadata from C:\--Files--\Programming\pipeline\outputs\dictionary_metadata.json...
+[2026-07-21 00:13:45] INFO [06_generate_documents]: Generating documents and exporting to C:\--Files--\Programming\pipeline\outputs\raw_documents.jsonl...
+[2026-07-21 00:15:35] INFO [06_generate_documents]: Raw documents generation completed successfully!
+[2026-07-21 00:15:35] INFO [07_clean_documents]: Cleaning documents and exporting to C:\--Files--\Programming\pipeline\outputs\clean_documents.jsonl...
+[2026-07-21 00:15:55] INFO [07_clean_documents]: Text cleaning completed:
+[2026-07-21 00:15:55] INFO [07_clean_documents]:   Total occurrences processed: 85597
+[2026-07-21 00:15:55] INFO [07_clean_documents]:   Cleaned documents exported: 74548
+[2026-07-21 00:15:55] INFO [07_clean_documents]:   Duplicates removed: 11049
+[2026-07-21 00:15:55] INFO [07_clean_documents]:   Too short documents filtered: 0
+[2026-07-21 00:15:55] INFO [08_export_corpus]: Exporting clean documents to final corpus files...
+[2026-07-21 00:16:08] INFO [08_export_corpus]: Corpus exported successfully:
+[2026-07-21 00:16:08] INFO [08_export_corpus]:   Final text file: C:\--Files--\Programming\pipeline\outputs\maritime_corpus.txt
+[2026-07-21 00:16:08] INFO [08_export_corpus]:   Final JSONL file: C:\--Files--\Programming\pipeline\outputs\maritime_corpus.jsonl
+[2026-07-21 00:16:08] INFO [08_export_corpus]:   Manifest written: C:\--Files--\Programming\pipeline\outputs\manifest.json
+[2026-07-21 00:16:08] INFO [08_export_corpus]:   Total documents: 74548
+[2026-07-21 00:16:08] INFO [09_statistics]: Computing corpus statistics...
+[2026-07-21 00:16:15] INFO [09_statistics]: Generating n-grams...
+[2026-07-21 00:16:24] INFO [09_statistics]: Statistics saved successfully to C:\--Files--\Programming\pipeline\outputs\statistics.json
+[2026-07-21 00:16:24] INFO [09_statistics]: Generating corpus quality report...
+[2026-07-21 00:16:25] INFO [09_statistics]: Human-readable quality report written to C:\--Files--\Programming\pipeline\outputs\corpus_quality_report.md
+[2026-07-21 00:16:25] INFO [10_extract_vocabulary]: Reading corpus text to count word frequencies...
+[2026-07-21 00:16:31] INFO [10_extract_vocabulary]: Total unique words in corpus: 25229
+[2026-07-21 00:16:31] INFO [10_extract_vocabulary]: Exporting top vocabulary words to C:\--Files--\Programming\pipeline\outputs\maritime_vocabulary.txt...
+[2026-07-21 00:16:31] INFO [10_extract_vocabulary]: Extracted 300 maritime vocabulary terms successfully.
+[2026-07-21 00:16:39] INFO [11_tokenizer_analysis]: Loading bert-base-uncased tokenizer from HuggingFace/Cache...
+[2026-07-21 00:16:41] INFO [11_tokenizer_analysis]: Analyzing how BERT splits maritime vocabulary terms...
+[2026-07-21 00:16:41] INFO [11_tokenizer_analysis]: Analyzing subwords-per-word ratio and OOV (unknown token) rate on a sample of the corpus...
+[2026-07-21 00:16:42] INFO [11_tokenizer_analysis]: Tokenizer analysis completed successfully. Saved to C:\--Files--\Programming\pipeline\outputs\tokenizer_analysis.json
+[2026-07-21 00:16:42] INFO [11_tokenizer_analysis]:   BERT Subwords/Word Ratio: 1.3955
+[2026-07-21 00:16:42] INFO [11_tokenizer_analysis]:   BERT UNK/OOV Rate: 0.000000
