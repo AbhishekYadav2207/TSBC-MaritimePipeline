@@ -210,7 +210,7 @@ The pipeline ingests seven raw data files located in the `data/` directory, repr
 ### 3.6. Stage 05: Data Merging and Aggregation
 
 *   **File Path**: [scripts/05_merge_tables.py](file:///c:/--Files--/Programming/pipeline/scripts/05_merge_tables.py)
-*   **Purpose**: Loads raw CSV files using the selected column metadata, aggregates duplicate records, and merges tables into a nested, document-aligned JSONL format.
+*   **Purpose**: Loads raw CSV files using the selected column metadata, aggregates duplicate records, and merges tables into a nested, document-aligned JSONL format using Left Outer Join semantics to guarantee 100% occurrence data retention.
 *   **Inputs**:
     *   `outputs/selected_semantic_columns.json`
     *   All raw CSV files listed in [Section 2](#2-ingested-data-catalog-input-data-points)
@@ -220,35 +220,19 @@ The pipeline ingests seven raw data files located in the `data/` directory, repr
         *   *Text Concatenation*: For columns like `weatherconditiondisplayeng`, `reportedbydisplayeng`, `substantiallyinterestedstatedisplayeng`, and `activitytypedisplayeng`, it concatenates unique, non-empty, and informative values using a semicolon (`;`) separator (e.g., `"clear; fog"`).
         *   *CYthonized first*: For other columns, it aggregates by taking the first non-null value, which is computationally highly efficient.
     3.  Loads child tables (Injuries, LSA, Navigation, and Rec Equipment) containing only selected columns.
-    4.  **Nested Structuring**:
-        *   Groups child table rows by `VesselID` into lookup dictionaries. Nulls/NaNs are stripped to keep the JSON footprint clean.
-        *   Groups aggregated vessels by `OccID`.
-        *   Enriches each vessel record with lists of its child records: `injuries`, `lsa_equipment`, `navigation_equipment`, and `rec_equipment`.
-    5.  Merges occurrences and vessels by `OccID` into nested dictionaries:
-        ```json
-        {
-          "occurrence_id": 12345,
-          "occurrence": { "OccDate": "2015-05-12", "WeatherConditionDisplayEng": "clear", "Summary": "..." },
-          "vessels": [
-            {
-              "VesselID": 987,
-              "VesselName": "MARITIME ONE",
-              "GrossTonnage": 5000,
-              "navigation_equipment": [ { "NavigationAidTypeDisplayEng": "radar1", "OnOffEnumDisplayEng": "On" } ],
-              "injuries": [],
-              "lsa_equipment": [],
-              "rec_equipment": []
-            }
-          ]
-        }
-        ```
+    4.  **Nested Structuring & Join Semantics**:
+        *   Groups standard child table rows by `VesselID` into lookup dictionaries. Nulls/NaNs are stripped to keep the JSON footprint clean.
+        *   Identifies orphan child table records (where `VesselID` is missing/NaN or is not present in standard vessels) and groups them by `OccID`.
+        *   Aggregates all orphan child records of an occurrence into exactly **one** placeholder vessel object (`VesselID: null`, `_placeholder: true`, `_reason: "orphan_child_records"`) to prevent duplicate synthetic vessels and retain orphan injuries/equipment.
+        *   Groups vessels (both standard and placeholder) by `OccID`.
+    5.  Iterates over a complete union of all unique `OccID`s found across occurrences, vessels, and child tables, ensuring no occurrence data is lost.
+        *   If an occurrence is completely missing from the master table but has vessels or equipment associated with its `OccID`, a placeholder occurrence is created with `"occurrence": null` and `"_placeholder_occurrence": true` at the root.
     6.  Writes the nested objects line-by-line to a JSONL file.
 *   **Outputs**:
     *   `outputs/merged_records.jsonl` (260.5 MB), containing 48,594 nested occurrences.
 *   **Invariants Established**:
-    *   Unique occurrence record structure, eliminating duplicated relational rows and aligning data elements by event.
-
----
+    *   Guarantees 100% occurrence retention (Left Outer Join).
+    *   Aggregates all orphan child attributes under a single placeholder vessel.
 
 ### 3.7. Stage 05a: Data Validation and Integrity Check
 
@@ -265,42 +249,45 @@ The pipeline ingests seven raw data files located in the `data/` directory, repr
         *   *Weather limits*: Wind speed $>150\text{ knots}$, air temp outside $[-60^\circ\text{C}, 60^\circ\text{C}]$.
         *   *Vessel limits*: Speed $>100\text{ knots}$, Gross Tonnage $>300,000\text{ GT}$, total crew or passengers $>1,000$.
         *   *Casualty limits*: Minor, serious, or fatal injuries exceeding total crew limits.
+        *   *Graceful Null Handling*: Defaulting to an empty dict during date/wind/temp validation if `occurrence` is null (representing a placeholder occurrence), ensuring no `AttributeError` crashes on missing data.
     3.  Compiles warnings and marks the status as `WARNING` if warnings are present, or `PASS` if clean.
 *   **Outputs**:
-    *   `outputs/validation_report.json` (808 bytes) documenting:
-        *   Validation status (`"WARNING"`).
-        *   Orphan counts: `vessels_without_occurrence`: 0, `injuries_without_vessel`: 2 (all other orphans are 0).
-        *   Sample warnings: Flags two vessels exceeding gross tonnage thresholds.
+    *   `outputs/validation_report.json` (808 bytes) documenting validation results.
 *   **Invariants Established**:
     *   Identifies data anomalies and validates join coverage before document generation.
 
 ---
 
-### 3.8. Stage 06: Document Generation
+### 3.8. Stage 06: Semantic Document Generation Engine
 
 *   **File Path**: [scripts/06_generate_documents.py](file:///c:/--Files--/Programming/pipeline/scripts/06_generate_documents.py)
-*   **Purpose**: Translates the structured, nested database records into fluent, natural language paragraphs using template families, normalizations, and conditional rendering rules.
+*   **Purpose**: Transforms structured, nested database records into multiple semantically focused natural language documents per occurrence to maximize MLM training diversity and semantic coverage while minimizing redundancy.
 *   **Inputs**:
     *   `outputs/merged_records.jsonl`
     *   `outputs/dictionary_metadata.json`
     *   `templates/vessel_templates.json`, `templates/injury_templates.json`, `templates/equipment_templates.json`
 *   **Detailed Logic & Generation Flow**:
-    1.  **Document Assembly Order**: For each occurrence, the document text is built sequentially by combining:
-        1.  **Incident Summary**: Raw text summary from the occurrence database (if available).
-        2.  **Environmental Conditions**: Generated description of weather, wind, waves, visibility, and air temperature.
-        3.  **Vessel Descriptions**: Descriptions generated for each vessel involved, outlining profiles, voyages, equipment status, casualties, damages, and pollution.
-        These sections are joined by double newlines (`\n\n`) to form a structured document.
-    2.  **Text Normalization & Cleaners**:
-        *   `clean_db_label(val)`: Removes database-specific annotations (e.g. ` - deactivated nov. 1995` or trailing dashes with years) using regex patterns, and collapses extra spaces.
-        *   `normalize_label(val)`: Normalizes technical labels. It first looks up the column or value in `dictionary_metadata.json` to extract its English `full_name` (removing metadata suffix markers). If not found, it applies a configurable mapping (e.g. `"radar1"` $\rightarrow$ `"radar"`, `"gps_receiver"` $\rightarrow$ `"GPS receiver"`, `"ecdis"` $\rightarrow$ `"ECDIS"`). It also strips trailing digits and capitalizes standard acronyms.
-    3.  **Low-Information Suppression**: Omits sub-sections if their database values are missing or contain uninformative values like `NONE`, `NONE APPARENT`, `UNKNOWN`, or `UNSPECIFIED`. For example, if wind speed, direction, temperature, and sea state are missing, the environmental paragraph is skipped entirely.
-    4.  **Conditional Casualty Reporting (`should_emit_no_casualty`)**: The generator only prints "no injuries or fatalities occurred" if the occurrence involved a major incident type (e.g., collision, fire, sinking, capsizing) but had zero actual casualties. For minor incidents, it avoids emitting repetitive "no casualty" boilerplate to keep the corpus natural.
-    5.  **Linguistic Diversity**: Randomly selects templates from JSON template families (e.g. basic profiles, voyage activities, cargo) to ensure variety in sentence structures.
-    6.  **Grammar Agreement**: Adjusts plural/singular verbs naturally when compiling equipment lists (e.g., switching from "were reported as inactive" to "was reported as inactive" when only one device is inactive).
+    1.  **Multi-Document Context & Modular Generators**: Instead of exporting a single occurrence document, the engine uses modular, independent generator functions to dynamically yield separate training samples:
+        *   `occurrence_summary` (source: `MDOTW_VW_OCCURRENCE_PUBLIC`): Reuses the primary occurrence-level summary.
+        *   `environment` (source: `MDOTW_VW_OCCURRENCE_PUBLIC`): Focuses on weather conditions, sea state, wind, and visibility.
+        *   `vessel_profile` (source: `MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC`): Details vessel specs, voyages, cargo, damage, and pollution (excluding equipment and injuries).
+        *   `vessel_characteristics` (source: `MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC`): Exposes physical stats (hull construction, tonnage, flag state, built year).
+        *   `voyage_activity` (source: `MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC`): Describes vessel phase and tasks during the event.
+        *   `cargo` (source: `MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC`): Details cargo quantities and categories.
+        *   `navigation_equipment` (source: `MDOTW_VW_OCCURRENCE_VESSEL_NAV_EQUIPMENT_PUBLIC`): Uses adaptive levels (Level 1 summary, Level 2 category grouping, Level 3 individual device status sentences).
+        *   `lsa_equipment` (source: `MDOTW_VW_OCCURRENCE_VESSEL_LSA_EQUIPMENT_PUBLIC`): Describes life saving appliances.
+        *   `recording_equipment` (source: `MDOTW_VW_OCCURRENCE_VESSEL_REC_EQUIPMENT_PUBLIC`): Describes VDR status.
+        *   `injury` (source: `MDOTW_INJURIES_PUBLIC`): Details casualties and injury categories.
+        *   `integrated_context` (source: `MULTIPLE_TABLES`): Deep operational context connecting weather, cargo, vessel profiles, and active navigation aids into a single description.
+    2.  **Information Density Filtering & Redundancy Suppression**:
+        *   Enforces a strict minimum info threshold of **50 characters** and **10 words** per document.
+        *   Avoids duplicates and redundancy by comparing MD5 hashes of generated texts locally to skip exact duplicate sentences within each occurrence.
+    3.  **Linguistic Diversity**: Uses template families with sufficient syntactic variation.
+    4.  **Relational Context & Traceability**: Each document retains `occurrence_id`, `vessel_id` (nullable), `document_type`, and `source_table` metadata.
 *   **Outputs**:
-    *   `outputs/raw_documents.jsonl` (284.6 MB) containing the generated documents coupled with original records.
+    *   `outputs/raw_documents.jsonl` containing the generated documents coupled with metadata.
 *   **Invariants Established**:
-    *   Produces fluent, grammatically correct domain paragraphs while preserving technical facts.
+    *   Produces fluent, grammatically correct domain paragraphs while preserving technical facts and metadata traceability.
 
 ---
 
@@ -382,16 +369,16 @@ The pipeline ingests seven raw data files located in the `data/` directory, repr
     *   `outputs/statistics.json` (4.0 KB): Contains raw metric values.
     *   `outputs/corpus_quality_report.md` (3.1 KB): Quality assessment report.
 *   **Measured Data Points**:
-    *   *Total Documents*: 48,441
-    *   *Total Tokens/Words*: 3,315,982 words
-    *   *Average Doc Length*: 68.45 words
-    *   *Unique Vocabulary*: 43,905 terms
-    *   *Lexical Diversity (TTR)*: 0.01324
-    *   *Shannon Entropy*: 8.5288 bits
-    *   *Duplicate Sentence Rate*: 52.30%
-    *   *Duplicate Paragraph Rate*: 31.21%
-    *   *Top 3 Bigrams*: `"of the"` (45,862), `"the vessel"` (35,463), `"at the"` (17,461)
-    *   *Top 3 Trigrams*: `"at the time"` (8,639), `"the time of"` (8,582), `"time of the"` (8,416)
+    *   *Total Documents*: 310,035
+    *   *Total Tokens/Words*: 8,273,295 words
+    *   *Average Doc Length*: 26.69 words
+    *   *Unique Vocabulary*: 43,933 terms
+    *   *Lexical Diversity (TTR)*: 0.00531
+    *   *Shannon Entropy*: 8.3590 bits
+    *   *Duplicate Sentence Rate*: 35.07%
+    *   *Duplicate Paragraph Rate*: 0.05%
+    *   *Top 3 Bigrams*: `"the vessel"` (150,795), `"a gross"` (88,439), `"gross tonnage"` (88,439)
+    *   *Top 3 Trigrams*: `"a gross tonnage"` (88,439), `"gross tonnage of"` (88,439), `"at the time"` (52,066)
 
 ---
 
