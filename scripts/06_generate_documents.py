@@ -707,7 +707,11 @@ def generate_occurrence_summary(oid: int, record: dict, v_tpl: dict, i_tpl: dict
         return ""
     raw_summary = occ.get("Summary")
     if raw_summary and str(raw_summary).strip() not in ["", "nan", "NaN"]:
-        return str(raw_summary).strip()
+        summary_clean = str(raw_summary).strip()
+        # Suppress isolated administrative notes that contain no pretraining content
+        if summary_clean.startswith("Note: formerly OccNo") and len(summary_clean) < 60:
+            return ""
+        return summary_clean
     return ""
 
 def generate_environment(oid: int, record: dict, dictionary_metadata: dict = None) -> str:
@@ -824,9 +828,18 @@ def build_integrated_context_for_vessel(oid: int, occ: dict, v: dict, v_tpl: dic
     
     activity_clause = ""
     if phase_valid and act_valid:
-        activity_clause = f"underway {phase.lower()} while engaged in {activity.lower()}"
+        p_lower = phase.lower()
+        a_lower = activity.lower()
+        if p_lower.startswith("underway"):
+            activity_clause = f"{p_lower} while engaged in {a_lower}"
+        else:
+            activity_clause = f"underway {p_lower} while engaged in {a_lower}"
     elif phase_valid:
-        activity_clause = f"underway {phase.lower()}"
+        p_lower = phase.lower()
+        if p_lower.startswith("underway"):
+            activity_clause = p_lower
+        else:
+            activity_clause = f"underway {p_lower}"
     elif act_valid:
         activity_clause = f"engaged in {activity.lower()} operations"
         
@@ -896,40 +909,53 @@ def build_integrated_context_for_vessel(oid: int, occ: dict, v: dict, v_tpl: dic
         transit_sentence = vessel_desc
 
     # Block C: Incident outcome
-    outcome_sentence = ""
+    outcome_verb = ""
     if event_name:
         if event_name in ["grounding", "grounded"]:
-            outcome_sentence = "grounded"
+            outcome_verb = "grounded"
         elif event_name in ["collision", "collided"]:
-            outcome_sentence = "was involved in a collision"
+            outcome_verb = random.choice([
+                "was involved in a collision",
+                "collided with another vessel",
+                "suffered a collision"
+            ])
         elif event_name in ["fire", "explosion"]:
-            outcome_sentence = f"experienced a {event_name}"
+            outcome_verb = random.choice([
+                f"experienced a {event_name}",
+                f"suffered a {event_name} on board"
+            ])
         else:
-            outcome_sentence = f"was involved in a {event_name} occurrence"
+            outcome_verb = random.choice([
+                f"was involved in a {event_name} occurrence",
+                f"experienced a {event_name} incident"
+            ])
+    else:
+        default_verbs = [
+            "was involved in an operational incident",
+            "experienced a shipboard occurrence",
+            "encountered an unspecified marine event",
+            "was involved in a vessel-related occurrence"
+        ]
+        outcome_verb = random.choice(default_verbs)
             
-    # Combine Block B and C:
-    main_narrative = ""
-    if transit_sentence and outcome_sentence:
-        main_narrative = f"{transit_sentence} {outcome_sentence}."
-    elif transit_sentence:
-        main_narrative = f"{transit_sentence} was involved in an occurrence."
-    elif outcome_sentence:
-        main_narrative = f"The vessel '{vname}' {outcome_sentence}."
-        
-    # Block D: Consequence (Damage + Pollution + Casualties)
+    # Block D: Consequence Descriptors (Damage + Pollution + Casualties)
     consequence_parts = []
     
     if has_damage:
-        loc = f" to the {dmg_loc.lower()}" if dmg_loc else ""
-        consequence_parts.append(f"sustained {dmg_degree.lower()} damage{loc}")
+        loc = f" to the {dmg_loc.lower()}" if dmg_loc else "hull"
+        consequence_parts.append(random.choice([
+            f"sustaining {dmg_degree.lower()} damage to the {loc}",
+            f"resulting in {dmg_degree.lower()} damage to the {loc}"
+        ]))
         
     if has_pollution:
-        consequence_parts.append(f"caused {pollution.lower()} sea pollution")
+        consequence_parts.append(random.choice([
+            f"causing {pollution.lower()} sea pollution",
+            f"resulting in {pollution.lower()} sea pollution"
+        ]))
         
-    consequence_clause = ""
-    if consequence_parts:
-        consequence_clause = f"The vessel {join_words(consequence_parts)}"
-        
+    consequence_clause = " and ".join(consequence_parts)
+    
     casualty_clause = ""
     if total_casualties > 0:
         counts = []
@@ -941,33 +967,54 @@ def build_integrated_context_for_vessel(oid: int, occ: dict, v: dict, v_tpl: dic
     elif is_significant_event:
         # Contrast zero injuries with the severe event
         templates = [
-            "although no injuries or fatalities were reported",
-            "and all crew members were safely accounted for without injury",
-            "but no casualties resulted from the incident"
+            "without any reported crew injuries or fatalities",
+            "with all crew members safely accounted for without injury",
+            "but no casualties resulted from the incident",
+            "although crew members escaped without injury"
         ]
         casualty_clause = random.choice(templates)
         
-    consequence_sentence = ""
+    # Combine outcome verb and consequence descriptors
+    outcome_clause = outcome_verb
     if consequence_clause and casualty_clause:
-        consequence_sentence = f"{consequence_clause}, {casualty_clause}."
+        outcome_clause = f"{outcome_verb}, {consequence_clause}, {casualty_clause}"
     elif consequence_clause:
-        consequence_sentence = f"{consequence_clause}."
+        outcome_clause = f"{outcome_verb}, {consequence_clause}"
     elif casualty_clause:
-        if casualty_clause.startswith("resulting"):
-            consequence_sentence = f"The occurrence was resolved, {casualty_clause}."
-        else:
-            consequence_sentence = f"The occurrence took place, {casualty_clause}."
+        outcome_clause = f"{outcome_verb}, {casualty_clause}"
 
+    # Combine Block B and C:
+    main_narrative = ""
+    if transit_sentence and outcome_clause:
+        main_narrative = f"{transit_sentence} {outcome_clause}."
+    elif transit_sentence:
+        main_narrative = f"{transit_sentence} experienced an operational event."
+    elif outcome_clause:
+        main_narrative = f"The vessel '{vname}' {outcome_clause}."
+        
     # Block E: Inactive / recording equipment details
     additional_details = []
     if off_devices:
-        additional_details.append(f"Navigation equipment reported as inactive included {join_words(off_devices)}.")
+        off_templates = [
+            f"Navigation aids reported as inactive included {join_words(off_devices)}.",
+            f"The inactive navigation suite consisted of {join_words(off_devices)}.",
+            f"During the voyage, {join_words(off_devices)} remained inactive.",
+            f"The crew reported {join_words(off_devices)} as inactive navigation aids."
+        ]
+        additional_details.append(random.choice(off_templates))
         
     lsa_list = v.get("lsa_equipment", [])
     lsa_raw = [lsa.get("LsApplianceDisplayEng") for lsa in lsa_list]
     lsa_names = normalize_equipment_list(lsa_raw, dictionary_metadata)
-    if lsa_names:
-        additional_details.append(f"Life-saving appliances carried on board consisted of {join_words(lsa_names)}.")
+    # Suppress low-information life-saving appliance types like "Other"
+    if lsa_names and lsa_names != ["Other"]:
+        lsa_templates = [
+            f"Life-saving appliances carried on board consisted of {join_words(lsa_names)}.",
+            f"Safety equipment on board included {join_words(lsa_names)}.",
+            f"For emergency safety, the vessel was equipped with {join_words(lsa_names)}.",
+            f"Life-saving equipment on the vessel included {join_words(lsa_names)}."
+        ]
+        additional_details.append(random.choice(lsa_templates))
         
     rec_list = v.get("rec_equipment", [])
     for rec in rec_list:
@@ -978,14 +1025,22 @@ def build_integrated_context_for_vessel(oid: int, occ: dict, v: dict, v_tpl: dic
             rec_name = normalize_label(rec_type, dictionary_metadata)
             ext_str = "data was successfully extracted" if extracted == "Yes" else "data could not be extracted"
             if seized == "Yes":
-                ext_str += " and the equipment was seized"
-            additional_details.append(f"A '{rec_name}' recording device was on board; {ext_str[0].upper() + ext_str[1:]}.")
+                ext_str += " and the device was seized"
+            
+            rec_templates = [
+                f"A '{rec_name}' recording device was on board; {ext_str}.",
+                f"The vessel was fitted with a '{rec_name}' recorder, from which {ext_str}.",
+                f"A '{rec_name}' recording system was present, and {ext_str}.",
+                f"Investigators noted a '{rec_name}' device on board, from which {ext_str}."
+            ]
+            additional_details.append(random.choice(rec_templates))
 
-    if not transit_parts and not outcome_sentence:
+    # Suppress check
+    if not transit_parts and not event_name and not has_damage and not has_pollution and total_casualties == 0:
         if not additional_details:
             return ""
 
-    final_sentences = [main_narrative, consequence_sentence] + additional_details
+    final_sentences = [main_narrative] + additional_details
     final_sentences = [s.strip() for s in final_sentences if s.strip()]
     
     full_text = " ".join(final_sentences)
