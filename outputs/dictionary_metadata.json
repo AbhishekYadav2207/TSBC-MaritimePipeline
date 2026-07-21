@@ -2653,7 +2653,7 @@
         "full_name": "Speed (knots)",
         "description": "The vessel's speed, in knots.",
         "data_type": "numeric",
-        "category": "other",
+        "category": "vessel_profile",
         "is_boolean": false,
         "id_to_display_map": null,
         "display_to_id_map": null

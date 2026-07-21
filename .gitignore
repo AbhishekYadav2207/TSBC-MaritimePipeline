@@ -28,3 +28,5 @@ outputs/raw_documents.jsonl
 outputs/clean_documents.jsonl
 outputs/merged_records.jsonl
 outputs/maritime_corpus.jsonl
+
+outputs_baseline_v1/

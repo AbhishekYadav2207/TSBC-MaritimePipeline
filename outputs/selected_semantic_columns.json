@@ -130,6 +130,7 @@
       "GrossTonnage",
       "Length_Meters",
       "OtherDamageObjectID",
+      "Speed_Knots",
       "TotalLength_Meters",
       "TotalVesselDeaths",
       "TotalVesselMinorInjuries",

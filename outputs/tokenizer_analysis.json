@@ -1,124 +1,83 @@
 {
   "model_name": "bert-base-uncased",
-  "sampled_documents": 1000,
-  "total_raw_words_analyzed": 28525,
-  "total_subword_tokens_analyzed": 41790,
-  "average_subwords_per_word": 1.4650306748466257,
-  "unk_token_count": 0,
+  "sampled_documents": 2000,
+  "total_raw_words_analyzed": 59617,
+  "total_subword_tokens_analyzed": 88581,
+  "average_subwords_per_word": 1.485834577385645,
+  "maritime_fragmentation_rate": 0.27596439169139464,
   "oov_rate": 0.0,
-  "maritime_vocabulary_splits": [
+  "sequence_length_distribution": {
+    "under_128": 1996,
+    "under_256": 2000,
+    "under_512": 2000,
+    "over_512": 0
+  },
+  "worst_fragmented_terms": [
     {
-      "term": "vessel",
+      "term": "lifesaving appliances",
       "tokens": [
-        "vessel"
+        "life",
+        "##sa",
+        "##ving",
+        "appliances"
       ],
-      "num_pieces": 1
+      "num_pieces": 4
     },
     {
-      "term": "fishing",
+      "term": "crewmembers",
       "tokens": [
-        "fishing"
+        "crew",
+        "##me",
+        "##mber",
+        "##s"
       ],
-      "num_pieces": 1
+      "num_pieces": 4
     },
     {
-      "term": "occurrence",
+      "term": "hovercraft",
       "tokens": [
-        "occurrence"
+        "hove",
+        "##rc",
+        "##raf",
+        "##t"
       ],
-      "num_pieces": 1
+      "num_pieces": 4
     },
     {
-      "term": "involved",
+      "term": "gross tonnage",
       "tokens": [
-        "involved"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "registered",
-      "tokens": [
-        "registered"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "gross",
-      "tokens": [
-        "gross"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "tonnage",
-      "tokens": [
+        "gross",
         "ton",
         "##nage"
       ],
-      "num_pieces": 2
+      "num_pieces": 3
     },
     {
-      "term": "radio",
+      "term": "search and rescue",
       "tokens": [
-        "radio"
+        "search",
+        "and",
+        "rescue"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "canada",
+      "term": "navigational aid",
       "tokens": [
-        "canada"
+        "navigation",
+        "##al",
+        "aid"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "damage",
+      "term": "navigational aids",
       "tokens": [
-        "damage"
+        "navigation",
+        "##al",
+        "aids"
       ],
-      "num_pieces": 1
-    },
-    {
-      "term": "compass",
-      "tokens": [
-        "compass"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "weather",
-      "tokens": [
-        "weather"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "seas",
-      "tokens": [
-        "seas"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "cargo",
-      "tokens": [
-        "cargo"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "radar",
-      "tokens": [
-        "radar"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "ahead",
-      "tokens": [
-        "ahead"
-      ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
       "term": "echosounder",
@@ -130,130 +89,144 @@
       "num_pieces": 3
     },
     {
-      "term": "vhf",
+      "term": "gyro",
       "tokens": [
-        "vhf"
+        "g",
+        "##yr",
+        "##o"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "board",
+      "term": "unberthing",
       "tokens": [
-        "board"
+        "un",
+        "##bert",
+        "##hing"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "equipment",
+      "term": "lifesaving",
       "tokens": [
-        "equipment"
+        "life",
+        "##sa",
+        "##ving"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "navigation",
+      "term": "liferaft",
       "tokens": [
-        "navigation"
+        "life",
+        "##raf",
+        "##t"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "crew",
+      "term": "crewmember",
       "tokens": [
-        "crew"
+        "crew",
+        "##me",
+        "##mber"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "included",
+      "term": "lifejacket",
       "tokens": [
-        "included"
+        "life",
+        "##jack",
+        "##et"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "minor",
+      "term": "breakwaters",
       "tokens": [
-        "minor"
+        "break",
+        "##water",
+        "##s"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
+    }
+  ],
+  "maritime_vocabulary_splits": [
+    {
+      "term": "lifesaving appliances",
+      "tokens": [
+        "life",
+        "##sa",
+        "##ving",
+        "appliances"
+      ],
+      "num_pieces": 4
     },
     {
-      "term": "engaged",
+      "term": "crewmembers",
       "tokens": [
-        "engaged"
+        "crew",
+        "##me",
+        "##mber",
+        "##s"
       ],
-      "num_pieces": 1
+      "num_pieces": 4
     },
     {
-      "term": "towed",
+      "term": "hovercraft",
       "tokens": [
-        "towed"
+        "hove",
+        "##rc",
+        "##raf",
+        "##t"
       ],
-      "num_pieces": 1
+      "num_pieces": 4
     },
     {
-      "term": "injuries",
+      "term": "gross tonnage",
       "tokens": [
-        "injuries"
+        "gross",
+        "ton",
+        "##nage"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "pilot",
+      "term": "search and rescue",
       "tokens": [
-        "pilot"
+        "search",
+        "and",
+        "rescue"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "its",
+      "term": "navigational aid",
       "tokens": [
-        "its"
+        "navigation",
+        "##al",
+        "aid"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "people",
+      "term": "navigational aids",
       "tokens": [
-        "people"
+        "navigation",
+        "##al",
+        "aids"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "off",
+      "term": "echosounder",
       "tokens": [
-        "off"
+        "echo",
+        "##so",
+        "##under"
       ],
-      "num_pieces": 1
-    },
-    {
-      "term": "incident",
-      "tokens": [
-        "incident"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "gps",
-      "tokens": [
-        "gps"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "tug",
-      "tokens": [
-        "tug"
-      ],
-      "num_pieces": 1
-    },
-    {
-      "term": "port",
-      "tokens": [
-        "port"
-      ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
       "term": "gyro",
@@ -265,103 +238,349 @@
       "num_pieces": 3
     },
     {
-      "term": "water",
+      "term": "unberthing",
       "tokens": [
-        "water"
+        "un",
+        "##bert",
+        "##hing"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "total",
+      "term": "lifesaving",
       "tokens": [
-        "total"
+        "life",
+        "##sa",
+        "##ving"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "members",
+      "term": "liferaft",
       "tokens": [
-        "members"
+        "life",
+        "##raf",
+        "##t"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "pollution",
+      "term": "crewmember",
       "tokens": [
-        "pollution"
+        "crew",
+        "##me",
+        "##mber"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "sea",
+      "term": "lifejacket",
       "tokens": [
-        "sea"
+        "life",
+        "##jack",
+        "##et"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "being",
+      "term": "breakwaters",
       "tokens": [
-        "being"
+        "break",
+        "##water",
+        "##s"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "ship",
+      "term": "shippegan",
       "tokens": [
-        "ship"
+        "ship",
+        "##pe",
+        "##gan"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "barge",
+      "term": "propellor",
       "tokens": [
-        "barge"
+        "prop",
+        "##ello",
+        "##r"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "harbour",
+      "term": "navigating",
       "tokens": [
-        "harbour"
+        "na",
+        "##vi",
+        "##gating"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "under",
+      "term": "lifebuoy",
       "tokens": [
-        "under"
+        "life",
+        "##bu",
+        "##oy"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "bay",
+      "term": "rivtow",
       "tokens": [
-        "bay"
+        "ri",
+        "##v",
+        "##tow"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "direction",
+      "term": "epirb",
       "tokens": [
-        "direction"
+        "ep",
+        "##ir",
+        "##b"
       ],
-      "num_pieces": 1
+      "num_pieces": 3
     },
     {
-      "term": "berthed",
+      "term": "algolake",
       "tokens": [
-        "berth",
+        "al",
+        "##gol",
+        "##ake"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "algoport",
+      "tokens": [
+        "al",
+        "##go",
+        "##port"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "algobay",
+      "tokens": [
+        "al",
+        "##go",
+        "##bay"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "plaisance",
+      "tokens": [
+        "pl",
+        "##ais",
+        "##ance"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "drydocked",
+      "tokens": [
+        "dry",
+        "##dock",
         "##ed"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "vhf radio",
+      "tokens": [
+        "vhf",
+        "radio"
       ],
       "num_pieces": 2
     },
     {
-      "term": "docked",
+      "term": "gps receiver",
       "tokens": [
-        "docked"
+        "gps",
+        "receiver"
       ],
-      "num_pieces": 1
+      "num_pieces": 2
+    },
+    {
+      "term": "fishing vessel",
+      "tokens": [
+        "fishing",
+        "vessel"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "bulk carrier",
+      "tokens": [
+        "bulk",
+        "carrier"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "engine room",
+      "tokens": [
+        "engine",
+        "room"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "sea pollution",
+      "tokens": [
+        "sea",
+        "pollution"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "engine failure",
+      "tokens": [
+        "engine",
+        "failure"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "cargo vessel",
+      "tokens": [
+        "cargo",
+        "vessel"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "machinery failure",
+      "tokens": [
+        "machinery",
+        "failure"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "cargo hold",
+      "tokens": [
+        "cargo",
+        "hold"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "container ship",
+      "tokens": [
+        "container",
+        "ship"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "port side",
+      "tokens": [
+        "port",
+        "side"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "steering failure",
+      "tokens": [
+        "steering",
+        "failure"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "hull damage",
+      "tokens": [
+        "hull",
+        "damage"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "starboard side",
+      "tokens": [
+        "starboard",
+        "side"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "propulsion failure",
+      "tokens": [
+        "propulsion",
+        "failure"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "poor visibility",
+      "tokens": [
+        "poor",
+        "visibility"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "bow damage",
+      "tokens": [
+        "bow",
+        "damage"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "engine breakdown",
+      "tokens": [
+        "engine",
+        "breakdown"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "reduced visibility",
+      "tokens": [
+        "reduced",
+        "visibility"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "restricted visibility",
+      "tokens": [
+        "restricted",
+        "visibility"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "good visibility",
+      "tokens": [
+        "good",
+        "visibility"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "steering loss",
+      "tokens": [
+        "steering",
+        "loss"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "keel damage",
+      "tokens": [
+        "keel",
+        "damage"
+      ],
+      "num_pieces": 2
     }
   ]
 }

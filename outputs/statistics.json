@@ -1,306 +1,207 @@
 {
-  "total_documents": 73316,
-  "total_characters": 16218036,
-  "total_tokens_words": 2555505,
-  "average_document_length_words": 34.8560341535272,
-  "median_document_length_words": 31.0,
-  "vocabulary_size": 42702,
-  "type_token_ratio_lexical_diversity": 0.01670980882447892,
-  "shannon_entropy": 8.7457385264153,
-  "duplicate_sentence_ratio": 0.2977136381815758,
-  "duplicate_paragraph_ratio": 5.4558350155442525e-05,
-  "document_length_distribution": {
-    "0-50 words": 58189,
-    "50-100 words": 14229,
-    "100-200 words": 872,
-    "200-500 words": 24,
-    "500-1000 words": 2,
-    "1000-10000 words": 0
+  "total_documents": 117889,
+  "total_characters": 26347523,
+  "total_tokens_words": 4033904,
+  "length_stats": {
+    "mean": 34.21781506332228,
+    "median": 35.0,
+    "std": 18.616033443643897,
+    "min": 5,
+    "max": 1244,
+    "percentiles": {
+      "P10": 13.0,
+      "P25": 21.0,
+      "P50": 35.0,
+      "P75": 45.0,
+      "P90": 51.0,
+      "P95": 56.0
+    },
+    "buckets": {
+      "<20": 27689,
+      "20-50": 74993,
+      "50-100": 14702,
+      "100-200": 401,
+      "200-512": 94,
+      ">512": 10
+    }
   },
-  "top_50_terms": [
+  "vocabulary_size": 43173,
+  "type_token_ratio": 0.010702535310706453,
+  "type_token_ratio_lexical_diversity": 0.010702535310706453,
+  "shannon_entropy": 8.448922770600037,
+  "template_scaffolding_ratio": 0.5481935117940337,
+  "template_pattern_concentration": 0.428284233473861,
+  "duplication": {
+    "sentence_duplicate_ratio": 0.162075022912757,
+    "paragraph_duplicate_ratio": 5.9377889370493264e-05,
+    "scaffold_reduced_near_duplicate_rate": 0.1624
+  },
+  "top_raw_bigrams": [
     [
-      "the",
-      131430
+      "in the",
+      51653
     ],
     [
-      "in",
-      99092
+      "experienced a",
+      51114
     ],
     [
-      "and",
-      55021
+      "when it",
+      50577
     ],
     [
-      "on",
-      51663
+      "a marine",
+      50500
     ],
     [
-      "a",
-      50597
+      "it experienced",
+      50493
     ],
     [
-      "of",
-      48865
-    ],
-    [
-      "was",
-      46582
-    ],
-    [
-      "while",
-      45843
-    ],
-    [
-      "underway",
-      44426
-    ],
-    [
-      "to",
-      43952
-    ],
-    [
-      "vessel",
-      43492
-    ],
-    [
-      "with",
-      41137
-    ],
-    [
-      "reported",
-      35504
-    ],
-    [
-      "an",
-      28826
-    ],
-    [
-      "fishing",
-      28614
-    ],
-    [
-      "occurrence",
-      27100
-    ],
-    [
-      "involved",
-      26431
-    ],
-    [
-      "registered",
-      25313
-    ],
-    [
-      "gt",
-      22303
-    ],
-    [
-      "gross",
-      22289
-    ],
-    [
-      "tonnage",
-      22289
-    ],
-    [
-      "radio",
-      20438
-    ],
-    [
-      "canada",
-      18592
-    ],
-    [
-      "damage",
-      18151
-    ],
-    [
-      "formerly",
-      18025
-    ],
-    [
-      "note",
-      18020
-    ],
-    [
-      "occno",
-      18018
-    ],
-    [
-      "compass",
-      17935
-    ],
-    [
-      "weather",
-      17876
-    ],
-    [
-      "meters",
-      16697
-    ],
-    [
-      "seas",
-      16126
-    ],
-    [
-      "sustained",
-      16035
-    ],
-    [
-      "no",
-      15742
-    ],
-    [
-      "cargo",
-      15332
-    ],
-    [
-      "as",
-      14492
-    ],
-    [
-      "radar",
-      13790
-    ],
-    [
-      "magnetic",
-      12698
-    ],
-    [
-      "were",
-      12624
-    ],
-    [
-      "moving",
-      12438
-    ],
-    [
-      "ahead",
-      12362
-    ],
-    [
-      "echosounder",
-      12160
-    ],
-    [
-      "vhf",
-      11572
-    ],
-    [
-      "board",
-      11227
-    ],
-    [
-      "clear",
-      10760
-    ],
-    [
-      "equipment",
-      10261
-    ],
-    [
-      "navigation",
-      10255
-    ],
-    [
-      "included",
-      10018
-    ],
-    [
-      "inactive",
-      10011
-    ],
-    [
-      "crew",
-      9909
-    ],
-    [
-      "minor",
-      9786
-    ]
-  ],
-  "top_10_bigrams": [
-    [
-      "involved in",
-      26411
-    ],
-    [
-      "was involved",
-      26268
-    ],
-    [
-      "in an",
-      26258
-    ],
-    [
-      "an occurrence",
-      26206
-    ],
-    [
-      "the vessel",
-      25939
+      "marine occurrence",
+      50490
     ],
     [
       "registered in",
-      25270
-    ],
-    [
-      "while underway",
-      24923
+      49583
     ],
     [
       "with a",
-      24463
+      48528
     ],
     [
-      "a gross",
-      22289
+      "constructed of",
+      46676
     ],
     [
-      "gross tonnage",
-      22289
+      "operating in",
+      46670
     ]
   ],
-  "top_10_trigrams": [
+  "top_domain_bigrams": [
     [
-      "was involved in",
-      26267
+      "the fishing",
+      29328
     ],
     [
-      "involved in an",
-      26208
+      "magnetic compass",
+      28140
     ],
     [
-      "in an occurrence",
-      26204
+      "vhf radio",
+      26093
     ],
     [
-      "with a gross",
-      22289
+      "note formerly",
+      18853
     ],
     [
-      "a gross tonnage",
-      22289
+      "formerly occno",
+      18853
     ],
     [
-      "gross tonnage of",
-      22289
+      "gyro compass",
+      16212
     ],
     [
-      "gt registered in",
-      22260
+      "mfhf radio",
+      13950
     ],
     [
-      "while underway underway",
-      19412
+      "automatic pilot",
+      13226
     ],
     [
-      "registered in canada",
-      18481
+      "the cargo",
+      13003
     ],
     [
-      "in canada was",
-      18481
+      "loran c",
+      12799
+    ]
+  ],
+  "top_domain_trigrams": [
+    [
+      "note formerly occno",
+      18853
+    ],
+    [
+      "the cargo solid",
+      10526
+    ],
+    [
+      "engaged in fishing",
+      8805
+    ],
+    [
+      "in fishing operations",
+      8800
+    ],
+    [
+      "the fishing vessel",
+      6833
+    ],
+    [
+      "fishing operations under",
+      6319
+    ],
+    [
+      "people on board",
+      5752
+    ],
+    [
+      "compass magnetic compass",
+      5705
+    ],
+    [
+      "data extraction status",
+      4962
+    ],
+    [
+      "extraction status pending",
+      4962
+    ]
+  ],
+  "top_domain_4grams": [
+    [
+      "engaged in fishing operations",
+      8799
+    ],
+    [
+      "phase engaged in fishing",
+      7857
+    ],
+    [
+      "in fishing operations under",
+      6295
+    ],
+    [
+      "data extraction status pending",
+      4962
+    ],
+    [
+      "people on board reported",
+      4395
+    ],
+    [
+      "magnetic compass magnetic compass",
+      3978
+    ],
+    [
+      "vhf radio vhf radio",
+      3787
+    ],
+    [
+      "operational status for radar",
+      3431
+    ],
+    [
+      "cargo under clear weather",
+      3384
+    ],
+    [
+      "with solid bulk cargo",
+      3319
     ]
   ]
 }

@@ -8,11 +8,10 @@ from pipeline_utils import setup_logging, detect_datasets, read_csv_safe, load_c
 
 logger = setup_logging("05_merge_tables")
 
-def aggregate_dataframe(df: pd.DataFrame, key_col: str, cols_meta: dict) -> pd.DataFrame:
-    """Aggregates a DataFrame by a key column, handling duplicates by summing, taking max, or concatenating text."""
+def aggregate_dataframe(df: pd.DataFrame, key_col, cols_meta: dict) -> pd.DataFrame:
+    """Aggregates a DataFrame by key column(s), handling duplicates by concatenating specific text fields or taking first."""
     agg_funcs = {}
     
-    # Columns where multiple values might exist and we want to preserve all of them
     concat_cols = {
         "weatherconditiondisplayeng", 
         "reportedbydisplayeng", 
@@ -20,9 +19,10 @@ def aggregate_dataframe(df: pd.DataFrame, key_col: str, cols_meta: dict) -> pd.D
         "activitytypedisplayeng"
     }
     
-    # Identify how to aggregate each column
+    keys = [key_col] if isinstance(key_col, str) else list(key_col)
+    
     for col in df.columns:
-        if col == key_col:
+        if col in keys:
             continue
             
         col_lower = col.lower()
@@ -36,10 +36,9 @@ def aggregate_dataframe(df: pd.DataFrame, key_col: str, cols_meta: dict) -> pd.D
                 return "; ".join(valid_vals)
             agg_funcs[col] = custom_concat
         else:
-            # Cythonized 'first' is extremely fast
             agg_funcs[col] = "first"
             
-    df_agg = df.groupby(key_col, as_index=False).agg(agg_funcs)
+    df_agg = df.groupby(keys, as_index=False).agg(agg_funcs)
     return df_agg
 
 def main():
@@ -59,7 +58,6 @@ def main():
     detected = detect_datasets()
     datasets = detected["datasets"]
     
-    # Helper to get all selected columns for a table
     def get_cols_to_read(table_name):
         meta = selected_columns[table_name]
         return list(set(
@@ -71,47 +69,54 @@ def main():
             meta["other_semantic"]
         ))
         
-    # 2. Read and deduplicate parent Occurrence table
+    # 2. Read and deduplicate parent Occurrence table (Key: OccID)
     occ_table_name = "MDOTW_VW_OCCURRENCE_PUBLIC"
     occ_cols = get_cols_to_read(occ_table_name)
     logger.info(f"Loading Occurrence table with {len(occ_cols)} columns...")
     df_occ = read_csv_safe(datasets[occ_table_name], usecols=occ_cols)
+    raw_occ_count = len(df_occ)
     
     logger.info(f"Deduplicating Occurrence table (original shape: {df_occ.shape})...")
     df_occ_agg = aggregate_dataframe(df_occ, "OccID", selected_columns[occ_table_name])
     logger.info(f"Occurrence table aggregated. Unique OccID count: {len(df_occ_agg)}")
     
-    # 3. Read and deduplicate Vessel table
+    # 3. Read and aggregate Vessel table by Composite Key: (VesselID, OccID)
     vessel_table_name = "MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC"
     vessel_cols = get_cols_to_read(vessel_table_name)
     logger.info(f"Loading Vessel table with {len(vessel_cols)} columns...")
     df_vessel = read_csv_safe(datasets[vessel_table_name], usecols=vessel_cols)
+    raw_vessel_count = len(df_vessel)
     
-    logger.info(f"Deduplicating Vessel table (original shape: {df_vessel.shape})...")
-    df_vessel_agg = aggregate_dataframe(df_vessel, "VesselID", selected_columns[vessel_table_name])
-    logger.info(f"Vessel table aggregated. Unique VesselID count: {len(df_vessel_agg)}")
+    # Ensure VesselID and OccID are valid for grouping
+    df_vessel_clean = df_vessel.dropna(subset=["VesselID", "OccID"])
+    logger.info(f"Deduplicating Vessel table by composite key (VesselID, OccID) (rows: {len(df_vessel_clean)})...")
+    df_vessel_agg = aggregate_dataframe(df_vessel_clean, ["VesselID", "OccID"], selected_columns[vessel_table_name])
+    logger.info(f"Vessel table aggregated by (VesselID, OccID). Composite unit count: {len(df_vessel_agg)}")
     
     # 4. Load child tables
     logger.info("Loading child tables...")
-    
-    # Injuries
     inj_table = "MDOTW_VW_INJURIES_PUBLIC"
     df_inj = read_csv_safe(datasets[inj_table], usecols=get_cols_to_read(inj_table))
+    raw_inj_count = len(df_inj)
     
-    # LSA Equipment
     lsa_table = "MDOTW_VW_OCCURRENCE_VESSEL_LSA_EQUIPMENT_PUBLIC"
     df_lsa = read_csv_safe(datasets[lsa_table], usecols=get_cols_to_read(lsa_table))
+    raw_lsa_count = len(df_lsa)
     
-    # Nav Equipment
     nav_table = "MDOTW_VW_OCCURRENCE_VESSEL_NAV_EQUIPMENT_PUBLIC"
     df_nav = read_csv_safe(datasets[nav_table], usecols=get_cols_to_read(nav_table))
+    raw_nav_count = len(df_nav)
     
-    # Rec Equipment
     rec_table = "MDOTW_VW_OCCURRENCE_VESSEL_REC_EQUIPMENT_PUBLIC"
     df_rec = read_csv_safe(datasets[rec_table], usecols=get_cols_to_read(rec_table))
+    raw_rec_count = len(df_rec)
     
-    # 5. Group child tables and identify all unique IDs
-    # We clean nan values and convert numpy types to standard python types to keep json clean and serializable
+    # 5. Build lookup set of valid vessel-occurrence pairs
+    vessel_occ_pairs = set(zip(
+        df_vessel_agg["VesselID"].dropna().astype(int),
+        df_vessel_agg["OccID"].dropna().astype(int)
+    ))
+    
     def clean_dict(d):
         cleaned = {}
         for k, v in d.items():
@@ -122,84 +127,84 @@ def main():
             else:
                 cleaned[k] = v
         return cleaned
-        
-    logger.info("Identifying unique IDs and grouping records...")
+
+    logger.info("Matching child records by composite key (VesselID, OccID)...")
     
-    # Track standard vessel IDs to distinguish orphans
-    vessels_set = set(df_vessel_agg["VesselID"].dropna().unique().astype(int))
-    
-    # Group standard child tables by VesselID
     inj_grouped = {}
     lsa_grouped = {}
     nav_grouped = {}
     rec_grouped = {}
     
-    # Group orphan child tables by OccID (for child records with missing/invalid VesselID)
     orphan_inj_by_occ = {}
     orphan_lsa_by_occ = {}
     orphan_nav_by_occ = {}
     orphan_rec_by_occ = {}
     
-    # Group injuries
+    matched_inj, orphan_inj = 0, 0
+    matched_lsa, orphan_lsa = 0, 0
+    matched_nav, orphan_nav = 0, 0
+    matched_rec, orphan_rec = 0, 0
+    
+    # Process Injuries
     for _, row in df_inj.iterrows():
-        vid = row.get("VesselID")
-        oid = row.get("OccID")
+        vid, oid = row.get("VesselID"), row.get("OccID")
         cleaned_row = clean_dict(row.to_dict())
-        if pd.notna(vid) and int(vid) in vessels_set:
-            inj_grouped.setdefault(int(vid), []).append(cleaned_row)
+        if pd.notna(vid) and pd.notna(oid) and (int(vid), int(oid)) in vessel_occ_pairs:
+            inj_grouped.setdefault((int(vid), int(oid)), []).append(cleaned_row)
+            matched_inj += 1
         elif pd.notna(oid):
             orphan_inj_by_occ.setdefault(int(oid), []).append(cleaned_row)
+            orphan_inj += 1
             
-    # Group LSA
+    # Process LSA
     for _, row in df_lsa.iterrows():
-        vid = row.get("VesselID")
-        oid = row.get("OccID")
+        vid, oid = row.get("VesselID"), row.get("OccID")
         cleaned_row = clean_dict(row.to_dict())
-        if pd.notna(vid) and int(vid) in vessels_set:
-            lsa_grouped.setdefault(int(vid), []).append(cleaned_row)
+        if pd.notna(vid) and pd.notna(oid) and (int(vid), int(oid)) in vessel_occ_pairs:
+            lsa_grouped.setdefault((int(vid), int(oid)), []).append(cleaned_row)
+            matched_lsa += 1
         elif pd.notna(oid):
             orphan_lsa_by_occ.setdefault(int(oid), []).append(cleaned_row)
+            orphan_lsa += 1
             
-    # Group Nav
+    # Process Nav Equipment
     for _, row in df_nav.iterrows():
-        vid = row.get("VesselID")
-        oid = row.get("OccID")
+        vid, oid = row.get("VesselID"), row.get("OccID")
         cleaned_row = clean_dict(row.to_dict())
-        if pd.notna(vid) and int(vid) in vessels_set:
-            nav_grouped.setdefault(int(vid), []).append(cleaned_row)
+        if pd.notna(vid) and pd.notna(oid) and (int(vid), int(oid)) in vessel_occ_pairs:
+            nav_grouped.setdefault((int(vid), int(oid)), []).append(cleaned_row)
+            matched_nav += 1
         elif pd.notna(oid):
             orphan_nav_by_occ.setdefault(int(oid), []).append(cleaned_row)
+            orphan_nav += 1
             
-    # Group Rec
+    # Process Rec Equipment
     for _, row in df_rec.iterrows():
-        vid = row.get("VesselID")
-        oid = row.get("OccID")
+        vid, oid = row.get("VesselID"), row.get("OccID")
         cleaned_row = clean_dict(row.to_dict())
-        if pd.notna(vid) and int(vid) in vessels_set:
-            rec_grouped.setdefault(int(vid), []).append(cleaned_row)
+        if pd.notna(vid) and pd.notna(oid) and (int(vid), int(oid)) in vessel_occ_pairs:
+            rec_grouped.setdefault((int(vid), int(oid)), []).append(cleaned_row)
+            matched_rec += 1
         elif pd.notna(oid):
             orphan_rec_by_occ.setdefault(int(oid), []).append(cleaned_row)
-            
+            orphan_rec += 1
+
     # 6. Group Vessels by OccID
-    logger.info("Grouping vessels by OccID...")
+    logger.info("Grouping composite vessels by OccID...")
     vessels_by_occ = {}
     for _, row in df_vessel_agg.iterrows():
-        oid = row.get("OccID")
-        if pd.notna(oid):
-            oid = int(oid)
-            vid = int(row["VesselID"])
-            
-            # Enrich vessel record with its child equipment and injuries
-            vessel_record = clean_dict(row.to_dict())
-            vessel_record["injuries"] = inj_grouped.get(vid, [])
-            vessel_record["lsa_equipment"] = lsa_grouped.get(vid, [])
-            vessel_record["navigation_equipment"] = nav_grouped.get(vid, [])
-            vessel_record["rec_equipment"] = rec_grouped.get(vid, [])
-            
-            vessels_by_occ.setdefault(oid, []).append(vessel_record)
-            
-    # 7. Merge everything into Occurrences and write to JSONL (Left Outer Join)
-    # Collect all unique OccIDs from all sources to ensure 100% data retention
+        oid = int(row["OccID"])
+        vid = int(row["VesselID"])
+        
+        vessel_record = clean_dict(row.to_dict())
+        vessel_record["injuries"] = inj_grouped.get((vid, oid), [])
+        vessel_record["lsa_equipment"] = lsa_grouped.get((vid, oid), [])
+        vessel_record["navigation_equipment"] = nav_grouped.get((vid, oid), [])
+        vessel_record["rec_equipment"] = rec_grouped.get((vid, oid), [])
+        
+        vessels_by_occ.setdefault(oid, []).append(vessel_record)
+
+    # 7. Merge everything into Occurrences and export JSONL
     occ_ids_set = set(df_occ_agg["OccID"].dropna().unique().astype(int))
     vessel_occ_ids = set(df_vessel_agg["OccID"].dropna().unique().astype(int))
     inj_occ_ids = set(df_inj["OccID"].dropna().unique().astype(int))
@@ -208,33 +213,33 @@ def main():
     rec_occ_ids = set(df_rec["OccID"].dropna().unique().astype(int))
     
     all_occ_ids = sorted([int(x) for x in (occ_ids_set | vessel_occ_ids | inj_occ_ids | lsa_occ_ids | nav_occ_ids | rec_occ_ids)])
-    logger.info(f"Total unique occurrences to merge (including placeholders): {len(all_occ_ids)}")
+    logger.info(f"Total unique occurrences to merge: {len(all_occ_ids)}")
     
     occ_by_id = {int(row["OccID"]): clean_dict(row.to_dict()) for _, row in df_occ_agg.iterrows()}
     
     out_file = output_dir / "merged_records.jsonl"
-    logger.info(f"Merging everything and exporting to {out_file}...")
+    placeholder_vessels_count = 0
+    placeholder_occurrences_count = 0
     
     with open(out_file, "w", encoding="utf-8") as f:
         for oid in tqdm(all_occ_ids, desc="Merging Records"):
-            # Check if this is a real occurrence or a placeholder
             if oid in occ_by_id:
                 occurrence_record = occ_by_id[oid]
-                is_placeholder_occurrence = False
+                is_placeholder_occ = False
             else:
                 occurrence_record = None
-                is_placeholder_occurrence = True
+                is_placeholder_occ = True
+                placeholder_occurrences_count += 1
                 
-            # Find associated vessels
             occ_vessels = list(vessels_by_occ.get(oid, []))
             
-            # Check for any orphan child records for this OccID to synthesize a single placeholder vessel
             orph_inj = orphan_inj_by_occ.get(oid, [])
             orph_lsa = orphan_lsa_by_occ.get(oid, [])
             orph_nav = orphan_nav_by_occ.get(oid, [])
             orph_rec = orphan_rec_by_occ.get(oid, [])
             
             if orph_inj or orph_lsa or orph_nav or orph_rec:
+                placeholder_vessels_count += 1
                 placeholder_vessel = {
                     "VesselID": None,
                     "VesselName": "Unknown Vessel",
@@ -247,19 +252,48 @@ def main():
                 }
                 occ_vessels.append(placeholder_vessel)
                 
-            # Build the nested object
             merged = {
                 "occurrence_id": oid,
                 "occurrence": occurrence_record,
                 "vessels": occ_vessels
             }
-            
-            if is_placeholder_occurrence:
+            if is_placeholder_occ:
                 merged["_placeholder_occurrence"] = True
                 
-            # Write to JSONL
             f.write(json.dumps(merged) + "\n")
             
+    # Save Merge Reconciliation Report
+    reconciliation_report = {
+        "raw_source_rows": {
+            "MDOTW_VW_OCCURRENCE_PUBLIC": raw_occ_count,
+            "MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC": raw_vessel_count,
+            "MDOTW_VW_INJURIES_PUBLIC": raw_inj_count,
+            "MDOTW_VW_OCCURRENCE_VESSEL_LSA_EQUIPMENT_PUBLIC": raw_lsa_count,
+            "MDOTW_VW_OCCURRENCE_VESSEL_NAV_EQUIPMENT_PUBLIC": raw_nav_count,
+            "MDOTW_VW_OCCURRENCE_VESSEL_REC_EQUIPMENT_PUBLIC": raw_rec_count
+        },
+        "retained_units": {
+            "unique_occurrences": len(df_occ_agg),
+            "merged_vessel_occurrence_units": len(df_vessel_agg),
+            "total_merged_occurrences": len(all_occ_ids)
+        },
+        "child_table_matches": {
+            "injuries": {"matched": matched_inj, "orphan": orphan_inj},
+            "lsa_equipment": {"matched": matched_lsa, "orphan": orphan_lsa},
+            "navigation_equipment": {"matched": matched_nav, "orphan": orphan_nav},
+            "recording_equipment": {"matched": matched_rec, "orphan": orphan_rec}
+        },
+        "synthesized_placeholders": {
+            "placeholder_vessels_created": placeholder_vessels_count,
+            "placeholder_occurrences_created": placeholder_occurrences_count
+        }
+    }
+    
+    recon_path = output_dir / "merge_reconciliation_report.json"
+    with open(recon_path, "w", encoding="utf-8") as fr:
+        json.dump(reconciliation_report, fr, indent=2)
+        
+    logger.info(f"Merge Reconciliation Report exported to {recon_path}")
     logger.info("Tables merged and saved successfully!")
 
 if __name__ == "__main__":

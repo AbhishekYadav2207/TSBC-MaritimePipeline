@@ -114,7 +114,7 @@ def categorize_column(col_name: str, desc: str, table_name: str) -> str:
         return "voyage_activity"
         
     # Vessel Characteristics
-    if any(k in col_lower for k in ["vesseltype", "vesselsubtype", "tonnage", "hull", "propulsion", "builder", "officialno", "imo", "mmsi", "callsign", "vesselname", "length", "width", "sms"]):
+    if any(k in col_lower for k in ["vesseltype", "vesselsubtype", "tonnage", "hull", "propulsion", "builder", "officialno", "imo", "mmsi", "callsign", "vesselname", "length", "width", "sms", "speed"]):
         return "vessel_profile"
         
     # Narratives and summaries

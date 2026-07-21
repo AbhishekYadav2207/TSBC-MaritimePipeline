@@ -22,71 +22,94 @@ def main():
         logger.error(f"Maritime vocabulary not found at {vocab_path}! Run Step 10 first.")
         return
         
-    # Read top vocab words
-    vocab_words = []
+    vocab_terms = []
     with open(vocab_path, "r", encoding="utf-8") as fv:
-        # Read first 50 words
-        vocab_words = [line.strip() for line in fv if line.strip()][:50]
+        vocab_terms = [line.strip() for line in fv if line.strip()]
         
-    logger.info("Loading bert-base-uncased tokenizer from HuggingFace/Cache...")
-    # This might download the tokenizer files if not already cached
+    logger.info("Loading bert-base-uncased tokenizer from HuggingFace...")
     tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
     
     # 1. Analyze maritime terms splits
-    logger.info("Analyzing how BERT splits maritime vocabulary terms...")
+    logger.info("Analyzing BERT tokenization splits on maritime vocabulary terms...")
     vocab_splits = []
-    for word in vocab_words:
-        tokens = tokenizer.tokenize(word)
+    split_count = 0
+    total_pieces = 0
+    
+    for term in vocab_terms:
+        tokens = tokenizer.tokenize(term)
+        num_pieces = len(tokens)
+        total_pieces += num_pieces
+        if num_pieces > 1:
+            split_count += 1
+            
         vocab_splits.append({
-            "term": word,
+            "term": term,
             "tokens": tokens,
-            "num_pieces": len(tokens)
+            "num_pieces": num_pieces
         })
         
-    # 2. Process sample of corpus to analyze subword ratio and OOV rate
-    logger.info("Analyzing subwords-per-word ratio and OOV (unknown token) rate on a sample of the corpus...")
+    vocab_splits.sort(key=lambda x: x["num_pieces"], reverse=True)
+    maritime_frag_rate = split_count / len(vocab_terms) if vocab_terms else 0.0
     
-    total_words = 0
-    total_subwords = 0
+    # 2. Process sample of corpus for subword fertility and sequence lengths
+    logger.info("Analyzing subwords-per-word ratio and sequence length distribution...")
+    
+    total_raw_words = 0
+    total_subword_tokens = 0
     total_unk_tokens = 0
-    num_sampled_docs = 0
+    sampled_docs = 0
+    max_sampled_docs = 2000
     
-    # Analyze up to 1000 documents to be fast and efficient
-    max_sampled_docs = 1000
+    seq_under_128 = 0
+    seq_under_256 = 0
+    seq_under_512 = 0
+    seq_over_512 = 0
     
     with open(corpus_jsonl_path, "r", encoding="utf-8") as fin:
         for line in tqdm(fin, total=max_sampled_docs, desc="Analyzing Tokenization"):
-            if num_sampled_docs >= max_sampled_docs:
+            if sampled_docs >= max_sampled_docs:
                 break
                 
             record = json.loads(line)
             doc_text = record["document"]
             
-            # Count raw whitespace words
-            raw_words_count = len(doc_text.split())
-            if raw_words_count == 0:
+            raw_words = len(doc_text.split())
+            if raw_words == 0:
                 continue
                 
-            # Tokenize using BERT
             bert_tokens = tokenizer.tokenize(doc_text)
+            num_tokens = len(bert_tokens)
             
-            total_words += raw_words_count
-            total_subwords += len(bert_tokens)
+            total_raw_words += raw_words
+            total_subword_tokens += num_tokens
             total_unk_tokens += bert_tokens.count(tokenizer.unk_token)
-            num_sampled_docs += 1
             
-    avg_subwords_per_word = total_subwords / total_words if total_words > 0 else 0.0
-    oov_rate = total_unk_tokens / total_subwords if total_subwords > 0 else 0.0
+            if num_tokens <= 128: seq_under_128 += 1
+            if num_tokens <= 256: seq_under_256 += 1
+            if num_tokens <= 512: seq_under_512 += 1
+            else: seq_over_512 += 1
+            
+            sampled_docs += 1
+            
+    fertility = total_subword_tokens / total_raw_words if total_raw_words > 0 else 0.0
+    oov_rate = total_unk_tokens / total_subword_tokens if total_subword_tokens > 0 else 0.0
     
     analysis_output = {
         "model_name": "bert-base-uncased",
-        "sampled_documents": num_sampled_docs,
-        "total_raw_words_analyzed": total_words,
-        "total_subword_tokens_analyzed": total_subwords,
-        "average_subwords_per_word": avg_subwords_per_word,
-        "unk_token_count": total_unk_tokens,
+        "sampled_documents": sampled_docs,
+        "total_raw_words_analyzed": total_raw_words,
+        "total_subword_tokens_analyzed": total_subword_tokens,
+        "average_subwords_per_word": fertility,
+        "maritime_fragmentation_rate": maritime_frag_rate,
         "oov_rate": oov_rate,
-        "maritime_vocabulary_splits": vocab_splits
+        "sequence_length_distribution": {
+            "under_128": seq_under_128,
+            "under_256": seq_under_256,
+            "under_512": seq_under_512,
+            "over_512": seq_over_512
+        },
+        "worst_fragmented_terms": vocab_splits[:15],
+        "maritime_vocabulary_splits": vocab_splits[:50]
     }
     
     out_path = output_dir / "tokenizer_analysis.json"
@@ -94,8 +117,8 @@ def main():
         json.dump(analysis_output, f, indent=2)
         
     logger.info(f"Tokenizer analysis completed successfully. Saved to {out_path}")
-    logger.info(f"  BERT Subwords/Word Ratio: {avg_subwords_per_word:.4f}")
-    logger.info(f"  BERT UNK/OOV Rate: {oov_rate:.6f}")
+    logger.info(f"  BERT Subwords/Word Fertility: {fertility:.4f}")
+    logger.info(f"  Maritime Fragmentation Rate: {maritime_frag_rate*100:.2f}%")
 
 if __name__ == "__main__":
     main()

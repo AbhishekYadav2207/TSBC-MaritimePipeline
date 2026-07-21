@@ -7,9 +7,25 @@ from pipeline_utils import setup_logging, load_config, get_project_root
 
 logger = setup_logging("10_extract_vocabulary")
 
-def clean_word(word: str) -> str:
-    """Cleans a word of non-alphabetic characters."""
-    return re.sub(r'[^a-zA-Z]', '', word).lower()
+MULTIWORD_PATTERNS = [
+    r'\b(?:restricted|poor|reduced|good)\s+visibility\b',
+    r'\b(?:propulsion|steering|engine|machinery)\s+(?:failure|breakdown|loss)\b',
+    r'\b(?:gross|net|deadweight)\s+tonnage\b',
+    r'\b(?:life\s+saving|lifesaving)\s+appliances?\b',
+    r'\bvoyage\s+data\s+recorder\b',
+    r'\bsearch\s+and\s+rescue\b',
+    r'\b(?:starboard|port)\s+side\b',
+    r'\bengine\s+room\b',
+    r'\bcargo\b\s+(?:hold|vessel|tanker)\b',
+    r'\bfishing\s+vessel\b',
+    r'\bbulk\s+carrier\b',
+    r'\bcontainer\s+ship\b',
+    r'\bnavigational?\s+aids?\b',
+    r'\bvhf\s+radio\b',
+    r'\bgps\s+receiver\b',
+    r'\bsea\s+pollution\b',
+    r'\b(?:hull|deck|keel|bow|stern)\s+damage\b'
+]
 
 def main():
     root = get_project_root()
@@ -26,27 +42,23 @@ def main():
     if meta_path.exists():
         with open(meta_path, "r", encoding="utf-8") as fm:
             metadata = json.load(fm)
-            # Extract words from descriptions and full names in the dictionary
             for table, cols in metadata.get("registry", {}).items():
                 for col, info in cols.items():
-                    # Tokenize full name and description
                     words = re.findall(r'\b[a-zA-Z]{3,}\b', info.get("full_name", "") + " " + info.get("description", ""))
                     for w in words:
                         dict_terms.add(w.lower())
                         
-    # Common general English stop words to exclude
     stop_words = {
         "the", "and", "was", "for", "with", "that", "were", "this", "from", "had", "been", "not", "but", "are", 
-        "have", "which", "there", "their", "they", "will", "would", "about", "their", "them", "then", "into",
+        "have", "which", "there", "their", "they", "will", "would", "about", "them", "then", "into",
         "has", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "first", "second",
-        "reported", "reported", "on", "in", "at", "by", "an", "is", "or", "it", "as", "to", "of", "during",
-        "resulted", "sustained", "occurred", "occurred", "took", "place", "time", "date", "year", "month",
+        "reported", "on", "in", "at", "by", "an", "is", "or", "it", "as", "to", "of", "during",
+        "resulted", "sustained", "occurred", "took", "place", "time", "date", "year", "month",
         "day", "hour", "minute", "second", "details", "information", "number", "system", "database", "admin",
         "administrative", "purpose", "purposes", "generated", "value", "values", "specified", "unknown",
         "none", "other", "another", "same", "any", "all", "each", "every", "some", "many", "most", "more"
     }
     
-    # Domain-specific maritime roots and anchors
     maritime_stems = {
         "vess", "ship", "boat", "craft", "yacht", "tug", "barge", "tanker", "trawler", "carrier", "cruis",
         "port", "starboard", "bow", "stern", "keel", "hull", "deck", "mast", "helm", "rudder", "propel", 
@@ -60,61 +72,52 @@ def main():
         "foundering", "pollution", "spill", "oil", "bilge", "ballast", "tank", "cargo", "machinery"
     }
     
-    # Step 1: Count words in corpus
-    logger.info("Reading corpus text to count word frequencies...")
-    corpus_word_counter = Counter()
+    logger.info("Reading corpus text to extract single-word and multiword maritime vocabulary...")
+    single_word_counter = Counter()
+    multiword_counter = Counter()
     
     with open(clean_path, "r", encoding="utf-8") as fin:
         for line in fin:
-            doc = json.loads(line)["document"]
-            # Extract alphabetic words of length >= 3
+            doc = json.loads(line)["document"].lower()
+            
+            # Extract multiword phrases first
+            for pat in MULTIWORD_PATTERNS:
+                matches = re.findall(pat, doc)
+                for m in matches:
+                    multiword_counter[m] += 1
+                    
+            # Extract single alphabetic words
             words = re.findall(r'\b[a-zA-Z]{3,}\b', doc)
             for w in words:
-                corpus_word_counter[w.lower()] += 1
+                single_word_counter[w] += 1
                 
-    logger.info(f"Total unique words in corpus: {len(corpus_word_counter)}")
-    
-    # Step 2: Extract maritime vocabulary terms
-    maritime_vocab = set()
-    
-    # We keep a word if:
-    # 1. It is not in stop words
-    # 2. AND (it matches a maritime stem OR it is in dict_terms and appears in the corpus)
-    # Let's check all corpus words
-    for word, freq in corpus_word_counter.items():
+    # Filter single terms
+    maritime_single = set()
+    for word, freq in single_word_counter.items():
         if word in stop_words:
             continue
-            
-        is_maritime = False
-        
-        # Check against stems
-        for stem in maritime_stems:
-            if stem in word:
-                is_maritime = True
-                break
-                
-        # Check if it was in the dictionary terms and has reasonable frequency (>= 5)
+        is_maritime = any(stem in word for stem in maritime_stems)
         if not is_maritime and word in dict_terms and freq >= 5:
-            # Check if it has maritime meaning by analyzing if it ends with standard suffixes
-            # or is a known maritime term
             is_maritime = True
-            
         if is_maritime:
-            maritime_vocab.add((word, freq))
+            maritime_single.add((word, freq))
             
-    # Sort by frequency in the corpus
-    sorted_vocab = sorted(list(maritime_vocab), key=lambda x: x[1], reverse=True)
+    sorted_single = sorted(list(maritime_single), key=lambda x: x[1], reverse=True)
+    sorted_multi = sorted(list(multiword_counter.items()), key=lambda x: x[1], reverse=True)
     
-    # Format output
     vocab_txt_path = output_dir / "maritime_vocabulary.txt"
-    logger.info(f"Exporting top vocabulary words to {vocab_txt_path}...")
+    logger.info(f"Exporting top single and multiword maritime terms to {vocab_txt_path}...")
     
+    # Export top multiword phrases first, then top single terms
     with open(vocab_txt_path, "w", encoding="utf-8") as f:
-        # We export the top 300 maritime words
-        for word, freq in sorted_vocab[:300]:
+        # Multiword phrases (up to 50)
+        for phrase, freq in sorted_multi[:50]:
+            f.write(f"{phrase}\n")
+        # Single-word terms (up to 300)
+        for word, freq in sorted_single[:300]:
             f.write(f"{word}\n")
             
-    logger.info(f"Extracted {min(300, len(sorted_vocab))} maritime vocabulary terms successfully.")
+    logger.info(f"Exported {min(50, len(sorted_multi))} multiword phrases and {min(300, len(sorted_single))} single terms to vocabulary file.")
 
 if __name__ == "__main__":
     main()

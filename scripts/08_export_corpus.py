@@ -53,6 +53,7 @@ def main():
             output_obj = {
                 "occurrence_id": oid,
                 "document": doc_text,
+                "provenance": record.get("provenance"),
                 "structured": structured
             }
             fjsonl.write(json.dumps(output_obj) + "\n")

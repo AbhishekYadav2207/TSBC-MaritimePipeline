@@ -17,8 +17,9 @@
   },
   "total_occurrences_processed": 48594,
   "duplicate_occurrence_ids_count": 0,
-  "total_value_warnings": 2,
+  "total_value_warnings": 3,
   "value_warnings_sample": [
+    "OccID 35695, Vessel RGL FAIRWEATHER (21847): Implausible gross tonnage (301287.0)",
     "OccID 44767, Vessel LEVERKUSEN EXPRESS (27176): Implausible gross tonnage (1422295.0)",
     "OccID 50205, Vessel R.G.L. FAIRWEATHER (21847): Implausible gross tonnage (301287.0)"
   ]

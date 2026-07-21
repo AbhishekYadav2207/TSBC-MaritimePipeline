@@ -1,0 +1,37 @@
+{
+  "raw_source_rows": {
+    "MDOTW_VW_OCCURRENCE_PUBLIC": 87760,
+    "MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC": 73926,
+    "MDOTW_VW_INJURIES_PUBLIC": 23004,
+    "MDOTW_VW_OCCURRENCE_VESSEL_LSA_EQUIPMENT_PUBLIC": 75257,
+    "MDOTW_VW_OCCURRENCE_VESSEL_NAV_EQUIPMENT_PUBLIC": 314447,
+    "MDOTW_VW_OCCURRENCE_VESSEL_REC_EQUIPMENT_PUBLIC": 78399
+  },
+  "retained_units": {
+    "unique_occurrences": 48594,
+    "merged_vessel_occurrence_units": 55929,
+    "total_merged_occurrences": 48594
+  },
+  "child_table_matches": {
+    "injuries": {
+      "matched": 16486,
+      "orphan": 6518
+    },
+    "lsa_equipment": {
+      "matched": 4534,
+      "orphan": 0
+    },
+    "navigation_equipment": {
+      "matched": 276412,
+      "orphan": 0
+    },
+    "recording_equipment": {
+      "matched": 8002,
+      "orphan": 0
+    }
+  },
+  "synthesized_placeholders": {
+    "placeholder_vessels_created": 6139,
+    "placeholder_occurrences_created": 0
+  }
+}
