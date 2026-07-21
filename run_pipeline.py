@@ -21,7 +21,8 @@ STAGES = {
     "09": ("09_statistics", "Calculate Corpus Statistics & Report"),
     "10": ("10_extract_vocabulary", "Extract Maritime Vocabulary"),
     "11": ("11_tokenizer_analysis", "BERT Tokenizer Split Analysis"),
-    "12": ("12_bert_mlm_evaluation", "BERT Masked Language Model Diagnostic Evaluation")
+    "12": ("12_bert_mlm_evaluation", "BERT Masked Language Model Diagnostic Evaluation"),
+    "13": ("13_lint_corpus", "Automated Corpus Quality Linting")
 }
 
 def run_stage(stage_key: str):

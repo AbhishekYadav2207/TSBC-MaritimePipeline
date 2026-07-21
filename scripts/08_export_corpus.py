@@ -17,6 +17,8 @@ def get_git_commit() -> str:
     except Exception:
         return "unknown"
 
+from text_sanitizer import strip_administrative_noise
+
 def main():
     root = get_project_root()
     config = load_config()
@@ -45,9 +47,11 @@ def main():
             structured = record["structured"]
             
             # 1. Export plain text corpus (separated by a blank line)
-            # Normalize carriage returns and replace any sequence of internal newlines with a single newline
-            doc_text_clean = re.sub(r'\n+', '\n', doc_text.replace("\r\n", "\n").replace("\r", "\n"))
-            ftxt.write(doc_text_clean + "\n\n")
+            doc_text_clean = strip_administrative_noise(doc_text)
+            doc_text_clean = re.sub(r'\n+', '\n', doc_text_clean.replace("\r\n", "\n").replace("\r", "\n"))
+            if not doc_text_clean.strip():
+                continue
+            ftxt.write(doc_text_clean.strip() + "\n\n")
             
             # 2. Export metadata-preserving JSONL
             output_obj = {

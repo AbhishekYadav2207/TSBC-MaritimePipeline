@@ -44,11 +44,16 @@ def split_sentences(text: str) -> list:
         
     return sentences
 
+from text_sanitizer import strip_administrative_noise
+
 def clean_text(text: str) -> str:
-    """Cleans up whitespaces, repeated punctuation, and common encoding artifacts."""
+    """Cleans up whitespaces, repeated punctuation, administrative noise, and common encoding artifacts."""
     if not text:
         return ""
         
+    # Strip administrative metadata noise
+    text = strip_administrative_noise(text)
+    
     # Replace unicode replacement characters (from encoding issues)
     text = text.replace("\uFFFD", " ")
     

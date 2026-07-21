@@ -30,3 +30,4 @@ outputs/merged_records.jsonl
 outputs/maritime_corpus.jsonl
 
 outputs_baseline_v1/
+outputs_baseline_v2/

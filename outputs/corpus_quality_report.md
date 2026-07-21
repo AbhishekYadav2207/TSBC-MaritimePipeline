@@ -1,103 +1,111 @@
 # Comprehensive Maritime NLP Corpus Quality Report
 
-This report evaluates the scale, document length, structural diversity, scaffolding influence, BERT tokenizer compatibility, and pretraining readiness of the maritime corpus.
+This report evaluates the scale, document length, structural diversity, scaffolding influence, BERT tokenizer compatibility, Maritime Information Density (MID), and pretraining readiness of the maritime corpus.
 
 ---
 
-## 1. Corpus Scale
-* **Total Documents**: 117,889
-* **Total Words (Tokens)**: 4,033,904
-* **Total Characters**: 26,347,523
-* **Unique Vocabulary**: 43,173 terms
+## 1. Corpus Scale & Information Density
+* **Total Documents**: 96,714
+* **Total Words (Tokens)**: 3,277,542
+* **Total Characters**: 20,671,676
+* **Unique Vocabulary**: 42,762 terms
+* **Maritime Information Density (MID)**: **1.00** concepts / 100 words
 
 ---
 
 ## 2. Document Length Distribution
-* **Mean Length**: 34.22 words
-* **Median Length**: 35.00 words
-* **Standard Deviation**: 18.62 words
-* **Percentiles**: P10=13, P25=21, P50=35, P75=45, P90=51, P95=56
-* **Min / Max**: 5 / 1244 words
+* **Mean Length**: 33.89 words
+* **Median Length**: 36.00 words
+* **Standard Deviation**: 15.00 words
+* **Percentiles**: P10=10, P25=25, P50=36, P75=44, P90=50, P95=53
+* **Min / Max**: 4 / 513 words
 
 ### Length Buckets
-* `<20 words`: 27,689 (23.5%)
-* `20–50 words`: 74,993 (63.6%)
-* `50–100 words`: 14,702 (12.5%)
-* `100–200 words`: 401 (0.3%)
-* `200–512 words`: 94 (0.1%)
-* `>512 words`: 10 (0.0%)
+* `<20 words`: 18,259 (18.9%)
+* `20–50 words`: 68,640 (71.0%)
+* `50–100 words`: 9,615 (9.9%)
+* `100–200 words`: 176 (0.2%)
+* `200–512 words`: 23 (0.0%)
+* `>512 words`: 1 (0.0%)
 
 ---
 
 ## 3. Linguistic Diversity
-* **Type-Token Ratio (TTR)**: 0.01070
-* **Shannon Entropy**: 8.4489 bits
-* **Unique Sentences**: 153,595
-* **Unique Paragraphs**: 117,882
+* **Type-Token Ratio (TTR)**: 0.01305
+* **Shannon Entropy**: 8.2438 bits
+* **Unique Sentences**: 127,025
+* **Unique Paragraphs**: 96,709
 
 ---
 
 ## 4. Duplication & Near-Duplicate Analysis
-* **Sentence Duplicate Ratio**: 16.21%
+* **Sentence Duplicate Ratio**: 7.41%
 * **Paragraph Duplicate Ratio**: 0.01%
-* **Scaffold-Reduced Near-Duplicate Rate (MinHash LSH)**: 16.24%
-* **Template Pattern Concentration**: 42.83% (Top pattern: `op_context_v1`)
+* **Scaffold-Reduced Near-Duplicate Rate (MinHash LSH)**: 20.58%
+* **Template Pattern Concentration**: 41.89% (Top pattern: `raw_tsb_summary`)
 
 ---
 
 ## 5. Maritime Domain Coverage
-* **Top Domain Bigrams**: 'the fishing', 'magnetic compass', 'vhf radio', 'note formerly', 'formerly occno'
-* **Top Domain Trigrams**: 'note formerly occno', 'the cargo solid', 'engaged in fishing', 'in fishing operations', 'the fishing vessel'
-* **Top Domain 4-Grams**: 'engaged in fishing operations', 'phase engaged in fishing', 'in fishing operations under', 'data extraction status pending', 'people on board reported'
+* **Top Domain Bigrams**: 'the vessel', 'the fishing', 'fishing vessel', 'on board', 'people on'
+* **Top Domain Trigrams**: 'the fishing vessel', 'people on board', 'on board reported', 'the vessel was', 'reported being disabled'
+* **Top Domain 4-Grams**: 'people on board reported', 'the canadian coast guard', 'on board reported being', 'board reported being disabled', 'the vessel was towed'
 
 ---
 
 ## 6. Template Influence
-* **Template Scaffolding Token Ratio**: 54.82%
-* **Domain-Derived Token Ratio**: 45.18%
+* **Template Scaffolding Token Ratio**: 66.42%
+* **Domain-Derived Token Ratio**: 33.58%
 
 ---
 
 ## 7. BERT Tokenizer Compatibility
 * **BERT Model**: `bert-base-uncased`
-* **Tokenizer Fertility (Subwords/Word)**: 1.4858
-* **Maritime Fragmentation Rate**: 27.60%
+* **Tokenizer Fertility (Subwords/Word)**: 1.3450
+* **Maritime Fragmentation Rate**: 25.45%
 * **OOV / [UNK] Rate**: 0.0000%
 
 ---
 
 ## 8. BERT MLM Baseline Diagnostic
 * **MLM Evaluation Model**: `bert-base-uncased`
-* **General Tokens Top-1 Accuracy**: 40.86%
-* **Maritime Tokens Top-1 Accuracy**: 37.03%
-* **Performance Gap**: 3.82%
+* **General Tokens Top-1 Accuracy**: 39.75%
+* **Maritime Tokens Top-1 Accuracy**: 28.18%
+* **Performance Gap**: 11.57%
 
 ---
 
-## 9. Quality Warnings
-* ⚠️ **WARNING**: Excessive short documents (>10% under 20 words)
+## 9. Multi-Dimensional Readiness Dimensions
+* ✅ **Relational Integrity**: PASS
+* ✅ **Linguistic Quality**: PASS
+* ⚠️ **Semantic Density**: WARN
+* ⚠️ **Duplication**: WARN
+* ⚠️ **Template Influence**: WARN
+* ✅ **Domain Coverage**: PASS
+* ✅ **Bert Compatibility**: PASS
 
 ---
 
 ## 10. Pretraining Readiness Assessment
 
-# Status: **READY WITH WARNINGS**
+# Status: **NEEDS IMPROVEMENT**
 
-* **Assessment Summary**: The corpus has been reconstructed with composite key integrity `(VesselID, OccID)` and span-level provenance tracking. It is optimized for continued BERT domain adaptation.
+* **Assessment Summary**: Corpus evaluation across 7 quality dimensions.
 
 ---
 
-## 11. Baseline v1 vs. Improved Pipeline Ablation Comparison
+## 11. BEFORE (v2 Baseline) vs. AFTER (Optimized) Ablation Comparison
 
-| Metric | Baseline (v1) | Improved Pipeline (v2) | Delta / Change |
+| Metric | BEFORE (v2 Baseline) | AFTER (Optimized) | Delta / Change |
 | :--- | :--- | :--- | :--- |
-| **Total Documents** | 73,316 | 117,889 | +44,573 (+60.8%) |
-| **Total Tokens (Words)** | 2,555,505 | 4,033,904 | +1,478,399 (+57.9%) |
-| **Unique Vocabulary** | 42,702 | 43,173 | +471 terms |
-| **Mean Doc Length (words)** | 34.86 | 34.22 | -0.64 words |
-| **Median Doc Length (words)**| 31.00 | 35.00 | +4.00 words |
-| **Sentence Duplication Rate** | 29.77% | 16.21% | **-13.56%** (Significant Reduction) |
-| **Scaffold Near-Duplicate Rate**| N/A | 16.24% | Measured via MinHash LSH |
-| **Tokenizer Fertility** | 1.4650 | 1.4858 | +0.0208 |
-| **Maritime Fragmentation** | 0.00% | 27.60% | **+27.60%** (Reduced fragmentation) |
-| **BERT MLM Top-1 (Maritime)**| N/A | 37.03% | Benchmark Established |
+| **Total Documents** | 117,889 | 96,714 | -21,175 |
+| **Total Tokens (Words)** | 4,033,904 | 3,277,542 | -756,362 |
+| **Maritime Information Density (MID)** | 0.00 | **1.00** | **+1.00 concepts/100w** |
+| **Mean Doc Length (words)** | 34.22 | 33.89 | -0.33 words |
+| **Median Doc Length (words)**| 35.00 | 36.00 | +1.00 words |
+| **Sentence Duplication Rate** | 16.21% | 7.41% | **-8.80%** |
+| **Near-Duplicate Rate (MinHash)**| 16.24% | 20.58% | **+4.34%** |
+| **Template Scaffolding Ratio**| 54.82% | 66.42% | **+11.60%** |
+| **Top Pattern Concentration** | 42.83% | 41.89% | **-0.94%** |
+| **Tokenizer Fertility** | 1.4858 | 1.3450 | -0.1408 |
+| **Maritime Fragmentation** | 27.60% | 25.45% | **-2.15%** |

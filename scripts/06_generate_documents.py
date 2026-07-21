@@ -7,32 +7,15 @@ from pathlib import Path
 from tqdm import tqdm
 import pandas as pd
 from pipeline_utils import setup_logging, load_config, get_project_root
+from text_sanitizer import (
+    strip_administrative_noise,
+    join_words_grammatical,
+    format_cargo_description,
+    format_damage_description,
+    format_casualty_count
+)
 
 logger = setup_logging("06_generate_documents")
-
-def load_templates(root: Path, config: dict) -> tuple:
-    gen_config = config.get("generation", {})
-    v_path = root / gen_config.get("template_vessel_path", "templates/vessel_templates.json")
-    i_path = root / gen_config.get("template_injury_path", "templates/injury_templates.json")
-    e_path = root / gen_config.get("template_equipment_path", "templates/equipment_templates.json")
-    
-    with open(v_path, "r", encoding="utf-8") as f:
-        v_tpl = json.load(f)
-    with open(i_path, "r", encoding="utf-8") as f:
-        i_tpl = json.load(f)
-    with open(e_path, "r", encoding="utf-8") as f:
-        e_tpl = json.load(f)
-        
-    return v_tpl, i_tpl, e_tpl
-
-def join_words(words: list) -> str:
-    if not words:
-        return ""
-    if len(words) == 1:
-        return words[0]
-    if len(words) == 2:
-        return f"{words[0]} and {words[1]}"
-    return ", ".join(words[:-1]) + f", and {words[-1]}"
 
 def clean_db_label(val: str) -> str:
     if not val:
@@ -45,55 +28,55 @@ def clean_db_label(val: str) -> str:
     return val_clean.strip()
 
 def clean_placeholder(val, default_str=None):
-    if val is None or str(val).strip().upper() in ["", "NAN", "UNKNOWN", "UNSPECIFIED"]:
+    if val is None or str(val).strip().upper() in ["", "NAN", "UNKNOWN", "UNSPECIFIED", "NONE"]:
         return default_str
     return clean_db_label(str(val).strip())
 
-def normalize_label(val: str) -> str:
-    if not val:
-        return ""
-    val_clean = clean_db_label(str(val).strip())
-    val_lower = val_clean.lower()
-    
-    fallback_map = {
-        "radar1": "radar",
-        "radar2": "radar",
-        "radar3": "radar",
-        "mf/hf": "MF/HF radio",
-        "vhf": "VHF radio",
-        "gps": "GPS receiver",
-        "ecdis": "ECDIS",
-        "ais": "AIS",
-        "vdr": "VDR",
-        "bnwas": "BNWAS",
-        "gyro compass": "gyro compass",
-        "magnetic compass": "magnetic compass",
-        "direction_finder": "direction finder"
-    }
-    if val_lower in fallback_map:
-        return fallback_map[val_lower]
-        
-    normalized = re.sub(r'(\w+?)\d+$', r'\1', val_clean)
-    normalized = normalized.replace("_", " ").replace("-", " ")
-    
-    acronyms = {"gps", "ecdis", "vhf", "ais", "vdr", "bnwas", "mf", "hf", "lsa", "sart", "epirb"}
-    words = normalized.split()
-    cleaned_words = [w.upper() if w.lower() in acronyms else w for w in words]
-    return " ".join(cleaned_words)
+# ----------------------------------------------------------------------
+# Concept Extractor & Concept Gain Calculator
+# ----------------------------------------------------------------------
+
+MARITIME_CONCEPT_KEYWORDS = {
+    "collision": "accident", "grounding": "accident", "fire": "accident", "explosion": "accident", "flooding": "accident",
+    "capsizing": "accident", "sinking": "accident", "foundering": "accident", "contact": "accident", "stranding": "accident",
+    "radar": "equipment", "vhf": "equipment", "gps": "equipment", "ecdis": "equipment", "ais": "equipment", "vdr": "equipment",
+    "gyrocompass": "equipment", "compass": "equipment", "echosounder": "equipment", "bnwas": "equipment",
+    "lifeboat": "safety", "liferaft": "safety", "epirb": "safety", "sart": "safety", "lifejacket": "safety", "lifebuoy": "safety",
+    "injury": "casualty", "fatality": "casualty", "missing": "casualty", "death": "casualty", "personnel": "casualty",
+    "fog": "environment", "clear": "environment", "rough": "environment", "calm": "environment", "wind": "environment",
+    "gale": "environment", "snow": "environment", "ice": "environment", "visibility": "environment",
+    "underway": "voyage", "anchored": "voyage", "berthed": "voyage", "towing": "voyage", "hauling": "voyage", "moored": "voyage",
+    "fishing": "vessel_type", "tanker": "vessel_type", "cargo": "vessel_type", "passenger": "vessel_type", "tug": "vessel_type",
+    "bulk": "vessel_type", "container": "vessel_type", "barge": "vessel_type"
+}
+
+def extract_concepts(text: str) -> set:
+    if not text:
+        return set()
+    words = re.findall(r'\b\w+\b', text.lower())
+    concepts = set()
+    for w in words:
+        if w in MARITIME_CONCEPT_KEYWORDS:
+            concepts.add(f"{MARITIME_CONCEPT_KEYWORDS[w]}:{w}")
+    return concepts
+
+def calculate_unique_concept_gain(existing_concepts: set, candidate_concepts: set) -> int:
+    if not candidate_concepts:
+        return 0
+    return len(candidate_concepts - existing_concepts)
+
+def jaccard_overlap(concepts1: set, concepts2: set) -> float:
+    if not concepts1 or not concepts2:
+        return 0.0
+    intersection = len(concepts1 & concepts2)
+    union = len(concepts1 | concepts2)
+    return intersection / union if union > 0 else 0.0
 
 # ----------------------------------------------------------------------
 # Span-Level Provenance Renderer
 # ----------------------------------------------------------------------
 
 def render_template(template_str: str, var_mapping: dict, pattern_id: str, perspective: str) -> dict:
-    """Interpolates variables into a template string while constructing exact character span provenance.
-    
-    var_mapping format:
-      {
-        "vname": {"val": "ALEXANDRIA", "cat": "vessel_profile", "field": "VesselName"},
-        ...
-      }
-    """
     matches = list(re.finditer(r'\{([a-zA-Z0-9_]+)\}', template_str))
     
     curr_idx = 0
@@ -132,8 +115,7 @@ def render_template(template_str: str, var_mapping: dict, pattern_id: str, persp
             "provenance": "template"
         })
         
-    # Clean double spaces in final_text and adjust spans if needed
-    final_text_clean = re.sub(r' +', ' ', final_text).strip()
+    final_text_clean = strip_administrative_noise(re.sub(r' +', ' ', final_text).strip())
     
     return {
         "text": final_text_clean,
@@ -145,70 +127,15 @@ def render_template(template_str: str, var_mapping: dict, pattern_id: str, persp
     }
 
 # ----------------------------------------------------------------------
-# Concept Extraction & Overlap Calculation
+# 5 Context-Sensitive Template Families for Vessel Operational Narratives
 # ----------------------------------------------------------------------
 
-CONCEPT_KEYWORDS = {
-    "collision": "accident", "grounding": "accident", "fire": "accident", "explosion": "accident", "flooding": "accident",
-    "radar": "equipment", "vhf": "equipment", "gps": "equipment", "ecdis": "equipment", "ais": "equipment", "vdr": "equipment",
-    "lifeboat": "safety", "liferaft": "safety", "epirb": "safety", "jacket": "safety",
-    "injury": "casualty", "fatality": "casualty", "missing": "casualty", "death": "casualty",
-    "fog": "environment", "clear": "environment", "rough": "environment", "calm": "environment", "wind": "environment",
-    "underway": "voyage", "anchored": "voyage", "berthed": "voyage", "towing": "voyage"
-}
-
-def extract_concepts(text: str) -> set:
-    words = re.findall(r'\b\w+\b', text.lower())
-    concepts = set()
-    for w in words:
-        if w in CONCEPT_KEYWORDS:
-            concepts.add(f"{CONCEPT_KEYWORDS[w]}:{w}")
-    return concepts
-
-def jaccard_overlap(concepts1: set, concepts2: set) -> float:
-    if not concepts1 or not concepts2:
-        return 0.0
-    intersection = len(concepts1 & concepts2)
-    union = len(concepts1 | concepts2)
-    return intersection / union if union > 0 else 0.0
-
-# ----------------------------------------------------------------------
-# Adaptive Generators
-# ----------------------------------------------------------------------
-
-def generate_occurrence_summary(record: dict) -> dict:
-    occ = record.get("occurrence")
-    if not occ:
-        return None
-    summary = occ.get("Summary")
-    if summary and str(summary).strip() not in ["", "nan", "NaN"]:
-        clean_sum = str(summary).strip()
-        if clean_sum.startswith("Note: formerly OccNo") and len(clean_sum) < 60:
-            return None
-        if len(clean_sum) < 30:
-            return None
-        return {
-            "text": clean_sum,
-            "provenance": {
-                "perspective": "occurrence_summary",
-                "pattern_id": "raw_tsb_summary",
-                "spans": [{
-                    "rendered_span": clean_sum,
-                    "category": "narrative",
-                    "source_field": "Summary",
-                    "provenance": "source_derived"
-                }]
-            }
-        }
-    return None
-
-def generate_vessel_operational(oid: int, occ: dict, v: dict, v_tpl: dict) -> dict:
-    """Primary operational narrative document combining vessel specs, phase, activity, environment, and outcomes."""
+def generate_vessel_operational_narrative(oid: int, occ: dict, v: dict) -> dict:
+    """Generates an operational narrative using 1 of 5 structural template families for high diversity."""
     vname = v.get("VesselName") or "An unnamed vessel"
     vtype = clean_placeholder(v.get("VesselTypeDisplayEng"), "vessel")
     vflag = clean_placeholder(v.get("VesselFlagDisplayEng"))
     hull = clean_placeholder(v.get("HullMaterialDisplayEng"))
-    prop = clean_placeholder(v.get("PropulsionTypeDisplayEng"))
     tonnage = v.get("GrossTonnage")
     built = v.get("YearBuilt")
     speed = v.get("Speed_Knots")
@@ -229,10 +156,14 @@ def generate_vessel_operational(oid: int, occ: dict, v: dict, v_tpl: dict) -> di
     built_str = str(int(float(built))) if built and pd.notna(built) and int(float(built)) > 0 else None
     speed_str = f"{float(speed):.1f} knots" if speed and pd.notna(speed) and float(speed) > 0 else None
 
-    var_map = {}
-    var_map["vname"] = {"val": vname, "cat": "vessel_profile", "field": "VesselName"}
-    var_map["vtype"] = {"val": vtype.lower(), "cat": "vessel_profile", "field": "VesselTypeDisplayEng"}
-    
+    var_map = {
+        "vname": {"val": vname, "cat": "vessel_profile", "field": "VesselName"},
+        "vtype": {"val": vtype.lower(), "cat": "vessel_profile", "field": "VesselTypeDisplayEng"}
+    }
+
+    # Deterministically select family based on occurrence/vessel ID hash
+    family_idx = abs(hash(f"{oid}_{v.get('VesselID')}")) % 5
+
     spec_parts = []
     if built_str:
         spec_parts.append(f"built in {built_str}")
@@ -246,195 +177,266 @@ def generate_vessel_operational(oid: int, occ: dict, v: dict, v_tpl: dict) -> di
     if hull:
         spec_parts.append(f"constructed of {hull.lower()}")
         var_map["hull"] = {"val": hull.lower(), "cat": "vessel_profile", "field": "HullMaterialDisplayEng"}
-    if speed_str:
-        spec_parts.append(f"operating at a speed of {speed_str}")
-        var_map["speed"] = {"val": speed_str, "cat": "vessel_profile", "field": "Speed_Knots"}
 
-    # Pattern selection based on available data
-    pattern_id = "op_context_v1"
-    tpl = "The {vtype} '{vname}'"
-    if spec_parts:
-        tpl += f", {', '.join(spec_parts)},"
+    cargo_clause = format_cargo_description(cargo_prod, cargo_qty)
+    if cargo_clause:
+        var_map["cargo"] = {"val": cargo_clause, "cat": "voyage_activity", "field": "CargoProductTypeDisplayEng"}
+
+    damage_clause = format_damage_description(dmg_degree, dmg_loc)
+    if damage_clause:
+        var_map["damage"] = {"val": damage_clause, "cat": "casualty", "field": "VesselDamageDegreeDisplayEng"}
+
+    raw_event = occ_type.lower() if occ_type else ""
+    if not raw_event or raw_event in ["occurrence", "unknown", "unspecified"]:
+        event_str = "marine occurrence"
+    elif raw_event.endswith("occurrence"):
+        event_str = raw_event
+    else:
+        event_str = f"{raw_event} occurrence"
         
-    transit_clauses = []
-    if phase and phase.upper() not in ["UNKNOWN", "UNSPECIFIED"]:
-        transit_clauses.append(f"operating in the {phase.lower()} phase")
-        var_map["phase"] = {"val": phase.lower(), "cat": "voyage_activity", "field": "VesselPhaseDisplayEng"}
-    if activity and activity.upper() not in ["UNKNOWN", "UNSPECIFIED"]:
-        transit_clauses.append(f"engaged in {activity.lower()} operations")
-        var_map["activity"] = {"val": activity.lower(), "cat": "voyage_activity", "field": "ActivityTypeDisplayEng"}
-    if cargo_prod:
-        if cargo_qty and pd.notna(cargo_qty):
-            transit_clauses.append(f"carrying {cargo_qty} of {cargo_prod.lower()}")
-            var_map["cargo"] = {"val": f"{cargo_qty} of {cargo_prod.lower()}", "cat": "voyage_activity", "field": "CargoProductTypeDisplayEng"}
-        else:
-            transit_clauses.append(f"laden with {cargo_prod.lower()} cargo")
-            var_map["cargo"] = {"val": cargo_prod.lower(), "cat": "voyage_activity", "field": "CargoProductTypeDisplayEng"}
-            
+    var_map["event"] = {"val": event_str, "cat": "casualty", "field": "OccurrenceTypeDisplayEng"}
+
     env_parts = []
-    if weather and weather.upper() not in ["UNKNOWN"]:
-        env_parts.append(f"{weather.lower()} weather")
-        var_map["weather"] = {"val": weather.lower(), "cat": "environment", "field": "WeatherConditionDisplayEng"}
-    if sea and sea.upper() not in ["UNKNOWN"]:
-        env_parts.append(f"{sea.lower()} seas")
-        var_map["sea"] = {"val": sea.lower(), "cat": "environment", "field": "SeaStateDisplayEng"}
-    if light and light.upper() not in ["UNKNOWN"]:
-        env_parts.append(f"{light.lower()} conditions")
-        var_map["light"] = {"val": light.lower(), "cat": "environment", "field": "LightConditionDisplayEng"}
-        
-    if env_parts:
-        transit_clauses.append(f"under {', '.join(env_parts)}")
-        
-    if transit_clauses:
-        tpl += f" was {', '.join(transit_clauses)}"
+    if weather: env_parts.append(f"{weather.lower()} weather")
+    if sea: env_parts.append(f"{sea.lower()} seas")
+    if light: env_parts.append(f"{light.lower()} light conditions")
+    env_str = join_words_grammatical(env_parts)
+    if env_str:
+        var_map["environment"] = {"val": env_str, "cat": "environment", "field": "WeatherConditionDisplayEng"}
+
+    # Family A: Subject-First (Standard)
+    if family_idx == 0:
+        pattern_id = "op_family_a_subject_first"
+        tpl = "The {vtype} '{vname}'"
+        if spec_parts: tpl += f", {', '.join(spec_parts)},"
+        if phase: tpl += f" was operating in the {phase.lower()} phase"
+        elif activity: tpl += f" was engaged in {activity.lower()} operations"
+        else: tpl += " was underway"
+        if cargo_clause: tpl += f", {cargo_clause}"
+        if env_str: tpl += f" under {env_str}"
+        tpl += f" when it experienced a {event_str}"
+        if damage_clause: tpl += f", {damage_clause}"
+        tpl += "."
+
+    # Family B: Operational-Context-First
+    elif family_idx == 1:
+        pattern_id = "op_family_b_context_first"
+        tpl = ""
+        if phase: tpl += f"While proceeding in the {phase.lower()} phase"
+        elif activity: tpl += f"While engaged in {activity.lower()} operations"
+        else: tpl += "While underway"
+        if env_str: tpl += f" under {env_str}"
+        tpl += f", the {vtype} '{vname}'"
+        if spec_parts: tpl += f" ({', '.join(spec_parts)})"
+        if cargo_clause: tpl += f", {cargo_clause},"
+        tpl += f" became involved in a {event_str}"
+        if damage_clause: tpl += f", {damage_clause}"
+        tpl += "."
+
+    # Family C: Incident-First
+    elif family_idx == 2:
+        pattern_id = "op_family_c_incident_first"
+        tpl = f"A {event_str} involved the {vtype} '{vname}'"
+        if spec_parts: tpl += f" ({', '.join(spec_parts)})"
+        if phase: tpl += f" during the {phase.lower()} phase"
+        elif activity: tpl += f" while conducting {activity.lower()} operations"
+        if cargo_clause: tpl += f" while {cargo_clause}"
+        if env_str: tpl += f" under {env_str}"
+        if damage_clause: tpl += f", with the vessel {damage_clause}"
+        tpl += "."
+
+    # Family D: Environmental-Focus
+    elif family_idx == 3:
+        pattern_id = "op_family_d_env_focus"
+        tpl = ""
+        if env_str: tpl += f"Under {env_str}, "
+        else: tpl += "During transit, "
+        tpl += f"the {vtype} '{vname}'"
+        if spec_parts: tpl += f", {', '.join(spec_parts)},"
+        if phase: tpl += f" operated in the {phase.lower()} phase"
+        if cargo_clause: tpl += f" {cargo_clause}"
+        tpl += f" when a {event_str} occurred"
+        if damage_clause: tpl += f", {damage_clause}"
+        tpl += "."
+
+    # Family E: Consolidated Activity Focus
     else:
-        tpl += " was en route"
-        
-    outcome_clauses = []
-    if occ_type and occ_type.upper() not in ["UNKNOWN", "UNSPECIFIED"]:
-        outcome_clauses.append(f"became involved in a {occ_type.lower()} occurrence")
-        var_map["event"] = {"val": occ_type.lower(), "cat": "casualty", "field": "OccurrenceTypeDisplayEng"}
-    else:
-        outcome_clauses.append("experienced a marine occurrence")
-        
-    if dmg_degree and dmg_degree.upper() not in ["NONE", "NONE APPARENT"]:
-        loc_str = f" to the {dmg_loc.lower()}" if dmg_loc else " hull"
-        outcome_clauses.append(f"sustaining {dmg_degree.lower()} damage{loc_str}")
-        var_map["damage"] = {"val": f"{dmg_degree.lower()} damage{loc_str}", "cat": "casualty", "field": "VesselDamageDegreeDisplayEng"}
-        
-    if pollution and pollution.upper() not in ["NONE", "NONE APPARENT", "UNKNOWN"]:
-        outcome_clauses.append(f"resulting in {pollution.lower()} sea pollution")
-        var_map["pollution"] = {"val": pollution.lower(), "cat": "casualty", "field": "SeaPollutionDegreeDisplayEng"}
-        
-    tpl += f" when it {', '.join(outcome_clauses)}."
-    
+        pattern_id = "op_family_e_activity_focus"
+        tpl = f"During maritime operations, the {vtype} '{vname}'"
+        if spec_parts: tpl += f" ({', '.join(spec_parts)})"
+        if activity: tpl += f" was engaged in {activity.lower()} operations"
+        if env_str: tpl += f" in {env_str}"
+        if cargo_clause: tpl += f", {cargo_clause},"
+        tpl += f" resulting in a {event_str}"
+        if damage_clause: tpl += f" and {damage_clause}"
+        tpl += "."
+
     return render_template(tpl, var_map, pattern_id, "vessel_operational")
 
-def generate_equipment_navigation(oid: int, v: dict, e_tpl: dict) -> dict:
-    """Dedicated equipment/navigation document generated ONLY when rich equipment data is available."""
-    vname = v.get("VesselName") or "The vessel"
+def generate_equipment_clause(v: dict) -> tuple:
+    """Generates clean equipment narrative clause with normalized labels and deduplicated status grouping."""
     nav_list = v.get("navigation_equipment", [])
     rec_list = v.get("rec_equipment", [])
     lsa_list = v.get("lsa_equipment", [])
     
-    # Needs at least 3 active/inactive navigation aids or detailed recording/LSA items
-    if len(nav_list) + len(rec_list) + len(lsa_list) < 2:
-        return None
+    if not (nav_list or rec_list or lsa_list):
+        return "", set()
         
     on_devices = []
     off_devices = []
     for nav in nav_list:
-        ntype = nav.get("NavigationAidTypeDisplayEng")
-        nstatus = nav.get("OnOffEnumDisplayEng")
-        if ntype:
-            norm_name = normalize_label(ntype)
-            if nstatus == "On":
+        norm_name = nav.get("normalized_name")
+        status = nav.get("status_clean", "")
+        if norm_name:
+            if status == "On":
                 on_devices.append(norm_name)
-            elif nstatus == "Off":
+            elif status == "Off":
                 off_devices.append(norm_name)
                 
-    lsa_names = []
-    for lsa in lsa_list:
-        ltype = lsa.get("LsApplianceDisplayEng")
-        if ltype:
-            lsa_names.append(normalize_label(ltype))
-            
+    lsa_names = [lsa.get("normalized_name") for lsa in lsa_list if lsa.get("normalized_name")]
     rec_details = []
     for rec in rec_list:
-        rtype = rec.get("RecordingEquipDisplayEng")
-        extracted = rec.get("DataExtractedEnumDisplayEng")
-        if rtype:
-            rname = normalize_label(rtype)
-            status = "data was extracted" if extracted == "Yes" else "data extraction status pending"
-            rec_details.append(f"{rname} ({status})")
+        rname = rec.get("normalized_name")
+        ext = rec.get("ext_status_clean")
+        if rname:
+            st_str = "data was extracted" if ext == "Yes" else "fitted"
+            rec_details.append(f"{rname} ({st_str})")
             
-    if not (on_devices or off_devices or lsa_names or rec_details):
-        return None
-        
-    var_map = {"vname": {"val": vname, "cat": "vessel_profile", "field": "VesselName"}}
-    sentences = []
+    parts = []
+    eq_concepts = set()
     
     if on_devices:
-        var_map["on_list"] = {"val": join_words(on_devices), "cat": "equipment", "field": "NavigationAidTypeDisplayEng"}
-        sentences.append("During transit, {vname} maintained active operational status for {on_list}.")
+        eq_str = join_words_grammatical(on_devices)
+        parts.append(f"Active navigation equipment included {eq_str}")
+        for dev in on_devices: eq_concepts.add(f"equipment:{dev.lower()}")
         
     if off_devices:
-        var_map["off_list"] = {"val": join_words(off_devices), "cat": "equipment", "field": "NavigationAidTypeDisplayEng"}
-        sentences.append("Navigation equipment reported as inactive or off included {off_list}.")
+        eq_off_str = join_words_grammatical(off_devices)
+        parts.append(f"navigation equipment reported inactive included {eq_off_str}")
+        for dev in off_devices: eq_concepts.add(f"equipment:{dev.lower()}")
         
     if lsa_names:
-        var_map["lsa_list"] = {"val": join_words(lsa_names), "cat": "equipment", "field": "LsApplianceDisplayEng"}
-        sentences.append("Onboard lifesaving appliances carried featured {lsa_list}.")
+        lsa_str = join_words_grammatical(lsa_names)
+        parts.append(f"onboard lifesaving equipment included {lsa_str}")
+        for lsa in lsa_names: eq_concepts.add(f"safety:{lsa.lower()}")
         
     if rec_details:
-        var_map["rec_list"] = {"val": join_words(rec_details), "cat": "equipment", "field": "RecordingEquipDisplayEng"}
-        sentences.append("Flight and voyage recording equipment fitted on board included {rec_list}.")
+        rec_str = join_words_grammatical(rec_details)
+        parts.append(f"recording equipment fitted included {rec_str}")
         
-    full_tpl = " ".join(sentences)
-    return render_template(full_tpl, var_map, "equip_nav_v1", "equipment_navigation")
+    if not parts:
+        return "", set()
+        
+    clause_text = "; ".join(parts) + "."
+    return clause_text.capitalize(), eq_concepts
 
-def generate_casualty_safety(oid: int, v: dict, i_tpl: dict) -> dict:
-    """Dedicated casualty/safety document generated ONLY when casualties or water entry occurred."""
-    vname = v.get("VesselName") or "The vessel"
+def generate_casualty_clause(v: dict) -> tuple:
+    """Generates clean casualty & complement clause with strict singular/plural agreement."""
     crew = v.get("TotalPeopleOnBoard")
     injuries = v.get("injuries", [])
     
-    has_casualties = False
     minor_count, serious_count, death_count, missing_count = 0, 0, 0, 0
     water_entry_count = 0
-    lse_used_name = None
     
     for inj in injuries:
         minor_count += int(inj.get("VictimMinorInjuries") or 0)
         serious_count += int(inj.get("VictimSeriousInjuries") or 0)
         death_count += int(inj.get("VictimDeath") or 0)
         missing_count += int(inj.get("VictimMissing") or 0)
-        
-        in_water = int(inj.get("TotalPeopleInWater") or 0)
-        if in_water > 0:
-            water_entry_count += in_water
-            lse_type = inj.get("PeopleInWaterLseTypeDisplayEng")
-            if lse_type:
-                lse_used_name = clean_db_label(lse_type)
+        water_entry_count += int(inj.get("TotalPeopleInWater") or 0)
 
     total_inj = minor_count + serious_count + death_count + missing_count
-    if total_inj == 0 and water_entry_count == 0:
-        return None  # Suppress separate casualty document if no casualties or water entry
+    if crew is None and total_inj == 0 and water_entry_count == 0:
+        return "", set()
         
-    var_map = {"vname": {"val": vname, "cat": "vessel_profile", "field": "VesselName"}}
-    sentences = []
+    parts = []
+    cas_concepts = set()
     
     if crew is not None and pd.notna(crew) and int(float(crew)) > 0:
-        var_map["crew"] = {"val": str(int(float(crew))), "cat": "casualty", "field": "TotalPeopleOnBoard"}
-        sentences.append("At the time of the occurrence, {vname} carried a total complement of {crew} persons on board.")
+        crew_num = int(float(crew))
+        parts.append(f"The vessel carried {crew_num} persons on board")
+        cas_concepts.add("casualty:complement")
         
     counts_parts = []
-    if minor_count > 0: counts_parts.append(f"{minor_count} minor injuries")
-    if serious_count > 0: counts_parts.append(f"{serious_count} serious injuries")
-    if death_count > 0: counts_parts.append(f"{death_count} fatalities")
-    if missing_count > 0: counts_parts.append(f"{missing_count} missing persons")
+    c_minor = format_casualty_count(minor_count, "minor injury", "minor injuries")
+    c_ser = format_casualty_count(serious_count, "serious injury", "serious injuries")
+    c_death = format_casualty_count(death_count, "fatality", "fatalities")
+    c_miss = format_casualty_count(missing_count, "missing person", "missing persons")
+    
+    if c_minor: counts_parts.append(c_minor)
+    if c_ser: counts_parts.append(c_ser)
+    if c_death: counts_parts.append(c_death)
+    if c_miss: counts_parts.append(c_miss)
     
     if counts_parts:
-        var_map["casualty_details"] = {"val": join_words(counts_parts), "cat": "casualty", "field": "VictimInjuries"}
-        sentences.append("The occurrence resulted in reported casualties comprising {casualty_details}.")
+        cas_str = join_words_grammatical(counts_parts)
+        parts.append(f"resulting in reported casualties of {cas_str}")
+        cas_concepts.add("casualty:injuries")
         
     if water_entry_count > 0:
-        var_map["water_count"] = {"val": str(water_entry_count), "cat": "casualty", "field": "TotalPeopleInWater"}
-        if lse_used_name:
-            var_map["lse_type"] = {"val": lse_used_name.lower(), "cat": "safety", "field": "PeopleInWaterLseTypeDisplayEng"}
-            sentences.append("During emergency response, {water_count} individuals entered the water wearing {lse_type}.")
-        else:
-            sentences.append("Emergency circumstances forced {water_count} personnel to enter the water.")
-            
-    full_tpl = " ".join(sentences)
-    return render_template(full_tpl, var_map, "casualty_safety_v1", "casualty_safety")
+        parts.append(f"with {water_entry_count} personnel entering the water")
+        cas_concepts.add("casualty:water_entry")
+        
+    if not parts:
+        return "", set()
+        
+    clause_text = "; ".join(parts) + "."
+    return clause_text.capitalize(), cas_concepts
 
 # ----------------------------------------------------------------------
-# Main Stage Orchestrator
+# Knowledge-Unit Graph & Concept-Gain Driven Document Builder
 # ----------------------------------------------------------------------
+
+def build_consolidated_documents_for_vessel(oid: int, occ: dict, v: dict) -> list:
+    """Builds semantically dense, non-redundant document(s) using Knowledge Unit Graph & Concept Gain Calculator."""
+    vid = v.get("VesselID")
+    vid_val = int(vid) if vid is not None and pd.notna(vid) else None
+    
+    # 1. Primary Knowledge Unit: Operational Narrative
+    op_res = generate_vessel_operational_narrative(oid, occ, v)
+    base_text = op_res["text"]
+    current_concepts = extract_concepts(base_text)
+    
+    # 2. Candidate Unit: Equipment & Navigation
+    eq_clause, eq_concepts = generate_equipment_clause(v)
+    eq_gain = calculate_unique_concept_gain(current_concepts, eq_concepts)
+    
+    # 3. Candidate Unit: Casualties & Safety
+    cas_clause, cas_concepts = generate_casualty_clause(v)
+    cas_gain = calculate_unique_concept_gain(current_concepts, cas_concepts)
+    
+    # Incrementally incorporate candidate units into the primary document if concept gain > 0
+    consolidated_parts = [base_text]
+    spans = list(op_res["provenance"]["spans"])
+    
+    if eq_clause and (eq_gain >= 1 or len(eq_clause) > 20):
+        consolidated_parts.append(eq_clause)
+        spans.append({"rendered_span": f" {eq_clause}", "category": "equipment", "provenance": "source_derived"})
+        current_concepts.update(eq_concepts)
+        
+    if cas_clause and (cas_gain >= 1 or len(cas_clause) > 20):
+        consolidated_parts.append(cas_clause)
+        spans.append({"rendered_span": f" {cas_clause}", "category": "casualty", "provenance": "source_derived"})
+        current_concepts.update(cas_concepts)
+        
+    final_doc_text = " ".join(consolidated_parts)
+    
+    return [{
+        "doc_type": "vessel_consolidated_narrative",
+        "vessel_id": vid_val,
+        "source_table": "MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC",
+        "res": {
+            "text": final_doc_text,
+            "provenance": {
+                "perspective": "vessel_consolidated_narrative",
+                "pattern_id": op_res["provenance"]["pattern_id"],
+                "spans": spans
+            }
+        }
+    }]
 
 def main():
-    random.seed(42)  # Guarantee reproducible generation
+    random.seed(42)
     root = get_project_root()
     config = load_config()
     output_dir = root / config.get("output_dir", "outputs")
@@ -444,14 +446,11 @@ def main():
         logger.error(f"Merged records not found at {merged_path}! Run Step 5 first.")
         return
         
-    v_tpl, i_tpl, e_tpl = load_templates(root, config)
     raw_docs_file = output_dir / "raw_documents.jsonl"
-    
-    logger.info("Generating documents with adaptive decomposition and span-level provenance...")
+    logger.info("Generating documents via Knowledge Unit Graph & Concept Gain Calculator...")
     
     total_occurrences = 0
     total_docs_generated = 0
-    cross_overlap_scores = []
     
     with open(merged_path, "r", encoding="utf-8") as fin, open(raw_docs_file, "w", encoding="utf-8") as fout:
         for line in tqdm(fin, desc="Generating Documents"):
@@ -461,95 +460,44 @@ def main():
             vessels = record["vessels"]
             
             total_occurrences += 1
-            generated_for_occ = []
             
-            # 1. Occurrence Summary
-            occ_sum = generate_occurrence_summary(record)
-            if occ_sum:
-                generated_for_occ.append({
-                    "doc_type": "occurrence_summary",
-                    "vessel_id": None,
-                    "source_table": "MDOTW_VW_OCCURRENCE_PUBLIC",
-                    "res": occ_sum
-                })
-                
-            # 2. Per-Vessel Adaptive Generation
+            # Raw TSB Occurrence Summary (if non-trivial)
+            if occ and occ.get("Summary"):
+                sum_text = strip_administrative_noise(str(occ["Summary"]).strip())
+                if len(sum_text) >= 40:
+                    fout.write(json.dumps({
+                        "occurrence_id": oid,
+                        "vessel_id": None,
+                        "document_type": "occurrence_summary",
+                        "source_table": "MDOTW_VW_OCCURRENCE_PUBLIC",
+                        "document": sum_text,
+                        "provenance": {
+                            "perspective": "occurrence_summary",
+                            "pattern_id": "raw_tsb_summary",
+                            "spans": [{"rendered_span": sum_text, "category": "narrative", "source_field": "Summary", "provenance": "source_derived"}]
+                        },
+                        "structured": record
+                    }) + "\n")
+                    total_docs_generated += 1
+
+            # Per-Vessel Consolidated Narrative
             for v in vessels:
-                vid = v.get("VesselID")
-                vid_val = int(vid) if vid is not None and pd.notna(vid) else None
-                
-                # Always consider Primary Operational document
-                op_doc = generate_vessel_operational(oid, occ, v, v_tpl)
-                if op_doc and len(op_doc["text"]) >= 40:
-                    generated_for_occ.append({
-                        "doc_type": "vessel_operational",
-                        "vessel_id": vid_val,
-                        "source_table": "MDOTW_VW_OCCURRENCE_VESSEL_PUBLIC",
-                        "res": op_doc
-                    })
+                docs = build_consolidated_documents_for_vessel(oid, occ, v)
+                for item in docs:
+                    fout.write(json.dumps({
+                        "occurrence_id": oid,
+                        "vessel_id": item["vessel_id"],
+                        "document_type": item["doc_type"],
+                        "source_table": item["source_table"],
+                        "document": item["res"]["text"],
+                        "provenance": item["res"]["provenance"],
+                        "structured": record
+                    }) + "\n")
+                    total_docs_generated += 1
                     
-                # Conditionally consider Equipment/Navigation document
-                eq_doc = generate_equipment_navigation(oid, v, e_tpl)
-                if eq_doc and len(eq_doc["text"]) >= 40:
-                    generated_for_occ.append({
-                        "doc_type": "equipment_navigation",
-                        "vessel_id": vid_val,
-                        "source_table": "MDOTW_VW_OCCURRENCE_VESSEL_NAV_EQUIPMENT_PUBLIC",
-                        "res": eq_doc
-                    })
-                    
-                # Conditionally consider Casualty/Safety document
-                cas_doc = generate_casualty_safety(oid, v, i_tpl)
-                if cas_doc and len(cas_doc["text"]) >= 40:
-                    generated_for_occ.append({
-                        "doc_type": "casualty_safety",
-                        "vessel_id": vid_val,
-                        "source_table": "MDOTW_VW_INJURIES_PUBLIC",
-                        "res": cas_doc
-                    })
-                    
-            # 3. Suppress Cross-Perspective Information Overlap (> 0.7 Jaccard overlap)
-            retained_docs = []
-            retained_concepts = []
-            
-            for item in generated_for_occ:
-                doc_text = item["res"]["text"]
-                concepts = extract_concepts(doc_text)
-                
-                # Check overlap against already retained documents for this occurrence
-                max_overlap = 0.0
-                for prev_c in retained_concepts:
-                    overlap = jaccard_overlap(concepts, prev_c)
-                    if overlap > max_overlap:
-                        max_overlap = overlap
-                        
-                if max_overlap > 0.0:
-                    cross_overlap_scores.append(max_overlap)
-                    
-                # Suppress if information overlap is too high (> 0.70)
-                if max_overlap <= 0.70 or item["doc_type"] == "occurrence_summary":
-                    retained_docs.append(item)
-                    retained_concepts.append(concepts)
-                    
-            # 4. Write retained documents
-            for item in retained_docs:
-                total_docs_generated += 1
-                output_obj = {
-                    "occurrence_id": oid,
-                    "vessel_id": item["vessel_id"],
-                    "document_type": item["doc_type"],
-                    "source_table": item["source_table"],
-                    "document": item["res"]["text"],
-                    "provenance": item["res"]["provenance"],
-                    "structured": record
-                }
-                fout.write(json.dumps(output_obj) + "\n")
-                
-    avg_overlap = (sum(cross_overlap_scores) / len(cross_overlap_scores)) if cross_overlap_scores else 0.0
     logger.info(f"Document generation complete:")
     logger.info(f"  Total occurrences processed: {total_occurrences}")
     logger.info(f"  Total documents generated: {total_docs_generated} (Avg {total_docs_generated/total_occurrences:.2f} docs/occ)")
-    logger.info(f"  Average cross-perspective information overlap: {avg_overlap:.4f}")
 
 if __name__ == "__main__":
     main()
