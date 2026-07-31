@@ -20,9 +20,14 @@ STAGES = {
     "08": ("08_export_corpus", "Export Maritime Corpus & Manifest"),
     "09": ("09_statistics", "Calculate Corpus Statistics & Report"),
     "10": ("10_extract_vocabulary", "Extract Maritime Vocabulary"),
-    "11": ("11_tokenizer_analysis", "BERT Tokenizer Split Analysis"),
-    "12": ("12_bert_mlm_evaluation", "BERT Masked Language Model Diagnostic Evaluation"),
-    "13": ("13_lint_corpus", "Automated Corpus Quality Linting")
+    "11": ("11_corpus_representations", "Multi-Format Corpus Representation Generation"),
+    "12": ("12_semantic_importance", "Semantic Importance Assessment & Knowledge Classification"),
+    "13": ("13_tokenizer_analysis", "Multi-Model Tokenizer Benchmark Analysis"),
+    "14": ("14_mlm_evaluation", "Multi-Model Masked Language Model Benchmark Matrix"),
+    "15": ("15_cross_model_benchmarking", "Cross-Model Benchmarking & Computational Resource Profiling"),
+    "16": ("16_statistical_analysis", "Statistical Significance Testing & Scoring Feature Ablation"),
+    "17": ("17_decision_engine", "Objective Threshold Decision Engine & Research Report"),
+    "18": ("18_lint_corpus", "Automated Corpus Quality Linting")
 }
 
 def run_stage(stage_key: str):

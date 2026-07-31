@@ -37,7 +37,17 @@ def test_pipeline_outputs():
         "statistics.json",
         "tokenizer_analysis.json",
         "manifest.json",
-        "corpus_quality_report.md"
+        "corpus_quality_report.md",
+        "document_importance.jsonl",
+        "importance_statistics.json",
+        "importance_distribution.png",
+        "comparison.csv",
+        "leaderboard.csv",
+        "benchmark_report.md",
+        "statistical_significance.json",
+        "ablation_study.json",
+        "experiment_metadata.json",
+        "decision_summary.json"
     ]
     
     all_exist = True

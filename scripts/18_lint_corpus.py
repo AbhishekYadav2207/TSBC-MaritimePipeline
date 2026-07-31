@@ -5,7 +5,7 @@ from pathlib import Path
 from tqdm import tqdm
 from pipeline_utils import setup_logging, load_config, get_project_root
 
-logger = setup_logging("13_lint_corpus")
+logger = setup_logging("18_lint_corpus")
 
 LINT_RULES = {
     "repeated_adjacent_words": r'\b([a-zA-Z]{3,})\s+\1\b',
@@ -21,27 +21,27 @@ def main():
     root = get_project_root()
     config = load_config()
     output_dir = root / config.get("output_dir", "outputs")
-    
+
     clean_path = output_dir / "clean_documents.jsonl"
     if not clean_path.exists():
         logger.error(f"Clean documents not found at {clean_path}!")
         return
-        
+
     logger.info("Running automated corpus quality linter...")
-    
+
     total_docs = 0
     issue_counts = {rule: 0 for rule in LINT_RULES}
     issue_samples = {rule: [] for rule in LINT_RULES}
-    
+
     compiled_rules = {rule: re.compile(pat) for rule, pat in LINT_RULES.items()}
-    
+
     with open(clean_path, "r", encoding="utf-8") as f:
         for line in tqdm(f, desc="Linting Corpus"):
             total_docs += 1
             record = json.loads(line)
             doc_text = record.get("document", "")
             oid = record.get("occurrence_id")
-            
+
             for rule_name, pattern in compiled_rules.items():
                 matches = pattern.findall(doc_text)
                 if matches:
@@ -58,11 +58,11 @@ def main():
                                 "match": matches[0] if isinstance(matches[0], str) else matches[0][0],
                                 "snippet": doc_text[:150]
                             })
-                        
+
     total_issues = sum(issue_counts.values())
     issue_rate = (total_issues / total_docs) if total_docs > 0 else 0.0
     status = "PASS" if issue_rate < 0.005 else "WARN"
-    
+
     report = {
         "status": status,
         "total_documents_linted": total_docs,
@@ -77,14 +77,12 @@ def main():
             for rule, count in issue_counts.items()
         }
     }
-    
+
     out_path = output_dir / "corpus_lint_report.json"
     with open(out_path, "w", encoding="utf-8") as fout:
         json.dump(report, fout, indent=2)
-        
+
     logger.info(f"Corpus linting complete. Status: {status}. Report saved to {out_path}")
-    for rule, count in issue_counts.items():
-        logger.info(f"  {rule}: {count} violations ({(count/total_docs*100):.3f}%)")
 
 if __name__ == "__main__":
     main()

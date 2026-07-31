@@ -1,0 +1,20 @@
+{
+  "total_documents": 96714,
+  "mean_importance_score": 36.65557675207312,
+  "median_importance_score": 37.88,
+  "std_importance_score": 7.469874531562474,
+  "min_importance_score": 10.67,
+  "max_importance_score": 65.33,
+  "quartiles": [
+    32.06,
+    37.88,
+    41.81
+  ],
+  "knowledge_tier_breakdown": {
+    "Low Knowledge": 33216,
+    "Medium Knowledge": 37732,
+    "High Knowledge": 23131,
+    "Noisy / Boilerplate": 2523,
+    "Redundant": 112
+  }
+}

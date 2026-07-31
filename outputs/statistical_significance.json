@@ -1,0 +1,293 @@
+{
+  "bootstrap_confidence_intervals": {
+    "allenai/scibert_scivocab_uncased": {
+      "mean": 0.2803354769028759,
+      "ci_95_low": 0.24001494118693623,
+      "ci_95_high": 0.3168759974315668
+    },
+    "answerdotai/ModernBERT-base": {
+      "mean": 0.7338257649724522,
+      "ci_95_low": 0.6665805330236609,
+      "ci_95_high": 0.7943872230154929
+    },
+    "bert-base-uncased": {
+      "mean": 0.25617301662305086,
+      "ci_95_low": 0.22178417295358732,
+      "ci_95_high": 0.2865669588448305
+    },
+    "dmis-lab/biobert-base-cased-v1.2": {
+      "mean": 0.21973034029810812,
+      "ci_95_low": 0.18109774716520322,
+      "ci_95_high": 0.2574471638518783
+    },
+    "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext": {
+      "mean": 0.16352355568741928,
+      "ci_95_low": 0.12247297074155242,
+      "ci_95_high": 0.20456121704114497
+    },
+    "nlpaueb/legal-bert-base-uncased": {
+      "mean": 0.3069103811878319,
+      "ci_95_low": 0.2847007544066737,
+      "ci_95_high": 0.33317001919675776
+    },
+    "roberta-base": {
+      "mean": 0.6379122626385946,
+      "ci_95_low": 0.5469017456878283,
+      "ci_95_high": 0.7221035408543935
+    }
+  },
+  "pairwise_statistical_tests": [
+    {
+      "model_1": "allenai/scibert_scivocab_uncased",
+      "model_2": "answerdotai/ModernBERT-base",
+      "mean_diff_top1": -0.4534902880695763,
+      "paired_t_stat": -18.01763939648851,
+      "p_value_t_test": 1.8864741657915593e-15,
+      "wilcoxon_stat": 0.0,
+      "p_value_wilcoxon": 5.960464477539063e-08,
+      "cohens_d_effect_size": -3.4072,
+      "cliffs_delta_effect_size": -0.9968,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "allenai/scibert_scivocab_uncased",
+      "model_2": "bert-base-uncased",
+      "mean_diff_top1": 0.02416246027982505,
+      "paired_t_stat": 2.4235976163373945,
+      "p_value_t_test": 0.02327336204352855,
+      "wilcoxon_stat": 72.0,
+      "p_value_wilcoxon": 0.013554692268371582,
+      "cohens_d_effect_size": 0.2624,
+      "cliffs_delta_effect_size": 0.1776,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "allenai/scibert_scivocab_uncased",
+      "model_2": "dmis-lab/biobert-base-cased-v1.2",
+      "mean_diff_top1": 0.060605136604767795,
+      "paired_t_stat": 10.854448380976011,
+      "p_value_t_test": 9.681616310833952e-11,
+      "wilcoxon_stat": 0.0,
+      "p_value_wilcoxon": 5.960464477539063e-08,
+      "cohens_d_effect_size": 0.6163,
+      "cliffs_delta_effect_size": 0.344,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "allenai/scibert_scivocab_uncased",
+      "model_2": "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext",
+      "mean_diff_top1": 0.11681192121545664,
+      "paired_t_stat": 14.18613114035402,
+      "p_value_t_test": 3.6345254808103674e-13,
+      "wilcoxon_stat": 0.0,
+      "p_value_wilcoxon": 5.960464477539063e-08,
+      "cohens_d_effect_size": 1.1271,
+      "cliffs_delta_effect_size": 0.5616,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "allenai/scibert_scivocab_uncased",
+      "model_2": "nlpaueb/legal-bert-base-uncased",
+      "mean_diff_top1": -0.026574904284956014,
+      "paired_t_stat": -1.5768733364048821,
+      "p_value_t_test": 0.1279159395482461,
+      "wilcoxon_stat": 116.0,
+      "p_value_wilcoxon": 0.21998637914657593,
+      "cohens_d_effect_size": -0.3157,
+      "cliffs_delta_effect_size": -0.1296,
+      "is_statistically_significant": false
+    },
+    {
+      "model_1": "allenai/scibert_scivocab_uncased",
+      "model_2": "roberta-base",
+      "mean_diff_top1": -0.35757678573571866,
+      "paired_t_stat": -10.53687303133136,
+      "p_value_t_test": 1.7530801903202493e-10,
+      "wilcoxon_stat": 0.0,
+      "p_value_wilcoxon": 5.960464477539063e-08,
+      "cohens_d_effect_size": -2.0417,
+      "cliffs_delta_effect_size": -0.7376,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "answerdotai/ModernBERT-base",
+      "model_2": "bert-base-uncased",
+      "mean_diff_top1": 0.47765274834940136,
+      "paired_t_stat": 19.372226818040406,
+      "p_value_t_test": 3.6887000408855106e-16,
+      "wilcoxon_stat": 0.0,
+      "p_value_wilcoxon": 5.960464477539063e-08,
+      "cohens_d_effect_size": 3.7404,
+      "cliffs_delta_effect_size": 1.0,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "answerdotai/ModernBERT-base",
+      "model_2": "dmis-lab/biobert-base-cased-v1.2",
+      "mean_diff_top1": 0.5140954246743441,
+      "paired_t_stat": 20.67676277409678,
+      "p_value_t_test": 8.40526606305084e-17,
+      "wilcoxon_stat": 0.0,
+      "p_value_wilcoxon": 5.960464477539063e-08,
+      "cohens_d_effect_size": 3.8864,
+      "cliffs_delta_effect_size": 1.0,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "answerdotai/ModernBERT-base",
+      "model_2": "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext",
+      "mean_diff_top1": 0.570302209285033,
+      "paired_t_stat": 20.856166800145772,
+      "p_value_t_test": 6.903512868482123e-17,
+      "wilcoxon_stat": 0.0,
+      "p_value_wilcoxon": 5.960464477539063e-08,
+      "cohens_d_effect_size": 4.1851,
+      "cliffs_delta_effect_size": 1.0,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "answerdotai/ModernBERT-base",
+      "model_2": "nlpaueb/legal-bert-base-uncased",
+      "mean_diff_top1": 0.4269153837846203,
+      "paired_t_stat": 14.538233335398829,
+      "p_value_t_test": 2.1405561207337934e-13,
+      "wilcoxon_stat": 0.0,
+      "p_value_wilcoxon": 5.960464477539063e-08,
+      "cohens_d_effect_size": 3.4957,
+      "cliffs_delta_effect_size": 0.9968,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "answerdotai/ModernBERT-base",
+      "model_2": "roberta-base",
+      "mean_diff_top1": 0.09591350233385765,
+      "paired_t_stat": 3.6364187124027154,
+      "p_value_t_test": 0.0013129802542242686,
+      "wilcoxon_stat": 46.0,
+      "p_value_wilcoxon": 0.002964178167173091,
+      "cohens_d_effect_size": 0.4888,
+      "cliffs_delta_effect_size": 0.2208,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "bert-base-uncased",
+      "model_2": "dmis-lab/biobert-base-cased-v1.2",
+      "mean_diff_top1": 0.03644267632494275,
+      "paired_t_stat": 3.1220025207233064,
+      "p_value_t_test": 0.004635933853071855,
+      "wilcoxon_stat": 74.0,
+      "p_value_wilcoxon": 0.01597297191619873,
+      "cohens_d_effect_size": 0.4009,
+      "cliffs_delta_effect_size": 0.2256,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "bert-base-uncased",
+      "model_2": "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext",
+      "mean_diff_top1": 0.09264946093563159,
+      "paired_t_stat": 6.147174496417033,
+      "p_value_t_test": 2.375326623467821e-06,
+      "wilcoxon_stat": 0.0,
+      "p_value_wilcoxon": 5.960464477539063e-08,
+      "cohens_d_effect_size": 0.9591,
+      "cliffs_delta_effect_size": 0.5232,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "bert-base-uncased",
+      "model_2": "nlpaueb/legal-bert-base-uncased",
+      "mean_diff_top1": -0.05073736456478106,
+      "paired_t_stat": -3.284101157521108,
+      "p_value_t_test": 0.0031309825895897885,
+      "wilcoxon_stat": 62.0,
+      "p_value_wilcoxon": 0.005578815937042236,
+      "cohens_d_effect_size": -0.6733,
+      "cliffs_delta_effect_size": -0.2384,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "bert-base-uncased",
+      "model_2": "roberta-base",
+      "mean_diff_top1": -0.3817392460155437,
+      "paired_t_stat": -12.226815575181634,
+      "p_value_t_test": 8.473991911237775e-12,
+      "wilcoxon_stat": 0.0,
+      "p_value_wilcoxon": 5.960464477539063e-08,
+      "cohens_d_effect_size": -2.2315,
+      "cliffs_delta_effect_size": -0.7152,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "dmis-lab/biobert-base-cased-v1.2",
+      "model_2": "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext",
+      "mean_diff_top1": 0.05620678461068884,
+      "paired_t_stat": 10.33132681263179,
+      "p_value_t_test": 2.590894587448041e-10,
+      "wilcoxon_stat": 0.0,
+      "p_value_wilcoxon": 5.960464477539063e-08,
+      "cohens_d_effect_size": 0.5479,
+      "cliffs_delta_effect_size": 0.3312,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "dmis-lab/biobert-base-cased-v1.2",
+      "model_2": "nlpaueb/legal-bert-base-uncased",
+      "mean_diff_top1": -0.08718004088972381,
+      "paired_t_stat": -5.595715904432075,
+      "p_value_t_test": 9.279678042745442e-06,
+      "wilcoxon_stat": 7.0,
+      "p_value_wilcoxon": 1.1324882507324219e-06,
+      "cohens_d_effect_size": -1.0519,
+      "cliffs_delta_effect_size": -0.5072,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "dmis-lab/biobert-base-cased-v1.2",
+      "model_2": "roberta-base",
+      "mean_diff_top1": -0.41818192234048646,
+      "paired_t_stat": -11.670113091834697,
+      "p_value_t_test": 2.220840457298849e-11,
+      "wilcoxon_stat": 0.0,
+      "p_value_wilcoxon": 5.960464477539063e-08,
+      "cohens_d_effect_size": -2.3963,
+      "cliffs_delta_effect_size": -0.8208,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext",
+      "model_2": "nlpaueb/legal-bert-base-uncased",
+      "mean_diff_top1": -0.14338682550041265,
+      "paired_t_stat": -8.211343257216885,
+      "p_value_t_test": 1.9831367239862018e-08,
+      "wilcoxon_stat": 1.0,
+      "p_value_wilcoxon": 1.1920928955078125e-07,
+      "cohens_d_effect_size": -1.6092,
+      "cliffs_delta_effect_size": -0.6896,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext",
+      "model_2": "roberta-base",
+      "mean_diff_top1": -0.4743887069511753,
+      "paired_t_stat": -12.33085840703488,
+      "p_value_t_test": 7.1029093685621915e-12,
+      "wilcoxon_stat": 0.0,
+      "p_value_wilcoxon": 5.960464477539063e-08,
+      "cohens_d_effect_size": -2.6718,
+      "cliffs_delta_effect_size": -0.8656,
+      "is_statistically_significant": true
+    },
+    {
+      "model_1": "nlpaueb/legal-bert-base-uncased",
+      "model_2": "roberta-base",
+      "mean_diff_top1": -0.33100188145076265,
+      "paired_t_stat": -7.710468234873149,
+      "p_value_t_test": 6.022348216768432e-08,
+      "wilcoxon_stat": 15.0,
+      "p_value_wilcoxon": 8.165836334228516e-06,
+      "cohens_d_effect_size": -1.9827,
+      "cliffs_delta_effect_size": -0.6448,
+      "is_statistically_significant": true
+    }
+  ]
+}

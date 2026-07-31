@@ -1,0 +1,36 @@
+{
+  "top_performing_model": "answerdotai/ModernBERT-base",
+  "decision": "Train MaritimeBERT From Scratch Required",
+  "strategy": "Strategy B: Train Domain-Specific MaritimeBERT Model From Scratch",
+  "rationale": "Substantial domain gap detected. Maritime Top-1 (73.38%) is below 60.0%, performance gap (-18.35%) exceeds 20.0%, or fragmentation (63.47%) exceeds 40.0%.",
+  "decision_thresholds_used": {
+    "dapt_top1_threshold": 85.0,
+    "gap_threshold": 5.0,
+    "frag_threshold": 20.0,
+    "scratch_top1_threshold": 60.0,
+    "scratch_gap_threshold": 20.0,
+    "scratch_frag_threshold": 40.0
+  },
+  "sensitivity_analysis": [
+    {
+      "threshold_shift_pct": -10.0,
+      "decision": "Train MaritimeBERT From Scratch Required"
+    },
+    {
+      "threshold_shift_pct": -5.0,
+      "decision": "Train MaritimeBERT From Scratch Required"
+    },
+    {
+      "threshold_shift_pct": 0.0,
+      "decision": "Train MaritimeBERT From Scratch Required"
+    },
+    {
+      "threshold_shift_pct": 5.0,
+      "decision": "Train MaritimeBERT From Scratch Required"
+    },
+    {
+      "threshold_shift_pct": 10.0,
+      "decision": "Train MaritimeBERT From Scratch Required"
+    }
+  ]
+}

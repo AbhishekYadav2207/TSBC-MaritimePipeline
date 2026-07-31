@@ -1,0 +1,32 @@
+{
+  "Rare Vocabulary": {
+    "ablated_feature_removed": "Rare Vocabulary",
+    "relevance_score": 83.1,
+    "performance_drop_pct": 8.4,
+    "justification": "Removing Rare Vocabulary degrades domain semantic selection precision by 8.4%."
+  },
+  "Concept Diversity": {
+    "ablated_feature_removed": "Concept Diversity",
+    "relevance_score": 85.3,
+    "performance_drop_pct": 6.2,
+    "justification": "Removing Concept Diversity degrades domain semantic selection precision by 6.2%."
+  },
+  "Redundancy Penalty": {
+    "ablated_feature_removed": "Redundancy Penalty",
+    "relevance_score": 86.4,
+    "performance_drop_pct": 5.1,
+    "justification": "Removing Redundancy Penalty degrades domain semantic selection precision by 5.1%."
+  },
+  "Event Complexity": {
+    "ablated_feature_removed": "Event Complexity",
+    "relevance_score": 87.2,
+    "performance_drop_pct": 4.3,
+    "justification": "Removing Event Complexity degrades domain semantic selection precision by 4.3%."
+  },
+  "Metadata Completeness": {
+    "ablated_feature_removed": "Metadata Completeness",
+    "relevance_score": 88.7,
+    "performance_drop_pct": 2.8,
+    "justification": "Removing Metadata Completeness degrades domain semantic selection precision by 2.8%."
+  }
+}

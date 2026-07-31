@@ -23,11 +23,12 @@ ENV/
 # Project-specific large datasets and logs
 data/
 
-# Large generated output files (>50 MB)
-outputs/raw_documents.jsonl
-outputs/clean_documents.jsonl
-outputs/merged_records.jsonl
-outputs/maritime_corpus.jsonl
+# Large generated output data files (>50 MB)
+outputs/*.jsonl
+outputs/*.txt
+outputs/corpus_representations/
+outputs/subsets/
+outputs/evaluations/
 
 outputs_baseline_v1/
 outputs_baseline_v2/

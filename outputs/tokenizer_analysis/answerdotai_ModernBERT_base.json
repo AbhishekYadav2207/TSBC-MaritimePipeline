@@ -1,0 +1,630 @@
+{
+  "model_name": "answerdotai/ModernBERT-base",
+  "clean_model_name": "answerdotai_ModernBERT_base",
+  "vocab_size": 50280,
+  "sampled_documents": 1501,
+  "total_raw_words_analyzed": 51451,
+  "total_subword_tokens_analyzed": 77484,
+  "average_subwords_per_word": 1.5059765602223474,
+  "maritime_fragmentation_rate": 0.6347305389221557,
+  "single_token_vocabulary_coverage": 0.3652694610778443,
+  "single_token_count": 122,
+  "total_maritime_terms": 334,
+  "avg_pieces_per_term": 1.8323353293413174,
+  "median_pieces_per_term": 2.0,
+  "p95_pieces_per_term": 3.0,
+  "max_pieces_per_term": 5,
+  "oov_rate": 0.0,
+  "tokenizer_speed_tokens_per_sec": 328790.6268290092,
+  "sequence_length_distribution": {
+    "under_128": 1501,
+    "under_256": 0,
+    "under_512": 0,
+    "over_512": 0
+  },
+  "worst_fragmented_terms": [
+    {
+      "term": "gross tonnage",
+      "tokens": [
+        "g",
+        "ross",
+        "\u0120ton",
+        "n",
+        "age"
+      ],
+      "num_pieces": 5
+    },
+    {
+      "term": "machinery failure",
+      "tokens": [
+        "m",
+        "ach",
+        "inery",
+        "\u0120failure"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "navigational aid",
+      "tokens": [
+        "nav",
+        "ig",
+        "ational",
+        "\u0120aid"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "navigational aids",
+      "tokens": [
+        "nav",
+        "ig",
+        "ational",
+        "\u0120aids"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "machinery breakdown",
+      "tokens": [
+        "m",
+        "ach",
+        "inery",
+        "\u0120breakdown"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "machinery loss",
+      "tokens": [
+        "m",
+        "ach",
+        "inery",
+        "\u0120loss"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "cargo tanker",
+      "tokens": [
+        "c",
+        "argo",
+        "\u0120tank",
+        "er"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "fishing vessel",
+      "tokens": [
+        "f",
+        "ishing",
+        "\u0120vessel"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "bulk carrier",
+      "tokens": [
+        "bul",
+        "k",
+        "\u0120carrier"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "cargo vessel",
+      "tokens": [
+        "c",
+        "argo",
+        "\u0120vessel"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "cargo hold",
+      "tokens": [
+        "c",
+        "argo",
+        "\u0120hold"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "search and rescue",
+      "tokens": [
+        "search",
+        "\u0120and",
+        "\u0120rescue"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "steering failure",
+      "tokens": [
+        "ste",
+        "ering",
+        "\u0120failure"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "hull damage",
+      "tokens": [
+        "h",
+        "ull",
+        "\u0120damage"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "starboard side",
+      "tokens": [
+        "star",
+        "board",
+        "\u0120side"
+      ],
+      "num_pieces": 3
+    }
+  ],
+  "maritime_vocabulary_splits": [
+    {
+      "term": "gross tonnage",
+      "tokens": [
+        "g",
+        "ross",
+        "\u0120ton",
+        "n",
+        "age"
+      ],
+      "num_pieces": 5
+    },
+    {
+      "term": "machinery failure",
+      "tokens": [
+        "m",
+        "ach",
+        "inery",
+        "\u0120failure"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "navigational aid",
+      "tokens": [
+        "nav",
+        "ig",
+        "ational",
+        "\u0120aid"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "navigational aids",
+      "tokens": [
+        "nav",
+        "ig",
+        "ational",
+        "\u0120aids"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "machinery breakdown",
+      "tokens": [
+        "m",
+        "ach",
+        "inery",
+        "\u0120breakdown"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "machinery loss",
+      "tokens": [
+        "m",
+        "ach",
+        "inery",
+        "\u0120loss"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "cargo tanker",
+      "tokens": [
+        "c",
+        "argo",
+        "\u0120tank",
+        "er"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "fishing vessel",
+      "tokens": [
+        "f",
+        "ishing",
+        "\u0120vessel"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "bulk carrier",
+      "tokens": [
+        "bul",
+        "k",
+        "\u0120carrier"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "cargo vessel",
+      "tokens": [
+        "c",
+        "argo",
+        "\u0120vessel"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "cargo hold",
+      "tokens": [
+        "c",
+        "argo",
+        "\u0120hold"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "search and rescue",
+      "tokens": [
+        "search",
+        "\u0120and",
+        "\u0120rescue"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "steering failure",
+      "tokens": [
+        "ste",
+        "ering",
+        "\u0120failure"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "hull damage",
+      "tokens": [
+        "h",
+        "ull",
+        "\u0120damage"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "starboard side",
+      "tokens": [
+        "star",
+        "board",
+        "\u0120side"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "propulsion failure",
+      "tokens": [
+        "prop",
+        "ulsion",
+        "\u0120failure"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "steering loss",
+      "tokens": [
+        "ste",
+        "ering",
+        "\u0120loss"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "vhf radio",
+      "tokens": [
+        "vh",
+        "f",
+        "\u0120radio"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "keel damage",
+      "tokens": [
+        "ke",
+        "el",
+        "\u0120damage"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "steering breakdown",
+      "tokens": [
+        "ste",
+        "ering",
+        "\u0120breakdown"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "stern damage",
+      "tokens": [
+        "st",
+        "ern",
+        "\u0120damage"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "propulsion loss",
+      "tokens": [
+        "prop",
+        "ulsion",
+        "\u0120loss"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "tonnage",
+      "tokens": [
+        "ton",
+        "n",
+        "age"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "nautical",
+      "tokens": [
+        "n",
+        "aut",
+        "ical"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "unberthing",
+      "tokens": [
+        "un",
+        "ber",
+        "thing"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "voyage",
+      "tokens": [
+        "v",
+        "oy",
+        "age"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "seaspan",
+      "tokens": [
+        "se",
+        "as",
+        "pan"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "tanker",
+      "tokens": [
+        "t",
+        "ank",
+        "er"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "vessels",
+      "tokens": [
+        "v",
+        "ess",
+        "els"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "machinery",
+      "tokens": [
+        "m",
+        "ach",
+        "inery"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "mooring",
+      "tokens": [
+        "m",
+        "oor",
+        "ing"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "crewmember",
+      "tokens": [
+        "cre",
+        "w",
+        "member"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "crewman",
+      "tokens": [
+        "cre",
+        "w",
+        "man"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "pierre",
+      "tokens": [
+        "p",
+        "ier",
+        "re"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "evacuated",
+      "tokens": [
+        "ev",
+        "ac",
+        "uated"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "departure",
+      "tokens": [
+        "dep",
+        "art",
+        "ure"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "barges",
+      "tokens": [
+        "b",
+        "arg",
+        "es"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "shippegan",
+      "tokens": [
+        "ship",
+        "pe",
+        "gan"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "sailboat",
+      "tokens": [
+        "s",
+        "ail",
+        "boat"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "liferaft",
+      "tokens": [
+        "lif",
+        "era",
+        "ft"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "propellor",
+      "tokens": [
+        "prop",
+        "ell",
+        "or"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "moorings",
+      "tokens": [
+        "m",
+        "oor",
+        "ings"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "portugal",
+      "tokens": [
+        "port",
+        "ug",
+        "al"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "shearwater",
+      "tokens": [
+        "she",
+        "ar",
+        "water"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "departed",
+      "tokens": [
+        "dep",
+        "art",
+        "ed"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "crewmembers",
+      "tokens": [
+        "cre",
+        "w",
+        "members"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "flooding",
+      "tokens": [
+        "fl",
+        "ood",
+        "ing"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "algoport",
+      "tokens": [
+        "alg",
+        "op",
+        "ort"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "oceanex",
+      "tokens": [
+        "o",
+        "cean",
+        "ex"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "algolake",
+      "tokens": [
+        "alg",
+        "ol",
+        "ake"
+      ],
+      "num_pieces": 3
+    }
+  ]
+}

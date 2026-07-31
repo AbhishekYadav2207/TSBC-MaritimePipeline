@@ -1,6 +1,6 @@
 {
-  "model_name": "bert-base-uncased",
-  "clean_model_name": "bert_base_uncased",
+  "model_name": "ProsusAI/finbert",
+  "clean_model_name": "ProsusAI_finbert",
   "vocab_size": 30522,
   "sampled_documents": 1501,
   "total_raw_words_analyzed": 51451,
@@ -15,7 +15,7 @@
   "p95_pieces_per_term": 3.0,
   "max_pieces_per_term": 4,
   "oov_rate": 0.0,
-  "tokenizer_speed_tokens_per_sec": 241993.3020833072,
+  "tokenizer_speed_tokens_per_sec": 255645.50698926204,
   "sequence_length_distribution": {
     "under_128": 1501,
     "under_256": 0,
