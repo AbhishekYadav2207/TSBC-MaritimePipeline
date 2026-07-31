@@ -93,7 +93,7 @@ pipeline/
 │   ├── 17_decision_engine.py       # Objective threshold decision engine & research report
 │   └── 18_lint_corpus.py            # Corpus regex quality linting engine
 ├── outputs/                         # Exported JSON, JSONL, CSV, PNG, and MD artifacts
-├── documentation/                   # 10 Detailed modular section guides
+├── documentation/                   # 11 Detailed modular section guides
 ├── run_pipeline.py                  # Master CLI orchestrator script
 ├── DOCUMENTATION.md                 # Single-file master technical manual
 └── README.md                        # Quick start & high-level architecture overview
@@ -114,19 +114,6 @@ pipeline/
 pip install -r requirements.txt
 ```
 
-`requirements.txt` includes:
-```text
-pandas>=2.0.0
-numpy>=1.24.0
-torch>=2.0.0
-transformers>=4.30.0
-scikit-learn>=1.2.0
-scipy>=1.10.0
-matplotlib>=3.7.0
-seaborn>=0.12.0
-tqdm>=4.65.0
-```
-
 ---
 
 ## Pipeline Execution Guide
@@ -139,26 +126,7 @@ python run_pipeline.py
 ```
 
 ### Run an Individual Stage
-Execute any specific stage without repeating preceding steps:
 ```bash
-# Parse data dictionary
-python run_pipeline.py --stage 01
-
-# Relational table merge
-python run_pipeline.py --stage 05
-
-# Validate merged record constraints
-python run_pipeline.py --stage 05a
-
-# Generate multi-format representations
-python run_pipeline.py --stage 11
-
-# Compute semantic importance scores
-python run_pipeline.py --stage 12
-
-# Run 175-run MLM evaluation grid
-python run_pipeline.py --stage 14
-
 # Calculate MUI score and build model leaderboard
 python run_pipeline.py --stage 15
 
@@ -168,32 +136,6 @@ python run_pipeline.py --stage 17
 # Run automated corpus quality linting
 python run_pipeline.py --stage 18
 ```
-
----
-
-## 18-Stage Master Reference Table
-
-| Stage | Script Name | Core Functionality & Research Purpose | Output Artifacts |
-| :--- | :--- | :--- | :--- |
-| **01** | [`01_parse_dictionary.py`](file:///c:/--Files--/Programming/pipeline/scripts/01_parse_dictionary.py) | Parses master data dictionary, pairs numeric IDs with English display columns. | [`outputs/dictionary_metadata.json`](file:///c:/--Files--/Programming/pipeline/outputs/dictionary_metadata.json) |
-| **02** | [`02_profile_dataset.py`](file:///c:/--Files--/Programming/pipeline/scripts/02_profile_dataset.py) | Computes row counts, missingness %, data types, and cardinalities for 6 raw CSVs. | [`outputs/profiling_report.json`](file:///c:/--Files--/Programming/pipeline/outputs/profiling_report.json) |
-| **03** | [`03_discover_relationships.py`](file:///c:/--Files--/Programming/pipeline/scripts/03_discover_relationships.py) | Discovers foreign key schema join graph and 1-to-Many vessel/equipment cardinalities. | [`outputs/relationships.json`](file:///c:/--Files--/Programming/pipeline/outputs/relationships.json) |
-| **04** | [`04_select_semantic_columns.py`](file:///c:/--Files--/Programming/pipeline/scripts/04_select_semantic_columns.py) | Selects high-information semantic attributes while dropping admin metadata. | [`outputs/selected_semantic_columns.json`](file:///c:/--Files--/Programming/pipeline/outputs/selected_semantic_columns.json) |
-| **05** | [`05_merge_tables.py`](file:///c:/--Files--/Programming/pipeline/scripts/05_merge_tables.py) | Executes relational Left Outer Join grouped by `OccID` into nested JSONL records. | [`outputs/merged_records.jsonl`](file:///c:/--Files--/Programming/pipeline/outputs/merged_records.jsonl) |
-| **05a** | [`05a_validate_records.py`](file:///c:/--Files--/Programming/pipeline/scripts/05a_validate_records.py) | Assesses key presence, non-empty vessel lists, and detects orphan records. | [`outputs/validation_report.json`](file:///c:/--Files--/Programming/pipeline/outputs/validation_report.json) |
-| **06** | [`06_generate_documents.py`](file:///c:/--Files--/Programming/pipeline/scripts/06_generate_documents.py) | Synthesizes structured records into narrative natural English documents using templates. | [`outputs/raw_documents.jsonl`](file:///c:/--Files--/Programming/pipeline/outputs/raw_documents.jsonl) |
-| **07** | [`07_clean_documents.py`](file:///c:/--Files--/Programming/pipeline/scripts/07_clean_documents.py) | Strips header tags, normalizes whitespace, sanitizes non-ASCII artifacts. | [`outputs/clean_documents.jsonl`](file:///c:/--Files--/Programming/pipeline/outputs/clean_documents.jsonl) |
-| **08** | [`08_export_corpus.py`](file:///c:/--Files--/Programming/pipeline/scripts/08_export_corpus.py) | Exports plain text `maritime_corpus.txt`, `maritime_corpus.jsonl`, and SHA-256 manifest. | [`outputs/maritime_corpus.txt`](file:///c:/--Files--/Programming/pipeline/outputs/maritime_corpus.txt) |
-| **09** | [`09_statistics.py`](file:///c:/--Files--/Programming/pipeline/scripts/09_statistics.py) | Computes token counts, vocabulary entropy, Type-Token Ratio, and quality report. | [`outputs/corpus_quality_report.md`](file:///c:/--Files--/Programming/pipeline/outputs/corpus_quality_report.md) |
-| **10** | [`10_extract_vocabulary.py`](file:///c:/--Files--/Programming/pipeline/scripts/10_extract_vocabulary.py) | Extracts top domain-specific maritime keywords using TF-IDF term scoring. | [`outputs/maritime_vocabulary.txt`](file:///c:/--Files--/Programming/pipeline/outputs/maritime_vocabulary.txt) |
-| **11** | [`11_corpus_representations.py`](file:///c:/--Files--/Programming/pipeline/scripts/11_corpus_representations.py) | Generates 5 multi-format corpus representations (Narrative, Key-Value, Template, JSON, Mixed). | [`outputs/corpus_representations/`](file:///c:/--Files--/Programming/pipeline/outputs/corpus_representations) |
-| **12** | [`12_semantic_importance.py`](file:///c:/--Files--/Programming/pipeline/scripts/12_semantic_importance.py) | Scores document importance using 9 features and extracts 6 knowledge evaluation subsets. | [`outputs/document_importance.jsonl`](file:///c:/--Files--/Programming/pipeline/outputs/document_importance.jsonl) |
-| **13** | [`13_tokenizer_analysis.py`](file:///c:/--Files--/Programming/pipeline/scripts/13_tokenizer_analysis.py) | Benchmarks 14 Hugging Face tokenizers across coverage, fragmentation, and speed. | [`outputs/tokenizer_analysis/`](file:///c:/--Files--/Programming/pipeline/outputs/tokenizer_analysis) |
-| **14** | [`14_mlm_evaluation.py`](file:///c:/--Files--/Programming/pipeline/scripts/14_mlm_evaluation.py) | Runs 175-eval MLM grid (7 models $\times$ 5 reps $\times$ 5 subsets) with 15% masking. | [`outputs/evaluations/cache/`](file:///c:/--Files--/Programming/pipeline/outputs/evaluations/cache) |
-| **15** | [`15_cross_model_benchmarking.py`](file:///c:/--Files--/Programming/pipeline/scripts/15_cross_model_benchmarking.py) | Computes composite MUI Score, generates ranked leaderboard and 4 publication plots. | [`outputs/leaderboard.csv`](file:///c:/--Files--/Programming/pipeline/outputs/leaderboard.csv) |
-| **16** | [`16_statistical_analysis.py`](file:///c:/--Files--/Programming/pipeline/scripts/16_statistical_analysis.py) | Computes Bootstrap 95% CIs, paired t-tests, Wilcoxon, Cohen's d, Cliff's delta, and ablation. | [`outputs/statistical_significance.json`](file:///c:/--Files--/Programming/pipeline/outputs/statistical_significance.json) |
-| **17** | [`17_decision_engine.py`](file:///c:/--Files--/Programming/pipeline/scripts/17_decision_engine.py) | Programmatically evaluates strategy rules and writes 10-section benchmark report. | [`outputs/benchmark_report.md`](file:///c:/--Files--/Programming/pipeline/outputs/benchmark_report.md) |
-| **18** | [`18_lint_corpus.py`](file:///c:/--Files--/Programming/pipeline/scripts/18_lint_corpus.py) | Quality regex linting across clean documents for repeated words and malformed phrasing. | [`outputs/corpus_lint_report.json`](file:///c:/--Files--/Programming/pipeline/outputs/corpus_lint_report.json) |
 
 ---
 
@@ -211,3 +153,4 @@ For exhaustive, in-depth technical documentation on specific components, refer t
 8. **[07_statistical_analysis_and_ablation.md](file:///c:/--Files--/Programming/pipeline/documentation/07_statistical_analysis_and_ablation.md)**: Stage 16: Bootstrap CIs, paired t-tests, Wilcoxon, Cohen's d, Cliff's delta, feature ablation.
 9. **[08_decision_engine_and_research_report.md](file:///c:/--Files--/Programming/pipeline/documentation/08_decision_engine_and_research_report.md)**: Stage 17–18: Pretraining strategy decision engine (Strategy A, B, C), research report, regex linting.
 10. **[09_output_artifacts_and_files_registry.md](file:///c:/--Files--/Programming/pipeline/documentation/09_output_artifacts_and_files_registry.md)**: Comprehensive registry of all 30 output files in `outputs/` with schemas and sample records.
+11. **[10_research_achievements_and_mlm_benchmark_report.md](file:///c:/--Files--/Programming/pipeline/documentation/10_research_achievements_and_mlm_benchmark_report.md)**: In-depth research synthesis of achievements, tokenizer selection/pruning rationale, 175-run MLM outputs, MUI leaderboard, and pretraining roadmap.
