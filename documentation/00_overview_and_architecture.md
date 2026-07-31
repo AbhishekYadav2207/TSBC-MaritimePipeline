@@ -1,10 +1,10 @@
 # Section 00: Overview & Pipeline Architecture
 
-## 1. High-Level Overview
+## 1. Executive Research Overview
 
-The **Maritime NLP Corpus Generation & Evaluation Pipeline** is a modular, end-to-end research framework designed to ingest raw relational databases (TSB MARSIS), process natural language accident reports, construct multi-format text representations, score semantic importance, benchmark multi-architecture tokenizers, run a 175-evaluation Masked Language Model (MLM) benchmark matrix across representative model families, perform statistical significance & feature ablation testing, and programmatically select the optimal domain adaptation strategy.
+The **Maritime NLP Corpus Generation & Evaluation Pipeline** is an 18-stage modular research framework designed to ingest raw relational maritime accident databases (TSB MARSIS views), process natural language accident reports, construct multi-format text representations, score semantic importance, benchmark multi-architecture tokenizers, run a 175-evaluation Masked Language Model (MLM) benchmark matrix across representative model families, perform statistical significance & feature ablation testing, and programmatically select the optimal domain adaptation strategy.
 
-The pipeline answers the fundamental research question:
+The pipeline addresses the fundamental research problem:
 > *Does continuing Domain-Adaptive Pretraining (DAPT) on existing general language models suffice for maritime accident data, or is training a specialized domain model (**MaritimeBERT**) from scratch required?*
 
 ---
@@ -61,6 +61,10 @@ pipeline/
 ├── config/
 │   └── config.json                  # Master configuration settings & threshold parameters
 ├── data/                            # Raw MARSIS CSV files (git-ignored)
+├── templates/                       # Randomized template families
+│   ├── vessel_templates.json        # Vessel specifications & activity templates
+│   ├── injury_templates.json        # Casualty & injury breakdown templates
+│   └── equipment_templates.json     # LSA, Navigation, & REC equipment templates
 ├── scripts/                         # 18 Modular execution stage scripts & helpers
 │   ├── pipeline_utils.py            # Shared logging, path resolution, encoding helpers
 │   ├── text_sanitizer.py            # Text normalization & PII scrubbing regex engine
@@ -92,7 +96,7 @@ pipeline/
 
 ---
 
-## 4. Master Orchestrator Usage (`run_pipeline.py`)
+## 4. Master Orchestrator Usage ([`run_pipeline.py`](file:///c:/--Files--/Programming/pipeline/run_pipeline.py))
 
 The pipeline can be run in its entirety or stage-by-stage using `run_pipeline.py`:
 
@@ -103,3 +107,24 @@ python run_pipeline.py
 # Execute a specific stage (e.g. Stage 15 Cross-Model Benchmarking)
 python run_pipeline.py --stage 15
 ```
+
+### Stage Execution Registry
+- `01`: Parse Data Dictionary
+- `02`: Profile Datasets
+- `03`: Discover Schema Relationships
+- `04`: Select Semantic Columns
+- `05`: Merge Datasets
+- `05a`: Validate Records
+- `06`: Generate Natural Language Documents
+- `07`: Clean and Normalize Documents
+- `08`: Export Maritime Corpus & Manifest
+- `09`: Calculate Corpus Statistics & Report
+- `10`: Extract Maritime Vocabulary
+- `11`: Multi-Format Corpus Representation Generation
+- `12`: Semantic Importance Assessment & Knowledge Classification
+- `13`: Multi-Model Tokenizer Benchmark Analysis
+- `14`: Multi-Model Masked Language Model Benchmark Matrix
+- `15`: Cross-Model Benchmarking & Computational Resource Profiling
+- `16`: Statistical Significance Testing & Scoring Feature Ablation
+- `17`: Objective Threshold Decision Engine & Research Report
+- `18`: Automated Corpus Quality Linting

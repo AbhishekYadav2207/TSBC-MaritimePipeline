@@ -1,52 +1,58 @@
 # Section 05: Masked Language Model (MLM) Evaluation Matrix (Stage 14)
 
-This document details Stage 14: Multi-Model Masked Language Model Benchmark Matrix execution mechanics.
+This document provides complete technical specifications for Stage 14: Multi-Model Masked Language Model Benchmark Matrix.
 
 ---
 
 ## Stage 14: Multi-Model MLM Evaluation Matrix
-- **Script**: [scripts/14_mlm_evaluation.py](file:///c:/--Files--/Programming/pipeline/scripts/14_mlm_evaluation.py)
-- **Grid Dimensions**: 7 Representative Models × 5 Corpus Representations × 5 Knowledge Subsets = **175 Independent Evaluation Runs**.
+- **Script**: [`scripts/14_mlm_evaluation.py`](file:///c:/--Files--/Programming/pipeline/scripts/14_mlm_evaluation.py)
+- **Execution Command**: `python run_pipeline.py --stage 14`
 
 ---
 
-## Evaluation Grid Dimensions
+## 1. 175-Run Evaluation Grid Architecture
 
-1. **Representative Models (7)**:
-   - `bert-base-uncased`
-   - `dmis-lab/biobert-base-cased-v1.2`
-   - `nlpaueb/legal-bert-base-uncased`
-   - `allenai/scibert_scivocab_uncased`
-   - `microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext`
-   - `answerdotai/ModernBERT-base`
-   - `roberta-base`
+Stage 14 executes a systematic **175-run evaluation grid**:
+$$\text{Total Grid Runs} = 7 \text{ Representative Models} \times 5 \text{ Multi-Format Representations} \times 5 \text{ Knowledge Subsets} = 175 \text{ Runs}$$
 
-2. **Corpus Representations (5)**:
-   - `narrative`, `key_value`, `template`, `json`, `mixed`
+### 7 Representative Model Families
+1. `bert-base-uncased`: Standard WordPiece baseline.
+2. `dmis-lab/biobert-base-cased-v1.2`: Medical/Bio cased WordPiece.
+3. `nlpaueb/legal-bert-base-uncased`: Domain WordPiece for legal syntax.
+4. `allenai/scibert_scivocab_uncased`: Domain WordPiece for scientific vocabulary.
+5. `microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext`: PubMed specialized WordPiece.
+6. `roberta-base`: Byte-Level BPE baseline.
+7. `answerdotai/ModernBERT-base`: Modern extended BPE.
 
-3. **Knowledge Subsets (5)**:
-   - `high_knowledge`, `medium_knowledge`, `low_knowledge`, `balanced_knowledge`, `random_baseline`
+### 5 Representations Evaluated
+- Narrative Prose (`narrative`)
+- Key-Value Pairs (`key_value`)
+- Slot-Filled Templates (`template`)
+- Compact JSON (`json`)
+- Hybrid Prose/Metadata (`mixed`)
+
+### 5 Knowledge Subsets Evaluated
+- High Knowledge (`high_knowledge.jsonl`)
+- Medium Knowledge (`medium_knowledge.jsonl`)
+- Low Knowledge (`low_knowledge.jsonl`)
+- Balanced Knowledge (`balanced_knowledge.jsonl`)
+- Random Baseline (`random_baseline.jsonl`)
 
 ---
 
-## Core Masking & Evaluation Algorithm
+## 2. Masking Protocol & Category Recall Subdomains
 
-For each of the 175 evaluation runs:
-1. **Occurrence-ID Document Matching**:
-   Representation text documents are filtered strictly by `occurrence_id` present in `outputs/subsets/<subset>.jsonl`:
-   ```python
-   target_docs = [rec["document"] for rec in rep_records if rec["occurrence_id"] in sub_occ_ids][:200]
-   ```
-2. **Token Masking**:
-   15% of non-special tokens are masked with the model's `[MASK]` token.
-3. **Loss Computation**:
-   Cross-entropy loss $\mathcal{L}_{\text{CE}}$ is calculated over masked token predictions:
-   $$\mathcal{L}_{\text{MLM}} = -\frac{1}{N_{\text{masked}}} \sum_{i=1}^{N_{\text{masked}}} \log P(w_i \mid \text{Context})$$
-4. **Accuracy Recall**:
-   Computes Top-1, Top-5, and Top-10 recall accuracy for general tokens, maritime domain tokens, rare terms, and 6 subdomain categories (Navigation, Weather, Safety, Machinery, Vessel, Casualties).
+- **Masking Protocol**: Tokens are randomly masked at a **15% rate** following standard BERT pretraining practice. Cross-Entropy Loss is calculated strictly over masked token positions.
+- **6 Subdomain Categories Evaluated**:
+  1. `vessel_terminology`: Ship types, hull specs, deck attributes.
+  2. `navigation`: GPS, AIS, radar, VHF, sonar, compass, VDR.
+  3. `machinery_propulsion`: Main engines, boilers, steering gear, windlasses.
+  4. `casualty_incident`: Collision, grounding, stranding, flooding, fatalities.
+  5. `weather_environment`: Wind, sea states, visibility, fog, temperature.
+  6. `safety_lifesaving`: Lifeboats, liferafts, EPIRBs, SARTs, lifejackets.
 
 ---
 
 ## Output Artifacts
-- Cached JSON evaluation files in [outputs/evaluations/cache/](file:///c:/--Files--/Programming/pipeline/outputs/evaluations/cache) (`<model>__<rep>__<subset>.json`)
-- Model summary JSON reports in [outputs/evaluations/](file:///c:/--Files--/Programming/pipeline/outputs/evaluations)
+- Evaluation run JSON cache files in [`outputs/evaluations/cache/*.json`](file:///c:/--Files--/Programming/pipeline/outputs/evaluations/cache)
+- Summarized model reports in [`outputs/evaluations/`](file:///c:/--Files--/Programming/pipeline/outputs/evaluations)

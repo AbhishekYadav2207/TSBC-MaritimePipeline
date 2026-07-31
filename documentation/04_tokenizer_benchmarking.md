@@ -1,64 +1,60 @@
 # Section 04: Multi-Model Tokenizer Benchmarking (Stage 13)
 
-This document details Stage 13: Multi-Model Tokenizer Benchmark Analysis and the tokenizer-driven model filtering methodology.
+This document provides complete technical specifications for Stage 13: Multi-Model Tokenizer Benchmark Analysis.
 
 ---
 
 ## Stage 13: Multi-Model Tokenizer Benchmark Analysis
-- **Script**: [scripts/13_tokenizer_analysis.py](file:///c:/--Files--/Programming/pipeline/scripts/13_tokenizer_analysis.py)
-- **Target Tokenizer Candidates**: 14 Hugging Face encoder models (BERT Uncased, BioBERT, LegalBERT, SciBERT, PubMedBERT, ModernBERT, RoBERTa, DeBERTa, ELECTRA, FinBERT, etc.).
+- **Script**: [`scripts/13_tokenizer_analysis.py`](file:///c:/--Files--/Programming/pipeline/scripts/13_tokenizer_analysis.py)
+- **Execution Command**: `python run_pipeline.py --stage 13`
 
 ---
 
-## Benchmark Metrics Evaluated
+## 1. Benchmarked Tokenizer Models (14 Tokenizer Architectures)
 
-1. **Vocabulary Size ($V$)**: Total subword vocabulary capacity.
-2. **Single-Token Coverage (%)**: Percentage of 334 maritime terms tokenized as a single token.
-3. **Subword Fragmentation Rate (%)**: Percentage of domain terms split into 2+ subword pieces.
-4. **Subword Fertility**: Average number of subwords generated per raw word:
-   $$\text{Fertility} = \frac{\sum N_{\text{subwords}}}{\sum N_{\text{words}}}$$
-5. **Out-of-Vocabulary (OOV) Rate (%)**: Proportion of unk tokens (`[UNK]`).
-6. **Tokenizer Speed (tok/sec)**: Subword tokenization throughput profiling.
+Stage 13 evaluates 14 target Hugging Face tokenizers spanning WordPiece, Byte-Pair Encoding (BPE), SentencePiece BPE, and Byte-Level BPE families:
 
----
-
-## Empirical Benchmark Ranking Table
-
-| Rank | Model Name | Vocab Size | Coverage (%) | Fragmentation (%) | Fertility | OOV Rate (%) | Speed (tok/s) |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **1** | `bert-base-uncased` | 30,522 | **74.85%** | **25.15%** | **1.3416** | 0.00% | 241,993 |
-| **1** | `bert-large-uncased` | 30,522 | **74.85%** | **25.15%** | **1.3416** | 0.00% | 248,067 |
-| **1** | `distilbert-base-uncased` | 30,522 | **74.85%** | **25.15%** | **1.3416** | 0.00% | 248,338 |
-| **1** | `google/electra-base-discriminator` | 30,522 | **74.85%** | **25.15%** | **1.3416** | 0.00% | 252,753 |
-| **1** | `ProsusAI/finbert` | 30,522 | **74.85%** | **25.15%** | **1.3416** | 0.00% | 255,646 |
-| **2** | `dmis-lab/biobert-base-cased-v1.2` | 28,996 | 65.87% | 34.13% | 1.4235 | 0.00% | 284,969 |
-| **2** | `emilyalsentzer/Bio_ClinicalBERT` | 28,996 | 65.87% | 34.13% | 1.4235 | 0.00% | 252,405 |
-| **3** | `nlpaueb/legal-bert-base-uncased` | 30,522 | 63.77% | 36.23% | 1.4198 | 0.04% | 255,161 |
-| **4** | `allenai/scibert_scivocab_uncased` | 31,090 | 58.08% | 41.92% | 1.4107 | 0.00% | 266,700 |
-| **5** | `microsoft/BiomedNLP-PubMedBERT...` | 30,522 | 57.19% | 42.81% | 1.4050 | 0.00% | 286,098 |
-| **6** | `answerdotai/ModernBERT-base` | 50,280 | 36.53% | 63.47% | 1.5060 | 0.00% | 328,791 |
-| **7** | `roberta-base` | 50,265 | 35.33% | 64.67% | 1.5124 | 0.00% | **337,205** |
+| Model ID | Tokenizer Family | Vocabulary Size | Target Domain |
+| :--- | :--- | :--- | :--- |
+| `bert-base-uncased` | Standard WordPiece | 30,522 | General English |
+| `bert-large-uncased` | Standard WordPiece | 30,522 | General English |
+| `roberta-base` | Byte-Level BPE | 50,265 | General English |
+| `microsoft/deberta-v3-base` | SentencePiece BPE | 128,000 | General English |
+| `answerdotai/ModernBERT-base` | Extended BPE | 50,280 | Modern General English |
+| `allenai/scibert_scivocab_uncased` | SciVocab WordPiece | 31,090 | Scientific Literature |
+| `dmis-lab/biobert-base-cased-v1.2` | Bio WordPiece | 28,996 | Biomedical |
+| `microsoft/BiomedNLP-PubMedBERT...` | PubMed WordPiece | 30,522 | PubMed Abstracts |
+| `emilyalsentzer/Bio_ClinicalBERT` | Clinical WordPiece | 30,522 | Clinical Records |
+| `nlpaueb/legal-bert-base-uncased` | Legal WordPiece | 30,522 | Legal Contracts |
+| `ProsusAI/finbert` | Financial WordPiece | 30,522 | Financial Reports |
+| `anferico/bert-for-patents` | Patent WordPiece | 30,522 | Patent Specifications |
+| `google/electra-base-discriminator` | WordPiece | 30,522 | General English |
+| `distilbert-base-uncased` | WordPiece | 30,522 | Distilled English |
 
 ---
 
-## Tokenizer-Driven Model Selection
+## 2. Evaluation Metrics Definitions
 
-To prevent evaluation redundancy, models sharing the **exact same tokenizer binary** were grouped together, selecting 1 representative model per family for downstream MLM benchmarking:
+1. **Single-Token Vocabulary Coverage (%)**:
+   Percentage of the 334 extracted maritime vocabulary terms that exist as single, atomic, un-fragmented tokens in the tokenizer dictionary:
+   $$\text{Coverage} = \frac{\sum \mathbf{1}(|T(w)| = 1)}{|V_{\text{maritime}}|} \times 100$$
 
-1. 🥇 **`bert-base-uncased`** (Standard WordPiece 30k representative)
-2. 🥈 **`dmis-lab/biobert-base-cased-v1.2`** (Bio WordPiece 29k representative)
-3. 🥉 **`nlpaueb/legal-bert-base-uncased`** (Legal WordPiece 30k)
-4. **`allenai/scibert_scivocab_uncased`** (SciVocab WordPiece 31k)
-5. **`microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext`** (PubMed WordPiece 30k)
-6. **`answerdotai/ModernBERT-base`** (Modern Extended BPE 50k)
-7. **`roberta-base`** (Byte-Level BPE 50k)
+2. **Subword Fragmentation Rate (%)**:
+   Percentage of maritime terms split into 2 or more subwords:
+   $$\text{Fragmentation Rate} = \frac{\sum \mathbf{1}(|T(w)| > 1)}{|V_{\text{maritime}}|} \times 100$$
 
-### Computational Savings
-- Full Grid: 14 models × 5 reps × 5 subsets = **350 runs**
-- Filtered Representative Grid: 7 models × 5 reps × 5 subsets = **175 runs** (50% reduction, ~2 hours saved)
+3. **Subwords-per-Word Fertility Ratio**:
+   Mean number of subword units produced per domain word:
+   $$\text{Fertility} = \frac{1}{|V_{\text{maritime}}|} \sum_{w \in V_{\text{maritime}}} |T(w)|$$
+
+4. **Out-Of-Vocabulary (OOV) Rate (%)**:
+   Percentage of tokens mapped to `[UNK]` or unmapped character sequences.
+
+5. **Tokenization Throughput (tokens/sec)**:
+   Speed of tokenizing raw text streams on CPU/GPU hardware.
 
 ---
 
-### Output Artifacts
-- [outputs/tokenizer_analysis/tokenizer_comparison.csv](file:///c:/--Files--/Programming/pipeline/outputs/tokenizer_analysis/tokenizer_comparison.csv)
-- Per-model JSON reports in [outputs/tokenizer_analysis/](file:///c:/--Files--/Programming/pipeline/outputs/tokenizer_analysis)
+## Output Artifacts
+- [`outputs/tokenizer_analysis/tokenizer_comparison.csv`](file:///c:/--Files--/Programming/pipeline/outputs/tokenizer_analysis/tokenizer_comparison.csv)
+- Detailed per-model JSON reports in [`outputs/tokenizer_analysis/*.json`](file:///c:/--Files--/Programming/pipeline/outputs/tokenizer_analysis)

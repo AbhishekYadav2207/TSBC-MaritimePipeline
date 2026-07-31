@@ -1,18 +1,19 @@
 # Section 07: Statistical Analysis & Feature Ablation (Stage 16)
 
-This document details Stage 16: Statistical Significance Testing, Bootstrap 95% Confidence Intervals, Effect Size Calculations, and Scoring Feature Ablation.
+This document provides complete technical specifications for Stage 16: Statistical Significance Testing, Bootstrap 95% Confidence Intervals, Effect Size Calculations, and Scoring Feature Ablation.
 
 ---
 
 ## Stage 16: Statistical Significance Testing & Feature Ablation
-- **Script**: [scripts/16_statistical_analysis.py](file:///c:/--Files--/Programming/pipeline/scripts/16_statistical_analysis.py)
+- **Script**: [`scripts/16_statistical_analysis.py`](file:///c:/--Files--/Programming/pipeline/scripts/16_statistical_analysis.py)
+- **Execution Command**: `python run_pipeline.py --stage 16`
 
 ---
 
-## Statistical Methodology & Formulae
+## 1. Statistical Methodology & Formulae
 
 1. **Bootstrap 95% Confidence Intervals**:
-   Re-sampled with replacement ($B = 1000$ iterations) to calculate non-parametric confidence bounds:
+   Re-sampled with replacement ($B = 1,000$ iterations) to calculate non-parametric confidence bounds:
    $$\text{CI}_{95} = \left[ \text{Percentile}\left(\bar{x}^*, 2.5\right), \; \text{Percentile}\left(\bar{x}^*, 97.5\right) \right]$$
 
 2. **Paired $t$-Test**:
@@ -29,9 +30,9 @@ This document details Stage 16: Statistical Significance Testing, Bootstrap 95% 
 
 ---
 
-## Scoring Feature Ablation Study
+## 2. Scoring Feature Ablation Study
 
-Stage 16 evaluates the marginal impact of individual scoring features in `12_semantic_importance.py` by removing each feature and measuring degradation in semantic selection precision:
+Stage 16 evaluates the marginal impact of individual scoring features in [`scripts/12_semantic_importance.py`](file:///c:/--Files--/Programming/pipeline/scripts/12_semantic_importance.py) by removing each feature and measuring degradation in semantic selection precision:
 
 | Feature Removed | Baseline Precision Score | Ablated Score | Performance Drop (%) | Justification |
 | :--- | :--- | :--- | :--- | :--- |
@@ -44,5 +45,5 @@ Stage 16 evaluates the marginal impact of individual scoring features in `12_sem
 ---
 
 ## Output Artifacts
-- [outputs/statistical_significance.json](file:///c:/--Files--/Programming/pipeline/outputs/statistical_significance.json)
-- [outputs/ablation_study.json](file:///c:/--Files--/Programming/pipeline/outputs/ablation_study.json)
+- [`outputs/statistical_significance.json`](file:///c:/--Files--/Programming/pipeline/outputs/statistical_significance.json)
+- [`outputs/ablation_study.json`](file:///c:/--Files--/Programming/pipeline/outputs/ablation_study.json)

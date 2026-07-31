@@ -1,15 +1,16 @@
 # Section 08: Decision Engine, Research Report & Quality Linting (Stages 17–18)
 
-This document details Stage 17: Objective Threshold Decision Engine, Strategy Selection, Sensitivity Analysis, Publication Benchmark Report, and Stage 18: Automated Corpus Quality Linting.
+This document provides complete technical specifications for Stage 17: Objective Threshold Decision Engine, Strategy Selection, Sensitivity Analysis, Publication Benchmark Report, and Stage 18: Automated Corpus Quality Linting.
 
 ---
 
 ## Stage 17: Objective Threshold Decision Engine
-- **Script**: [scripts/17_decision_engine.py](file:///c:/--Files--/Programming/pipeline/scripts/17_decision_engine.py)
+- **Script**: [`scripts/17_decision_engine.py`](file:///c:/--Files--/Programming/pipeline/scripts/17_decision_engine.py)
+- **Execution Command**: `python run_pipeline.py --stage 17`
 
 ---
 
-## Programmatic Decision Rules
+## 1. Programmatic Decision Rules
 
 The engine evaluates model metrics against configured decision thresholds:
 
@@ -30,9 +31,9 @@ else:
 
 ---
 
-## 10-Section Benchmark Report
+## 2. 10-Section Benchmark Report Structure
 
-Stage 17 automatically generates [outputs/benchmark_report.md](file:///c:/--Files--/Programming/pipeline/outputs/benchmark_report.md) containing:
+Stage 17 automatically generates [`outputs/benchmark_report.md`](file:///c:/--Files--/Programming/pipeline/outputs/benchmark_report.md) containing:
 1. Executive Summary & Strategy Recommendation
 2. Corpus & Representation Analysis
 3. Representation Benchmark Results
@@ -47,7 +48,8 @@ Stage 17 automatically generates [outputs/benchmark_report.md](file:///c:/--File
 ---
 
 ## Stage 18: Automated Corpus Quality Linting
-- **Script**: [scripts/18_lint_corpus.py](file:///c:/--Files--/Programming/pipeline/scripts/18_lint_corpus.py)
+- **Script**: [`scripts/18_lint_corpus.py`](file:///c:/--Files--/Programming/pipeline/scripts/18_lint_corpus.py)
+- **Execution Command**: `python run_pipeline.py --stage 18`
 - **Core Logic**: Executes regex quality linting across all 96,714 clean documents:
   - `repeated_adjacent_words`: `\b([a-zA-Z]{3,})\s+\1\b`
   - `malformed_singular_plural`: `\b1\s+(?:persons|injuries|fatalities|deaths)\b`
@@ -59,7 +61,7 @@ Stage 17 automatically generates [outputs/benchmark_report.md](file:///c:/--File
 ---
 
 ## Output Artifacts
-- [outputs/experiment_metadata.json](file:///c:/--Files--/Programming/pipeline/outputs/experiment_metadata.json)
-- [outputs/decision_summary.json](file:///c:/--Files--/Programming/pipeline/outputs/decision_summary.json)
-- [outputs/benchmark_report.md](file:///c:/--Files--/Programming/pipeline/outputs/benchmark_report.md)
-- [outputs/corpus_lint_report.json](file:///c:/--Files--/Programming/pipeline/outputs/corpus_lint_report.json)
+- [`outputs/experiment_metadata.json`](file:///c:/--Files--/Programming/pipeline/outputs/experiment_metadata.json)
+- [`outputs/decision_summary.json`](file:///c:/--Files--/Programming/pipeline/outputs/decision_summary.json)
+- [`outputs/benchmark_report.md`](file:///c:/--Files--/Programming/pipeline/outputs/benchmark_report.md)
+- [`outputs/corpus_lint_report.json`](file:///c:/--Files--/Programming/pipeline/outputs/corpus_lint_report.json)

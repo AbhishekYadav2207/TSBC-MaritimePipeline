@@ -1,15 +1,16 @@
 # Section 06: Cross-Model Benchmarking & Leaderboard (Stage 15)
 
-This document details Stage 15: Cross-Model Benchmarking, Maritime Understanding Index (MUI) composite score calculation, model leaderboard ranking, and visualization output generation.
+This document provides complete technical specifications for Stage 15: Cross-Model Benchmarking, Maritime Understanding Index (MUI) composite score calculation, model leaderboard ranking, and visualization output generation.
 
 ---
 
 ## Stage 15: Cross-Model Benchmarking
-- **Script**: [scripts/15_cross_model_benchmarking.py](file:///c:/--Files--/Programming/pipeline/scripts/15_cross_model_benchmarking.py)
+- **Script**: [`scripts/15_cross_model_benchmarking.py`](file:///c:/--Files--/Programming/pipeline/scripts/15_cross_model_benchmarking.py)
+- **Execution Command**: `python run_pipeline.py --stage 15`
 
 ---
 
-## Mathematical Maritime Understanding Index (MUI) Score
+## 1. Mathematical Maritime Understanding Index (MUI) Score
 
 To rank model domain capability holistically, Stage 15 computes the composite **MUI Score** (scaled $0 - 100$):
 
@@ -25,7 +26,7 @@ Where:
 
 ---
 
-## Empirical Model Leaderboard Table
+## 2. Empirical Model Leaderboard Table
 
 | Rank | Model Name | MUI Score | Maritime Top-1 (%) | Rare Term Acc (%) | MLM Loss | Domain Shift Gap (%) | Params (M) | Throughput (docs/sec) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -39,7 +40,7 @@ Where:
 
 ---
 
-## Visualizations Generated ([outputs/visualizations/](file:///c:/--Files--/Programming/pipeline/outputs/visualizations))
+## 3. Visualizations Generated ([`outputs/visualizations/`](file:///c:/--Files--/Programming/pipeline/outputs/visualizations))
 
 1. **`mlm_loss_comparison.png`**: Cross-model MLM loss comparison bar chart.
 2. **`model_leaderboard_ranks.png`**: Leaderboard rankings with 95% confidence interval error bars.
@@ -49,6 +50,6 @@ Where:
 ---
 
 ## Output Artifacts
-- [outputs/comparison.csv](file:///c:/--Files--/Programming/pipeline/outputs/comparison.csv)
-- [outputs/leaderboard.csv](file:///c:/--Files--/Programming/pipeline/outputs/leaderboard.csv)
-- Plots in [outputs/visualizations/](file:///c:/--Files--/Programming/pipeline/outputs/visualizations)
+- [`outputs/comparison.csv`](file:///c:/--Files--/Programming/pipeline/outputs/comparison.csv)
+- [`outputs/leaderboard.csv`](file:///c:/--Files--/Programming/pipeline/outputs/leaderboard.csv)
+- High-res PNG plot artifacts under [`outputs/visualizations/`](file:///c:/--Files--/Programming/pipeline/outputs/visualizations)

@@ -1,12 +1,12 @@
 # Section 09: Output Artifacts & Files Registry
 
-This document provides a comprehensive reference of every generated file in the `outputs/` directory.
+This document provides a comprehensive, exhaustive reference catalog of every generated file in the `outputs/` directory.
 
 ---
 
-## Output Files Catalog
+## Complete Output Files Catalog
 
-| Output File Path | File Description | Key Structure / Schema | Downstream Usage |
+| Output File Path | Description | Format / Key Schema | Downstream Usage |
 | :--- | :--- | :--- | :--- |
 | `outputs/dictionary_metadata.json` | Data dictionary column specs & enum translations | Dict mapping table names to column specifications | Input for Stage 04 attribute selection |
 | `outputs/profiling_report.json` | Raw CSV table statistics & missingness profiling | JSON object with row counts, missing %, data types | Input for Stage 03 schema discovery |
@@ -14,7 +14,7 @@ This document provides a comprehensive reference of every generated file in the 
 | `outputs/selected_semantic_columns.json` | Descriptive column selection metadata | Selected semantic attributes per table | Input for Stage 05 table merging |
 | `outputs/merged_records.jsonl` | Nested relational occurrence JSONL (346 MB) | Nested JSON records grouped by `OccID` | Input for Stage 05a, 06, and 11 |
 | `outputs/validation_report.json` | Data integrity validation report | Key check counts, error counts, orphan count | Input for Stage 09 corpus reporting |
-| `outputs/raw_documents.jsonl` | Template-generated natural text documents (891 MB) | `{"occurrence_id": occ_id, "document": text}` | Input for Stage 07 cleaning |
+| `outputs/raw_documents.jsonl` | Template-generated text documents (891 MB) | `{"occurrence_id": occ_id, "document": text}` | Input for Stage 07 cleaning |
 | `outputs/clean_documents.jsonl` | Cleaned & normalized text documents (807 MB) | `{"occurrence_id": occ_id, "document": text}` | Input for Stage 08, 09, 10, 12, 13, 18 |
 | `outputs/maritime_corpus.txt` | Plain text line-by-line corpus (21 MB) | One clean document string per line | Pretraining text dataset export |
 | `outputs/maritime_corpus.jsonl` | Final corpus export in JSONL (796 MB) | `{"occurrence_id": occ_id, "text": doc}` | Corpus distribution format |
