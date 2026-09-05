@@ -1,4 +1,5 @@
 {
+  "domain_name": "maritime",
   "top_performing_model": "answerdotai/ModernBERT-base",
   "decision": "Train MaritimeBERT From Scratch Required",
   "strategy": "Strategy B: Train Domain-Specific MaritimeBERT Model From Scratch",

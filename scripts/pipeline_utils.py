@@ -176,3 +176,93 @@ def detect_datasets() -> dict:
         "datasets": mapping,
         "dictionary": dictionary_file
     }
+
+def get_benchmark_config() -> dict:
+    """Returns the benchmark configuration section from config/config.json with safe defaults."""
+    config = load_config()
+    benchmark_cfg = config.get("benchmark", {})
+    return {
+        "domain_name": benchmark_cfg.get("domain_name", "generic"),
+        "corpus_file": benchmark_cfg.get("corpus_file", "maritime_corpus.txt"),
+        "vocabulary_file": benchmark_cfg.get("vocabulary_file", "maritime_vocabulary.txt"),
+        "metric_name": benchmark_cfg.get("metric_name", "DUI"),
+        "metric_display_name": benchmark_cfg.get("metric_display_name", "Domain Understanding Index (DUI)"),
+        "categories": benchmark_cfg.get("categories", {}),
+        "rare_domain_terms": benchmark_cfg.get("rare_domain_terms", []),
+        "allow_corpus_auto_discovery": benchmark_cfg.get("allow_corpus_auto_discovery", False),
+        "deduplicate_corpus": benchmark_cfg.get("deduplicate_corpus", False),
+        "domain_semantic_lexicons": benchmark_cfg.get("domain_semantic_lexicons", {}),
+        "domain_lint_patterns": benchmark_cfg.get("domain_lint_patterns", [])
+    }
+
+def load_corpus_documents(
+    corpus_path: Path,
+    doc_delimiter: str = "\n\n",
+    deduplicate: bool = False,
+    allow_auto_discovery: bool = False
+) -> list:
+    """
+    Canonical interface loader for Stage 11+ benchmarking.
+    Loads documents from a plain-text corpus file (*.txt).
+    Splits on double newlines by default.
+
+    Duplicate semantics:
+      - By default (deduplicate=False), all non-empty documents are preserved.
+        Each document is assigned a unique, deterministic doc_id, and flagged with 'is_duplicate'.
+      - If deduplicate=True, identical text boundaries are filtered out.
+
+    Missing corpus semantics:
+      - If corpus_path is missing and allow_auto_discovery=False (default), raises FileNotFoundError.
+      - If allow_auto_discovery=True, attempts fallback to any discovered *_corpus.txt.
+    """
+    corpus_path = Path(corpus_path)
+    if not corpus_path.exists():
+        if allow_auto_discovery:
+            parent = corpus_path.parent
+            fallbacks = list(parent.glob("*_corpus.txt")) if parent.exists() else []
+            if fallbacks:
+                corpus_path = fallbacks[0]
+            else:
+                raise FileNotFoundError(f"Configured corpus file not found: {corpus_path}")
+        else:
+            raise FileNotFoundError(
+                f"Configured corpus file not found: {corpus_path}. "
+                "Automatic discovery is disabled. Set 'benchmark.allow_corpus_auto_discovery': true to enable fallback."
+            )
+
+    with open(corpus_path, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    # Split documents by delimiter
+    raw_docs = content.split(doc_delimiter) if doc_delimiter else content.splitlines()
+    
+    docs = []
+    seen_hashes = set()
+    import hashlib
+
+    doc_idx = 1
+    for raw in raw_docs:
+        text = raw.strip()
+        if not text:
+            continue
+        
+        doc_hash = hashlib.md5(text.encode("utf-8")).hexdigest()
+        is_dup = doc_hash in seen_hashes
+
+        if is_dup and deduplicate:
+            continue
+
+        seen_hashes.add(doc_hash)
+        
+        doc_id = f"doc_{doc_idx:06d}"
+        docs.append({
+            "doc_id": doc_id,
+            "document": text,
+            "occurrence_id": doc_id,  # Backwards compatibility alias
+            "is_duplicate": is_dup
+        })
+        doc_idx += 1
+
+    return docs
+
+

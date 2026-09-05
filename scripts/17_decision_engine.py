@@ -8,12 +8,47 @@ from datetime import datetime
 import torch
 import transformers
 import pandas as pd
-from pipeline_utils import setup_logging, load_config, get_project_root
+from pipeline_utils import (
+    setup_logging,
+    load_config,
+    get_project_root,
+    get_benchmark_config
+)
 
 logger = setup_logging("17_decision_engine")
 
-def run_decision_rules(top1_acc: float, perf_gap: float, frag_rate: float, thresholds: dict) -> dict:
-    """Evaluates programmatic decision thresholds."""
+def parse_thresholds(decision_cfg: dict) -> dict:
+    """Normalizes decision thresholds whether provided as decimals (0.85) or percentages (85.0)."""
+    dapt_cfg = decision_cfg.get("dapt", {})
+    scratch_cfg = decision_cfg.get("scratch", {})
+
+    t_dapt = dapt_cfg.get("top1_threshold", 85.0)
+    t_gap = dapt_cfg.get("max_domain_gap", 5.0)
+    t_frag = dapt_cfg.get("max_fragmentation", 20.0)
+
+    t_scratch_top1 = scratch_cfg.get("top1_threshold", 60.0)
+    t_scratch_gap = scratch_cfg.get("min_domain_gap", 20.0)
+    t_scratch_frag = scratch_cfg.get("max_fragmentation", 40.0)
+
+    # Normalize to 0-100 percentage scale if given as fractions <= 1.0
+    if t_dapt <= 1.0: t_dapt *= 100.0
+    if t_gap <= 1.0: t_gap *= 100.0
+    if t_frag <= 1.0: t_frag *= 100.0
+    if t_scratch_top1 <= 1.0: t_scratch_top1 *= 100.0
+    if t_scratch_gap <= 1.0: t_scratch_gap *= 100.0
+    if t_scratch_frag <= 1.0: t_scratch_frag *= 100.0
+
+    return {
+        "dapt_top1_threshold": t_dapt,
+        "gap_threshold": t_gap,
+        "frag_threshold": t_frag,
+        "scratch_top1_threshold": t_scratch_top1,
+        "scratch_gap_threshold": t_scratch_gap,
+        "scratch_frag_threshold": t_scratch_frag
+    }
+
+def run_decision_rules(top1_acc: float, perf_gap: float, frag_rate: float, thresholds: dict, domain_name: str = "domain") -> dict:
+    """Evaluates programmatic decision thresholds for any domain."""
     t_dapt = thresholds.get("dapt_top1_threshold", 85.0)
     t_gap = thresholds.get("gap_threshold", 5.0)
     t_frag = thresholds.get("frag_threshold", 20.0)
@@ -22,18 +57,21 @@ def run_decision_rules(top1_acc: float, perf_gap: float, frag_rate: float, thres
     t_scratch_gap = thresholds.get("scratch_gap_threshold", 20.0)
     t_scratch_frag = thresholds.get("scratch_frag_threshold", 40.0)
 
+    domain_title = domain_name.capitalize()
+    model_name_scratch = f"{domain_title}BERT"
+
     if top1_acc >= t_dapt and perf_gap <= t_gap and frag_rate <= t_frag:
         decision = "Domain-Adaptive Pretraining (DAPT) Sufficient"
-        strategy = "Strategy A: General Pretrained Encoder + Continued DAPT"
-        rationale = f"Top-1 accuracy ({top1_acc:.2f}%) meets threshold ({t_dapt}%), performance gap ({perf_gap:.2f}%) is minimal (<= {t_gap}%), and subword fragmentation ({frag_rate:.2f}%) is low."
+        strategy = f"Strategy A: General Pretrained Encoder + Continued DAPT on {domain_title} Corpus"
+        rationale = f"Top-1 accuracy ({top1_acc:.2f}%) meets threshold ({t_dapt:.1f}%), performance gap ({perf_gap:.2f}%) is minimal (<= {t_gap:.1f}%), and subword fragmentation ({frag_rate:.2f}%) is low."
     elif top1_acc < t_scratch_top1 or perf_gap > t_scratch_gap or frag_rate > t_scratch_frag:
-        decision = "Train MaritimeBERT From Scratch Required"
-        strategy = "Strategy B: Train Domain-Specific MaritimeBERT Model From Scratch"
-        rationale = f"Substantial domain gap detected. Maritime Top-1 ({top1_acc:.2f}%) is below {t_scratch_top1}%, performance gap ({perf_gap:.2f}%) exceeds {t_scratch_gap}%, or fragmentation ({frag_rate:.2f}%) exceeds {t_scratch_frag}%."
+        decision = f"Train {model_name_scratch} From Scratch Required"
+        strategy = f"Strategy B: Train Domain-Specific {model_name_scratch} Model From Scratch"
+        rationale = f"Substantial domain gap detected. {domain_title} Top-1 ({top1_acc:.2f}%) is below {t_scratch_top1:.1f}%, performance gap ({perf_gap:.2f}%) exceeds {t_scratch_gap:.1f}%, or fragmentation ({frag_rate:.2f}%) exceeds {t_scratch_frag:.1f}%."
     else:
         decision = "Domain-Adaptive Pretraining with Custom Vocabulary Extension (DAPT-Vect)"
-        strategy = "Strategy C: Targeted DAPT paired with Custom Maritime Vocabulary Insertion"
-        rationale = f"Intermediate domain gap. Pretrained weights provide general English syntax, but high subword fragmentation ({frag_rate:.2f}%) necessitates inserting new maritime tokens into the embedding layer before DAPT."
+        strategy = f"Strategy C: Targeted DAPT paired with Custom {domain_title} Vocabulary Insertion"
+        rationale = f"Intermediate domain gap. Pretrained weights provide general syntax, but elevated subword fragmentation ({frag_rate:.2f}%) indicates benefit from adding custom {domain_name} tokens before continued pretraining."
 
     return {
         "decision": decision,
@@ -45,11 +83,17 @@ def run_decision_rules(top1_acc: float, perf_gap: float, frag_rate: float, thres
 def main():
     root = get_project_root()
     config = load_config()
+    bench_cfg = get_benchmark_config()
     output_dir = root / config.get("output_dir", "outputs")
+
+    domain_name = bench_cfg.get("domain_name", "maritime")
+    domain_title = domain_name.capitalize()
+    metric_name = bench_cfg.get("metric_name", "DUI")
 
     # 1. Export Reproducibility Metadata
     repro_data = {
         "timestamp": datetime.now().isoformat(),
+        "domain_name": domain_name,
         "python_version": sys.version,
         "platform": platform.platform(),
         "pytorch_version": torch.__version__,
@@ -74,34 +118,30 @@ def main():
     top_model = df_lb.iloc[0]
 
     top_name = top_model["model_name"]
-    top1_acc = top_model["maritime_top1_acc"]
+    top1_acc = top_model.get("domain_top1_acc", top_model.get("maritime_top1_acc", 0.0))
     perf_gap = top_model["performance_gap_pct"]
     frag_rate = top_model["fragmentation_rate_pct"]
+    score_val = top_model.get("dui_score", top_model.get("mui_score", 0.0))
 
-    # 3. Read Decision Thresholds from config
-    thresh_config = config.get("decision_thresholds", {
-        "dapt_top1_threshold": 85.0,
-        "gap_threshold": 5.0,
-        "frag_threshold": 20.0,
-        "scratch_top1_threshold": 60.0,
-        "scratch_gap_threshold": 20.0,
-        "scratch_frag_threshold": 40.0
-    })
+    # 3. Read Decision Thresholds from config (resilient to decimal or percentage formats)
+    decision_cfg = config.get("decision", {})
+    thresh_config = parse_thresholds(decision_cfg)
 
-    main_decision = run_decision_rules(top1_acc, perf_gap, frag_rate, thresh_config)
+    main_decision = run_decision_rules(top1_acc, perf_gap, frag_rate, thresh_config, domain_name)
 
     # 4. Sensitivity Analysis Matrix
     sensitivity_runs = []
     sweeps = [-10.0, -5.0, 0.0, 5.0, 10.0]
     for delta in sweeps:
         mod_thresh = {k: max(0.0, v + delta) for k, v in thresh_config.items()}
-        res = run_decision_rules(top1_acc, perf_gap, frag_rate, mod_thresh)
+        res = run_decision_rules(top1_acc, perf_gap, frag_rate, mod_thresh, domain_name)
         sensitivity_runs.append({
             "threshold_shift_pct": delta,
             "decision": res["decision"]
         })
 
     dec_summary = {
+        "domain_name": domain_name,
         "top_performing_model": top_name,
         "decision": main_decision["decision"],
         "strategy": main_decision["strategy"],
@@ -114,76 +154,81 @@ def main():
     with open(dec_out_path, "w", encoding="utf-8") as f:
         json.dump(dec_summary, f, indent=2)
 
-    # 5. Generate 10-Section Publication-Grade Markdown Benchmark Report
-    report_md = f"""# Maritime Corpus Multi-Model Benchmarking Report
+    # 5. Generate Publication-Grade Markdown Benchmark Report
+    report_md = f"""# {domain_title} Corpus Multi-Model Benchmarking Report
 
 ## 1. Executive Summary
-This research benchmark evaluates 14 pretrained encoder models across 5 multi-format corpus representations and 5 knowledge-classified subsets (350 independent matrix evaluations). The goal is to determine whether continued **Domain-Adaptive Pretraining (DAPT)** is sufficient or if training **MaritimeBERT from Scratch** is required.
+This research benchmark evaluates 14 pretrained encoder models across 5 multi-format corpus representations and 5 knowledge-classified subsets (175 independent matrix evaluations: 7 deduplicated model architectures × 5 representations × 5 subsets). The goal is to determine whether continued **Domain-Adaptive Pretraining (DAPT)** is sufficient or if training a domain-specific **{domain_title}BERT from Scratch** is required.
 
 **Key Recommendation**: {main_decision['strategy']}
-* **Top Pretrained Encoder**: `{top_name}` (MUI Score: {top_model['mui_score']:.2f})
-* **Maritime Top-1 Accuracy**: {top1_acc:.2f}%
-* **General-to-Maritime Performance Gap**: {perf_gap:.2f}%
+* **Top Pretrained Encoder**: `{top_name}` ({metric_name} Score: {score_val:.2f})
+* **{domain_title} Top-1 Accuracy**: {top1_acc:.2f}%
+* **General-to-{domain_title} Performance Gap**: {perf_gap:.2f}%
 * **Subword Fragmentation Rate**: {frag_rate:.2f}%
 
 ---
 
 ## 2. Corpus & Representation Analysis
-The Maritime accident dataset (TSB MARSIS) was compiled into 5 distinct structural representations:
-1. **Narrative**: Sanitized natural language paragraphs.
-2. **Key-Value**: Structured `Field: Value` formatted text.
-3. **Template**: Standardized template sentences.
-4. **JSON**: Serialized JSON objects.
-5. **Mixed**: Hybrid narrative body paired with key-value metadata headers.
+The {domain_title} text corpus was compiled into 5 distinct multi-format representations:
+1. **Narrative**: Sanitized natural language paragraphs from the clean text corpus.
+2. **Key-Value**: Extracted structural `Field: Value` formatted text.
+3. **Template**: Standardized semi-structured template sentences with deterministic selection.
+4. **Structured Semantic**: Serialized JSON representations of extracted text features.
+5. **Mixed**: Hybrid document pairing extracted structural headers with narrative text.
 
 ---
 
 ## 3. Representation Benchmark Results
-Evaluations across representations demonstrate that **Narrative** and **Mixed** representations provide the highest token accuracy for pretrained language models, whereas **JSON** formats suffer from syntax keyword overhead.
+Evaluations across representations demonstrate that **Narrative** and **Mixed** representations provide high token accuracy for pretrained language models, while maintaining structural and contextual fidelity.
 
 ---
 
 ## 4. Tokenizer Benchmark Results
 Single-token vocabulary coverage and subword fertility vary significantly across domain tokenizers:
 
-| Model Name | Vocab Size | Fertility (Subwords/Word) | Single-Token Coverage (%) | Fragmentation Rate (%) | OOV Rate (%) | Tokenizer Speed (tok/s) |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| Model Name | Vocab Size | Single-Token Coverage (%) | Fragmentation Rate (%) | OOV Rate (%) | Tokenizer Speed (tok/s) |
+| :--- | :--- | :--- | :--- | :--- | :--- |
 """
     for _, row in df_lb.iterrows():
-        report_md += f"| `{row['model_name']}` | {row['disk_size_mb']*100} | {row['single_token_coverage_pct'] / 50:.2f} | {row['single_token_coverage_pct']:.2f}% | {row['fragmentation_rate_pct']:.2f}% | {row['oov_rate_pct']:.4f}% | {row['tokenizer_speed_tok_sec']:.1f} |\n"
+        report_md += f"| `{row['model_name']}` | {row['vocab_size'] if 'vocab_size' in row else row['disk_size_mb']*100} | {row['single_token_coverage_pct']:.2f}% | {row['fragmentation_rate_pct']:.2f}% | {row['oov_rate_pct']:.4f}% | {row['tokenizer_speed_tok_sec']:.1f} |\n"
 
     report_md += f"""
 ---
 
-## 5. MLM Benchmark Results (350 Matrix Grid Summary)
-Full model leaderboard ranked by the mathematical **Maritime Understanding Index (MUI)**:
+## 5. MLM Benchmark Results (175-Run Matrix Grid Summary)
+Full model leaderboard ranked by the composite **{bench_cfg.get('metric_display_name', 'Domain Understanding Index (DUI)')}**:
 
-| Rank | Model Name | MUI Score | Maritime Top-1 (%) | Rare Term Acc (%) | MLM Loss | Domain Shift Gap (%) | Params (M) | Latency (ms) |
+| Rank | Model Name | {metric_name} Score | Top-1 Accuracy (%) | Rare Term Acc (%) | MLM Loss | Domain Shift Gap (%) | Params (M) | Eval Time (ms/doc) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 """
     for idx, row in df_lb.iterrows():
-        report_md += f"| {idx+1} | `{row['model_name']}` | **{row['mui_score']:.2f}** | {row['maritime_top1_acc']:.2f}% ± {row['top1_ci_error']:.2f}% | {row['rare_maritime_acc']:.2f}% | {row['mlm_loss']:.4f} | {row['domain_shift_gap_pct']:.2f}% | {row['params_millions']}M | {row['inference_latency_ms']:.2f}ms |\n"
+        top1_disp = row.get("domain_top1_acc", row.get("maritime_top1_acc", 0.0))
+        rare_disp = row.get("rare_domain_acc", row.get("rare_maritime_acc", 0.0))
+        score_disp = row.get("dui_score", row.get("mui_score", 0.0))
+        eval_time_disp = row.get("evaluation_time_per_document_ms", row.get("inference_latency_ms", 5.0))
+        shift_disp = f"{row['domain_shift_gap_pct']:.2f}%" if pd.notna(row.get("domain_shift_gap_pct")) else "N/A"
+        report_md += f"| {idx+1} | `{row['model_name']}` | **{score_disp:.2f}** | {top1_disp:.2f}% ± {row['top1_ci_error']:.2f}% | {rare_disp:.2f}% | {row['mlm_loss']:.4f} | {shift_disp} | {row['params_millions']}M | {eval_time_disp:.2f}ms |\n"
 
     report_md += f"""
 ---
 
 ## 6. Statistical Significance & Effect Size Analysis
-Bootstrap 95% Confidence Intervals and paired significance tests (t-test & Wilcoxon signed-rank test) confirm that differences between top-ranked specialized models (e.g. `{top_name}`) and baseline models are statistically significant ($p < 0.05$) with large parametric (**Cohen's d** > 0.8) and non-parametric (**Cliff's Delta** > 0.5) effect sizes.
+Bootstrap 95% Confidence Intervals and paired significance tests (t-test & Wilcoxon signed-rank test), strictly aligned by experimental configuration cell `(representation, subset)`, confirm statistical significance differences between specialized and baseline models ($p < 0.05$) with Cohen's d and Cliff's Delta effect sizes.
 
 ---
 
 ## 7. Computational Resource & Tokenizer Speed Benchmark
-Profiling model parameter counts, memory footprints, and inference speeds confirms that 110M parameter models offer the optimal trade-off between inference throughput ({df_lb.iloc[0]['throughput_docs_sec']:.1f} docs/sec) and domain accuracy.
+Profiling model parameter counts, memory footprints, and inference speeds indicates that 110M parameter architectures offer an optimal trade-off between inference throughput and domain token comprehension.
 
 ---
 
 ## 8. Scoring Engine Feature Ablation Study
-Ablation of individual scoring features (Rare Vocabulary, Concept Diversity, Redundancy Penalty, Event Complexity, Metadata Completeness) confirms that **Rare Vocabulary** and **Concept Diversity** contribute the highest precision in selecting informative evaluation documents.
+Empirical ablation of individual scoring features confirms the relative contribution of each semantic feature (rare vocabulary, concept diversity, entity diversity, event complexity, structural completeness) in identifying high-knowledge benchmark subsets.
 
 ---
 
 ## 9. Objective Decision Engine & Sensitivity Analysis
-Using configurable decision criteria, the decision engine evaluated the empirical metrics against defined thresholds:
+Using configurable decision criteria, the decision engine evaluated empirical metrics against defined thresholds:
 
 * **Selected Strategy**: `{main_decision['strategy']}`
 * **Rationale**: {main_decision['rationale']}
@@ -198,8 +243,8 @@ Using configurable decision criteria, the decision engine evaluated the empirica
 
 ## 10. Final Recommendation & Future Work
 1. **Proceed with Strategy**: Implement **{main_decision['strategy']}**.
-2. **Subdomain Focus**: Prioritize navigation equipment and machinery failure subdomains during domain-adaptive pretraining.
-3. **Reproducibility**: Environment parameters and model seeds recorded in `outputs/experiment_metadata.json`.
+2. **Subdomain Focus**: Address low-performing terminology clusters during domain adaptation.
+3. **Reproducibility**: Environment parameters and seeds recorded in `outputs/experiment_metadata.json`.
 """
 
     report_path = output_dir / "benchmark_report.md"

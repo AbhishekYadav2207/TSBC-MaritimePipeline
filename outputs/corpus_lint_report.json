@@ -1,5 +1,6 @@
 {
   "status": "PASS",
+  "corpus_file": "maritime_corpus.txt",
   "total_documents_linted": 96658,
   "total_violations": 184,
   "violation_rate": "0.190%",
@@ -9,27 +10,32 @@
       "percentage": "0.163%",
       "samples": [
         {
-          "occurrence_id": 660,
+          "doc_id": "doc_000841",
+          "occurrence_id": "doc_000841",
           "match": "LUMBA",
           "snippet": "BEGAN AKING WATER,OBTAINED PUMP FROM SAR VESSEL LUMBA LUMBA"
         },
         {
-          "occurrence_id": 759,
+          "doc_id": "doc_000942",
+          "occurrence_id": "doc_000942",
           "match": "BELLA",
           "snippet": "VESSEL PROCEEDED TO BELLA BELLA B C TO BE INSPECTED"
         },
         {
-          "occurrence_id": 893,
+          "doc_id": "doc_001109",
+          "occurrence_id": "doc_001109",
           "match": "BELLA",
           "snippet": "TWO CREWMEN BURNED,EVACUATED TO BELLA BELLA HOSPITAL"
         },
         {
-          "occurrence_id": 1439,
+          "doc_id": "doc_001834",
+          "occurrence_id": "doc_001834",
           "match": "BELLA",
           "snippet": "GROUNDED-DAMAGE & CAUSE UNKNOWN-TOWED TO BELLA BELLA BY CCG READY."
         },
         {
-          "occurrence_id": 2416,
+          "doc_id": "doc_003323",
+          "occurrence_id": "doc_003323",
           "match": "BELLA",
           "snippet": "FIRE AND EXPLOSION-TWO BOYS ON BOARD-PICKED UP-TAKEN TO BELLA BELLA."
         }
@@ -50,17 +56,20 @@
       "percentage": "0.003%",
       "samples": [
         {
-          "occurrence_id": 25257,
+          "doc_id": "doc_040730",
+          "occurrence_id": "doc_040730",
           "match": "sustained damaged",
           "snippet": "Fishing vessel \"EGMONT\" was tied up at Matane Wharf during a storm and sustained damaged to the hull. About 50 frames damaged."
         },
         {
-          "occurrence_id": 37473,
+          "doc_id": "doc_063604",
+          "occurrence_id": "doc_063604",
           "match": "sustained damaged",
           "snippet": "On 2 October 2011, the moored vessel \"KITTY' at section 20 was struck by an unregistered barge. The barge had broken mooring and drifted from Trois Ri"
         },
         {
-          "occurrence_id": 53775,
+          "doc_id": "doc_095724",
+          "occurrence_id": "doc_095724",
           "match": "sustained damaged",
           "snippet": "On 07 December 2025, the fishing vessel \"PATRICK & THE GIRLS\", with 4 people on board, ran aground on Black Reef in Sambro Harbour, NS. The vessel fre"
         }
@@ -71,27 +80,32 @@
       "percentage": "0.024%",
       "samples": [
         {
-          "occurrence_id": 16097,
+          "doc_id": "doc_025098",
+          "occurrence_id": "doc_025098",
           "match": "ANCHOR",
           "snippet": "VSL LOST HER PROPELLER, DROPPED HER ANCHOR, ANCHOR DRAGGED, DRIFTED"
         },
         {
-          "occurrence_id": 24195,
+          "doc_id": "doc_038847",
+          "occurrence_id": "doc_038847",
           "match": "FIRE",
           "snippet": "CHARTER CRAFT SUSTAINED SMALL ELECTRICAL FIRE, FIRE EXTINGUISHED AND VESSEL ASSISTED BY ANOTHER COMPANY VESSEL IN THE SAME AREA."
         },
         {
-          "occurrence_id": 25123,
+          "doc_id": "doc_040486",
+          "occurrence_id": "doc_040486",
           "match": "arson",
           "snippet": "A fire occurred in the engine room of the vessel while underway. Vessel reached port, burned and sank alongside wharf. Skipper charged with conspiracy"
         },
         {
-          "occurrence_id": 27399,
+          "doc_id": "doc_044798",
+          "occurrence_id": "doc_044798",
           "match": "rudder",
           "snippet": "Vessel struck wall at short cut bridge in Rouge river, Detroit river, entrance, U.S.A. Vessel to be towed to Port Weller for repairs to rudder, rudder"
         },
         {
-          "occurrence_id": 29280,
+          "doc_id": "doc_048165",
+          "occurrence_id": "doc_048165",
           "match": "New York",
           "snippet": "On 22 March 2001, while en route from New York, New York, to Halifax, Nova Scotia, the container vessel Kitano reported a fire on the foredeck at abou"
         }

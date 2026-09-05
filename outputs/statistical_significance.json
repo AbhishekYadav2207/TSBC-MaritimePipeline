@@ -1,47 +1,50 @@
 {
+  "statistical_alignment": "Observations strictly aligned on (representation, subset) keys",
   "bootstrap_confidence_intervals": {
     "allenai/scibert_scivocab_uncased": {
       "mean": 0.2803354769028759,
-      "ci_95_low": 0.2441401084371268,
-      "ci_95_high": 0.3185879565280361
+      "ci_95_low": 0.24267778232383364,
+      "ci_95_high": 0.3176988812803582
     },
     "answerdotai/ModernBERT-base": {
       "mean": 0.7338257649724522,
-      "ci_95_low": 0.6735545228939316,
-      "ci_95_high": 0.7921437301448183
+      "ci_95_low": 0.6677420476022355,
+      "ci_95_high": 0.7920442539083898
     },
     "bert-base-uncased": {
       "mean": 0.25617301662305086,
-      "ci_95_low": 0.22395822688944575,
-      "ci_95_high": 0.2870932862299445
+      "ci_95_low": 0.22428939802326606,
+      "ci_95_high": 0.28714567110959793
     },
     "dmis-lab/biobert-base-cased-v1.2": {
       "mean": 0.21973034029810812,
-      "ci_95_low": 0.18149016508479476,
-      "ci_95_high": 0.25233100898585287
+      "ci_95_low": 0.1832511200186179,
+      "ci_95_high": 0.2572337797397732
     },
     "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext": {
       "mean": 0.16352355568741928,
-      "ci_95_low": 0.12356539764760484,
-      "ci_95_high": 0.2061737430416974
+      "ci_95_low": 0.12560450089310357,
+      "ci_95_high": 0.20156058144918815
     },
     "nlpaueb/legal-bert-base-uncased": {
       "mean": 0.3069103811878319,
-      "ci_95_low": 0.28367718487326415,
-      "ci_95_high": 0.33139697790073164
+      "ci_95_low": 0.2855626348441233,
+      "ci_95_high": 0.3311458883363933
     },
     "roberta-base": {
       "mean": 0.6379122626385946,
-      "ci_95_low": 0.5482949351010489,
-      "ci_95_high": 0.7218256852033221
+      "ci_95_low": 0.5459877182979095,
+      "ci_95_high": 0.7183383319857373
     }
   },
   "pairwise_statistical_tests": [
     {
       "model_1": "allenai/scibert_scivocab_uncased",
       "model_2": "answerdotai/ModernBERT-base",
-      "mean_diff_top1": -0.4534902880695763,
-      "paired_t_stat": -18.01763939648851,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": -0.4535,
+      "paired_t_stat": -18.0176,
       "p_value_t_test": 1.8864741657915593e-15,
       "wilcoxon_stat": 0.0,
       "p_value_wilcoxon": 5.960464477539063e-08,
@@ -52,8 +55,10 @@
     {
       "model_1": "allenai/scibert_scivocab_uncased",
       "model_2": "bert-base-uncased",
-      "mean_diff_top1": 0.02416246027982505,
-      "paired_t_stat": 2.4235976163373945,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": 0.0242,
+      "paired_t_stat": 2.4236,
       "p_value_t_test": 0.02327336204352855,
       "wilcoxon_stat": 72.0,
       "p_value_wilcoxon": 0.013554692268371582,
@@ -64,8 +69,10 @@
     {
       "model_1": "allenai/scibert_scivocab_uncased",
       "model_2": "dmis-lab/biobert-base-cased-v1.2",
-      "mean_diff_top1": 0.060605136604767795,
-      "paired_t_stat": 10.854448380976011,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": 0.0606,
+      "paired_t_stat": 10.8544,
       "p_value_t_test": 9.681616310833952e-11,
       "wilcoxon_stat": 0.0,
       "p_value_wilcoxon": 5.960464477539063e-08,
@@ -76,8 +83,10 @@
     {
       "model_1": "allenai/scibert_scivocab_uncased",
       "model_2": "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext",
-      "mean_diff_top1": 0.11681192121545664,
-      "paired_t_stat": 14.18613114035402,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": 0.1168,
+      "paired_t_stat": 14.1861,
       "p_value_t_test": 3.6345254808103674e-13,
       "wilcoxon_stat": 0.0,
       "p_value_wilcoxon": 5.960464477539063e-08,
@@ -88,8 +97,10 @@
     {
       "model_1": "allenai/scibert_scivocab_uncased",
       "model_2": "nlpaueb/legal-bert-base-uncased",
-      "mean_diff_top1": -0.026574904284956014,
-      "paired_t_stat": -1.5768733364048821,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": -0.0266,
+      "paired_t_stat": -1.5769,
       "p_value_t_test": 0.1279159395482461,
       "wilcoxon_stat": 116.0,
       "p_value_wilcoxon": 0.21998637914657593,
@@ -100,8 +111,10 @@
     {
       "model_1": "allenai/scibert_scivocab_uncased",
       "model_2": "roberta-base",
-      "mean_diff_top1": -0.35757678573571866,
-      "paired_t_stat": -10.53687303133136,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": -0.3576,
+      "paired_t_stat": -10.5369,
       "p_value_t_test": 1.7530801903202493e-10,
       "wilcoxon_stat": 0.0,
       "p_value_wilcoxon": 5.960464477539063e-08,
@@ -112,8 +125,10 @@
     {
       "model_1": "answerdotai/ModernBERT-base",
       "model_2": "bert-base-uncased",
-      "mean_diff_top1": 0.47765274834940136,
-      "paired_t_stat": 19.372226818040406,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": 0.4777,
+      "paired_t_stat": 19.3722,
       "p_value_t_test": 3.6887000408855106e-16,
       "wilcoxon_stat": 0.0,
       "p_value_wilcoxon": 5.960464477539063e-08,
@@ -124,8 +139,10 @@
     {
       "model_1": "answerdotai/ModernBERT-base",
       "model_2": "dmis-lab/biobert-base-cased-v1.2",
-      "mean_diff_top1": 0.5140954246743441,
-      "paired_t_stat": 20.67676277409678,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": 0.5141,
+      "paired_t_stat": 20.6768,
       "p_value_t_test": 8.40526606305084e-17,
       "wilcoxon_stat": 0.0,
       "p_value_wilcoxon": 5.960464477539063e-08,
@@ -136,8 +153,10 @@
     {
       "model_1": "answerdotai/ModernBERT-base",
       "model_2": "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext",
-      "mean_diff_top1": 0.570302209285033,
-      "paired_t_stat": 20.856166800145772,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": 0.5703,
+      "paired_t_stat": 20.8562,
       "p_value_t_test": 6.903512868482123e-17,
       "wilcoxon_stat": 0.0,
       "p_value_wilcoxon": 5.960464477539063e-08,
@@ -148,8 +167,10 @@
     {
       "model_1": "answerdotai/ModernBERT-base",
       "model_2": "nlpaueb/legal-bert-base-uncased",
-      "mean_diff_top1": 0.4269153837846203,
-      "paired_t_stat": 14.538233335398829,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": 0.4269,
+      "paired_t_stat": 14.5382,
       "p_value_t_test": 2.1405561207337934e-13,
       "wilcoxon_stat": 0.0,
       "p_value_wilcoxon": 5.960464477539063e-08,
@@ -160,8 +181,10 @@
     {
       "model_1": "answerdotai/ModernBERT-base",
       "model_2": "roberta-base",
-      "mean_diff_top1": 0.09591350233385765,
-      "paired_t_stat": 3.6364187124027154,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": 0.0959,
+      "paired_t_stat": 3.6364,
       "p_value_t_test": 0.0013129802542242686,
       "wilcoxon_stat": 46.0,
       "p_value_wilcoxon": 0.002964178167173091,
@@ -172,8 +195,10 @@
     {
       "model_1": "bert-base-uncased",
       "model_2": "dmis-lab/biobert-base-cased-v1.2",
-      "mean_diff_top1": 0.03644267632494275,
-      "paired_t_stat": 3.1220025207233064,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": 0.0364,
+      "paired_t_stat": 3.122,
       "p_value_t_test": 0.004635933853071855,
       "wilcoxon_stat": 74.0,
       "p_value_wilcoxon": 0.01597297191619873,
@@ -184,8 +209,10 @@
     {
       "model_1": "bert-base-uncased",
       "model_2": "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext",
-      "mean_diff_top1": 0.09264946093563159,
-      "paired_t_stat": 6.147174496417033,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": 0.0926,
+      "paired_t_stat": 6.1472,
       "p_value_t_test": 2.375326623467821e-06,
       "wilcoxon_stat": 0.0,
       "p_value_wilcoxon": 5.960464477539063e-08,
@@ -196,8 +223,10 @@
     {
       "model_1": "bert-base-uncased",
       "model_2": "nlpaueb/legal-bert-base-uncased",
-      "mean_diff_top1": -0.05073736456478106,
-      "paired_t_stat": -3.284101157521108,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": -0.0507,
+      "paired_t_stat": -3.2841,
       "p_value_t_test": 0.0031309825895897885,
       "wilcoxon_stat": 62.0,
       "p_value_wilcoxon": 0.005578815937042236,
@@ -208,8 +237,10 @@
     {
       "model_1": "bert-base-uncased",
       "model_2": "roberta-base",
-      "mean_diff_top1": -0.3817392460155437,
-      "paired_t_stat": -12.226815575181634,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": -0.3817,
+      "paired_t_stat": -12.2268,
       "p_value_t_test": 8.473991911237775e-12,
       "wilcoxon_stat": 0.0,
       "p_value_wilcoxon": 5.960464477539063e-08,
@@ -220,8 +251,10 @@
     {
       "model_1": "dmis-lab/biobert-base-cased-v1.2",
       "model_2": "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext",
-      "mean_diff_top1": 0.05620678461068884,
-      "paired_t_stat": 10.33132681263179,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": 0.0562,
+      "paired_t_stat": 10.3313,
       "p_value_t_test": 2.590894587448041e-10,
       "wilcoxon_stat": 0.0,
       "p_value_wilcoxon": 5.960464477539063e-08,
@@ -232,8 +265,10 @@
     {
       "model_1": "dmis-lab/biobert-base-cased-v1.2",
       "model_2": "nlpaueb/legal-bert-base-uncased",
-      "mean_diff_top1": -0.08718004088972381,
-      "paired_t_stat": -5.595715904432075,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": -0.0872,
+      "paired_t_stat": -5.5957,
       "p_value_t_test": 9.279678042745442e-06,
       "wilcoxon_stat": 7.0,
       "p_value_wilcoxon": 1.1324882507324219e-06,
@@ -244,8 +279,10 @@
     {
       "model_1": "dmis-lab/biobert-base-cased-v1.2",
       "model_2": "roberta-base",
-      "mean_diff_top1": -0.41818192234048646,
-      "paired_t_stat": -11.670113091834697,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": -0.4182,
+      "paired_t_stat": -11.6701,
       "p_value_t_test": 2.220840457298849e-11,
       "wilcoxon_stat": 0.0,
       "p_value_wilcoxon": 5.960464477539063e-08,
@@ -256,8 +293,10 @@
     {
       "model_1": "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext",
       "model_2": "nlpaueb/legal-bert-base-uncased",
-      "mean_diff_top1": -0.14338682550041265,
-      "paired_t_stat": -8.211343257216885,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": -0.1434,
+      "paired_t_stat": -8.2113,
       "p_value_t_test": 1.9831367239862018e-08,
       "wilcoxon_stat": 1.0,
       "p_value_wilcoxon": 1.1920928955078125e-07,
@@ -268,8 +307,10 @@
     {
       "model_1": "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext",
       "model_2": "roberta-base",
-      "mean_diff_top1": -0.4743887069511753,
-      "paired_t_stat": -12.33085840703488,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": -0.4744,
+      "paired_t_stat": -12.3309,
       "p_value_t_test": 7.1029093685621915e-12,
       "wilcoxon_stat": 0.0,
       "p_value_wilcoxon": 5.960464477539063e-08,
@@ -280,8 +321,10 @@
     {
       "model_1": "nlpaueb/legal-bert-base-uncased",
       "model_2": "roberta-base",
-      "mean_diff_top1": -0.33100188145076265,
-      "paired_t_stat": -7.710468234873149,
+      "statistical_unit": "Paired evaluation across identical (representation, subset) experimental conditions",
+      "paired_observations_count": 25,
+      "mean_diff_top1": -0.331,
+      "paired_t_stat": -7.7105,
       "p_value_t_test": 6.022348216768432e-08,
       "wilcoxon_stat": 15.0,
       "p_value_wilcoxon": 8.165836334228516e-06,

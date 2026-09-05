@@ -7,7 +7,13 @@ from tqdm import tqdm
 import numpy as np
 import pandas as pd
 from transformers import AutoTokenizer
-from pipeline_utils import setup_logging, load_config, get_project_root
+from pipeline_utils import (
+    setup_logging,
+    load_config,
+    get_project_root,
+    get_benchmark_config,
+    load_corpus_documents
+)
 
 logger = setup_logging("13_tokenizer_analysis")
 
@@ -39,7 +45,7 @@ def analyze_tokenizer(model_name: str, vocab_terms: list, corpus_docs: list) -> 
         logger.warning(f"Failed to load tokenizer '{model_name}': {e}. Skipping.")
         return None
 
-    # 1. Maritime Vocabulary Tokenization & Piece Statistics
+    # 1. Domain Vocabulary Tokenization & Piece Statistics
     vocab_splits = []
     piece_counts = []
     single_token_count = 0
@@ -58,13 +64,13 @@ def analyze_tokenizer(model_name: str, vocab_terms: list, corpus_docs: list) -> 
 
     vocab_splits.sort(key=lambda x: x["num_pieces"], reverse=True)
     total_terms = len(vocab_terms) if vocab_terms else 1
-    
+
     single_token_coverage = single_token_count / total_terms
-    maritime_frag_rate = (total_terms - single_token_count) / total_terms
-    avg_pieces = float(np.mean(piece_counts))
-    median_pieces = float(np.median(piece_counts))
-    p95_pieces = float(np.percentile(piece_counts, 95))
-    max_pieces = int(np.max(piece_counts))
+    domain_frag_rate = (total_terms - single_token_count) / total_terms
+    avg_pieces = float(np.mean(piece_counts)) if piece_counts else 1.0
+    median_pieces = float(np.median(piece_counts)) if piece_counts else 1.0
+    p95_pieces = float(np.percentile(piece_counts, 95)) if piece_counts else 1.0
+    max_pieces = int(np.max(piece_counts)) if piece_counts else 1
 
     # 2. Corpus Subword Fertility, OOV Rate & Tokenizer Speed Profiling
     total_raw_words = 0
@@ -104,10 +110,12 @@ def analyze_tokenizer(model_name: str, vocab_terms: list, corpus_docs: list) -> 
         "total_raw_words_analyzed": total_raw_words,
         "total_subword_tokens_analyzed": total_subword_tokens,
         "average_subwords_per_word": fertility,
-        "maritime_fragmentation_rate": maritime_frag_rate,
+        "domain_fragmentation_rate": domain_frag_rate,
+        "maritime_fragmentation_rate": domain_frag_rate,  # Compatibility alias
         "single_token_vocabulary_coverage": single_token_coverage,
         "single_token_count": single_token_count,
-        "total_maritime_terms": total_terms,
+        "total_domain_terms": total_terms,
+        "total_maritime_terms": total_terms,  # Compatibility alias
         "avg_pieces_per_term": avg_pieces,
         "median_pieces_per_term": median_pieces,
         "p95_pieces_per_term": p95_pieces,
@@ -116,28 +124,38 @@ def analyze_tokenizer(model_name: str, vocab_terms: list, corpus_docs: list) -> 
         "tokenizer_speed_tokens_per_sec": tokenizer_speed,
         "sequence_length_distribution": seq_length_dist,
         "worst_fragmented_terms": vocab_splits[:15],
-        "maritime_vocabulary_splits": vocab_splits[:50]
+        "domain_vocabulary_splits": vocab_splits[:50],
+        "maritime_vocabulary_splits": vocab_splits[:50]  # Compatibility alias
     }
 
 def main():
     root = get_project_root()
     config = load_config()
+    bench_cfg = get_benchmark_config()
     output_dir = root / config.get("output_dir", "outputs")
 
-    vocab_path = output_dir / "maritime_vocabulary.txt"
+    # Load vocabulary from benchmark config or file
+    vocab_filename = bench_cfg.get("vocabulary_file", "maritime_vocabulary.txt")
+    vocab_path = output_dir / vocab_filename
+    if not vocab_path.exists():
+        fallback_vocabs = list(output_dir.glob("*_vocabulary.txt"))
+        if fallback_vocabs:
+            vocab_path = fallback_vocabs[0]
+
     vocab_terms = []
     if vocab_path.exists():
         with open(vocab_path, "r", encoding="utf-8") as fv:
             vocab_terms = [line.strip() for line in fv if line.strip()]
 
-    corpus_path = output_dir / "clean_documents.jsonl"
-    corpus_docs = []
-    if corpus_path.exists():
-        with open(corpus_path, "r", encoding="utf-8") as fc:
-            for idx, line in enumerate(fc):
-                corpus_docs.append(json.loads(line)["document"])
-                if idx >= 1500:
-                    break
+    # Load corpus text directly from plain-text corpus (deterministic, no silent fallback)
+    corpus_filename = bench_cfg.get("corpus_file", "maritime_corpus.txt")
+    corpus_path = output_dir / corpus_filename
+
+    allow_discovery = bench_cfg.get("allow_corpus_auto_discovery", False)
+    dedup = bench_cfg.get("deduplicate_corpus", False)
+
+    docs = load_corpus_documents(corpus_path, deduplicate=dedup, allow_auto_discovery=allow_discovery)
+    corpus_docs = [d["document"] for d in docs[:1500]]
 
     tok_dir = output_dir / "tokenizer_analysis"
     tok_dir.mkdir(parents=True, exist_ok=True)
@@ -165,7 +183,7 @@ def main():
             "vocab_size": r["vocab_size"],
             "subwords_per_word_fertility": round(r["average_subwords_per_word"], 4),
             "single_token_coverage_pct": round(r["single_token_vocabulary_coverage"] * 100, 2),
-            "fragmentation_rate_pct": round(r["maritime_fragmentation_rate"] * 100, 2),
+            "fragmentation_rate_pct": round(r["domain_fragmentation_rate"] * 100, 2),
             "oov_rate_pct": round(r["oov_rate"] * 100, 4),
             "avg_pieces_per_term": round(r["avg_pieces_per_term"], 2),
             "median_pieces": r["median_pieces_per_term"],

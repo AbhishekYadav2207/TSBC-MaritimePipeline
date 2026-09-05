@@ -3,12 +3,18 @@ import json
 import math
 import random
 import time
+import re
 from pathlib import Path
 from tqdm import tqdm
 import torch
 import numpy as np
 from transformers import AutoTokenizer, AutoModelForMaskedLM
-from pipeline_utils import setup_logging, load_config, get_project_root
+from pipeline_utils import (
+    setup_logging,
+    load_config,
+    get_project_root,
+    get_benchmark_config
+)
 
 logger = setup_logging("14_mlm_evaluation")
 
@@ -23,55 +29,62 @@ TARGET_MODELS = [
     "answerdotai/ModernBERT-base"                                   # Modern Extended BPE (50,280)
 ]
 
-CATEGORIES = {
-    "vessel_terminology": ["vess", "ship", "boat", "barge", "tug", "tanker", "trawler", "carrier", "hull", "deck", "keel", "tonnage", "transom", "freeboard", "gunwale", "bilge"],
-    "navigation": ["navig", "gps", "ais", "vhf", "radar", "sonar", "compass", "gyro", "sounder", "chart", "vdr", "fathometer"],
-    "machinery_propulsion": ["engine", "propel", "machinery", "motor", "shaft", "boiler", "fuel", "steering", "windlass", "hawser"],
-    "casualty_incident": ["collision", "grounding", "stranding", "flooding", "leak", "capsiz", "sink", "injury", "death", "fatality", "missing", "damage"],
-    "weather_environment": ["weather", "wind", "sea", "wave", "swell", "temp", "ice", "visibility", "fog", "clear", "windward", "leeward"],
-    "safety_lifesaving": ["lifeboat", "liferaft", "lifejack", "lsa", "epirb", "sart", "buoy", "flare", "safety", "davit", "coxswain"]
-}
-
-RARE_MARITIME_TERMS = [
-    "gyrocompass", "fathometer", "forepeak", "bulwark", "stempost", "windlass",
-    "epirb", "sart", "hawser", "freeboard", "coxswain", "transom", "gunwale",
-    "bilge", "fairlead", "windward", "leeward", "davit", "bitts", "bollard"
-]
-
 def clean_model_filename(model_name: str) -> str:
     return model_name.replace("/", "_").replace("-", "_")
 
-def get_term_category(term: str) -> str:
+def get_term_category(term: str, categories: dict) -> str:
     term_lower = term.lower()
-    for cat, stems in CATEGORIES.items():
+    for cat, stems in categories.items():
         if any(stem in term_lower for stem in stems):
             return cat
-    return "vessel_terminology"
+    return list(categories.keys())[0] if categories else "domain_terminology"
 
-def evaluate_model_on_docs(model, tokenizer, docs: list, vocab_terms: list, device: torch.device) -> dict:
+def extract_domain_spans(text: str, vocab_terms: list, rare_terms: set, categories: dict) -> list:
+    """
+    Finds exact character-level spans of domain terms in the document text.
+    Ensures domain-token classification is based on actual textual occurrences,
+    preventing subwords (e.g. 'dynamic' in 'hemodynamic') from being globally contaminated.
+    """
+    spans = []
+    text_lower = text.lower()
+
+    # Prioritize longer multi-word phrases over single-word tokens
+    all_terms = sorted(list(set(vocab_terms).union(rare_terms)), key=lambda x: len(x), reverse=True)
+
+    for term in all_terms:
+        term_clean = term.strip().lower()
+        if not term_clean or len(term_clean) < 2:
+            continue
+        # Strict word-boundary matching
+        pattern = r'\b' + re.escape(term_clean) + r'\b'
+        for m in re.finditer(pattern, text_lower):
+            spans.append({
+                "start": m.start(),
+                "end": m.end(),
+                "term": term_clean,
+                "is_rare": term_clean in rare_terms,
+                "category": get_term_category(term_clean, categories)
+            })
+    return spans
+
+def evaluate_model_on_docs(
+    model,
+    tokenizer,
+    docs: list,
+    vocab_terms: list,
+    categories: dict,
+    rare_terms: list,
+    device: torch.device
+) -> dict:
     if not docs:
         return {}
 
-    maritime_token_ids = set()
-    category_token_ids = {cat: set() for cat in CATEGORIES}
-    rare_token_ids = set()
-
-    for term in vocab_terms:
-        sub_ids = tokenizer.convert_tokens_to_ids(tokenizer.tokenize(term))
-        maritime_token_ids.update(sub_ids)
-        cat = get_term_category(term)
-        category_token_ids[cat].update(sub_ids)
-
-    for r_term in RARE_MARITIME_TERMS:
-        r_ids = tokenizer.convert_tokens_to_ids(tokenizer.tokenize(r_term))
-        rare_token_ids.update(r_ids)
-        maritime_token_ids.update(r_ids)
-        category_token_ids["navigation"].update(r_ids)
+    rare_terms_set = set(r.lower() for r in rare_terms)
 
     general_stats = {"loss": 0.0, "top1": 0, "top5": 0, "top10": 0, "count": 0}
-    maritime_stats = {"loss": 0.0, "top1": 0, "top5": 0, "top10": 0, "count": 0}
+    domain_stats = {"loss": 0.0, "top1": 0, "top5": 0, "top10": 0, "count": 0}
     rare_stats = {"loss": 0.0, "top1": 0, "top5": 0, "top10": 0, "count": 0}
-    cat_stats = {cat: {"loss": 0.0, "top1": 0, "top5": 0, "top10": 0, "count": 0} for cat in CATEGORIES}
+    cat_stats = {cat: {"loss": 0.0, "top1": 0, "top5": 0, "top10": 0, "count": 0} for cat in categories}
 
     mask_token_id = tokenizer.mask_token_id
     if mask_token_id is None:
@@ -79,19 +92,34 @@ def evaluate_model_on_docs(model, tokenizer, docs: list, vocab_terms: list, devi
 
     criterion = torch.nn.CrossEntropyLoss(reduction="sum")
     batch_size = 16
-    eval_docs = docs[:200]  # Efficient CPU evaluation sample size
+    eval_docs = docs[:200]  # Efficient evaluation sample size
 
     t_start = time.time()
 
     with torch.no_grad():
         for i in range(0, len(eval_docs), batch_size):
             batch_texts = eval_docs[i:i+batch_size]
-            inputs = tokenizer(batch_texts, padding=True, truncation=True, max_length=256, return_tensors="pt")
-            inputs = {k: v.to(device) for k, v in inputs.items()}
 
+            # Use fast tokenizer offset_mapping if available
+            try:
+                inputs = tokenizer(
+                    batch_texts,
+                    padding=True,
+                    truncation=True,
+                    max_length=256,
+                    return_offsets_mapping=True,
+                    return_tensors="pt"
+                )
+                offset_mapping = inputs.pop("offset_mapping", None)
+            except Exception:
+                inputs = tokenizer(batch_texts, padding=True, truncation=True, max_length=256, return_tensors="pt")
+                offset_mapping = None
+
+            inputs = {k: v.to(device) for k, v in inputs.items()}
             input_ids = inputs["input_ids"]
             labels = input_ids.clone()
 
+            # Construct Bernoulli masking matrix (15% standard MLM rate, excluding special tokens)
             probability_matrix = torch.full(labels.shape, 0.15, device=device)
             special_tokens_mask = [
                 tokenizer.get_special_tokens_mask(val, already_has_special_tokens=True) for val in labels.cpu().tolist()
@@ -112,8 +140,14 @@ def evaluate_model_on_docs(model, tokenizer, docs: list, vocab_terms: list, devi
                 continue
 
             for b in range(labels.shape[0]):
+                doc_text = batch_texts[b]
+                # Extract character spans for actual domain term occurrences in this document
+                doc_spans = extract_domain_spans(doc_text, vocab_terms, rare_terms_set, categories)
+                b_offsets = offset_mapping[b].cpu().tolist() if offset_mapping is not None else None
+
                 mask_positions = torch.where(masked_indices[b])[0]
                 for pos in mask_positions:
+                    p_idx = pos.item()
                     target_id = labels[b, pos].item()
                     token_logits = logits[b, pos]
 
@@ -124,8 +158,33 @@ def evaluate_model_on_docs(model, tokenizer, docs: list, vocab_terms: list, devi
                     is_top5 = 1 if target_id in top_k_indices[:5] else 0
                     is_top10 = 1 if target_id in top_k_indices[:10] else 0
 
-                    is_rare = target_id in rare_token_ids
-                    is_maritime = target_id in maritime_token_ids
+                    # SPAN-AWARE DETECTION: check if token overlaps with an actual domain term occurrence in text
+                    is_domain = False
+                    is_rare = False
+                    matched_category = None
+
+                    if b_offsets is not None and p_idx < len(b_offsets):
+                        tok_start, tok_end = b_offsets[p_idx]
+                        if tok_start < tok_end:  # Non-special token
+                            for span in doc_spans:
+                                # Overlap check between token character span and domain term character span
+                                if max(tok_start, span["start"]) < min(tok_end, span["end"]):
+                                    is_domain = True
+                                    if span["is_rare"]:
+                                        is_rare = True
+                                    matched_category = span["category"]
+                                    break
+                    else:
+                        # Fallback for tokenizers without offset_mapping: check decoded token string against doc spans
+                        tok_str = tokenizer.decode([target_id]).strip().lower().replace("##", "")
+                        if tok_str and len(tok_str) >= 3:
+                            for span in doc_spans:
+                                if span["term"] in doc_text.lower():
+                                    is_domain = True
+                                    if span["is_rare"]:
+                                        is_rare = True
+                                    matched_category = span["category"]
+                                    break
 
                     if is_rare:
                         rare_stats["loss"] += token_loss
@@ -134,20 +193,19 @@ def evaluate_model_on_docs(model, tokenizer, docs: list, vocab_terms: list, devi
                         rare_stats["top10"] += is_top10
                         rare_stats["count"] += 1
 
-                    if is_maritime:
-                        maritime_stats["loss"] += token_loss
-                        maritime_stats["top1"] += is_top1
-                        maritime_stats["top5"] += is_top5
-                        maritime_stats["top10"] += is_top10
-                        maritime_stats["count"] += 1
+                    if is_domain:
+                        domain_stats["loss"] += token_loss
+                        domain_stats["top1"] += is_top1
+                        domain_stats["top5"] += is_top5
+                        domain_stats["top10"] += is_top10
+                        domain_stats["count"] += 1
 
-                        for cat, cat_ids in category_token_ids.items():
-                            if target_id in cat_ids:
-                                cat_stats[cat]["loss"] += token_loss
-                                cat_stats[cat]["top1"] += is_top1
-                                cat_stats[cat]["top5"] += is_top5
-                                cat_stats[cat]["top10"] += is_top10
-                                cat_stats[cat]["count"] += 1
+                        if matched_category and matched_category in cat_stats:
+                            cat_stats[matched_category]["loss"] += token_loss
+                            cat_stats[matched_category]["top1"] += is_top1
+                            cat_stats[matched_category]["top5"] += is_top5
+                            cat_stats[matched_category]["top10"] += is_top10
+                            cat_stats[matched_category]["count"] += 1
                     else:
                         general_stats["loss"] += token_loss
                         general_stats["top1"] += is_top1
@@ -163,26 +221,28 @@ def evaluate_model_on_docs(model, tokenizer, docs: list, vocab_terms: list, devi
         loss_exp = math.exp(avg_loss) if avg_loss < 20 else 99999.0
         return {
             "masked_sample_count": st["count"],
-            "mlm_loss": float(avg_loss),
-            "mlm_loss_derived_exponential": float(loss_exp),
-            "top1_accuracy": float(st["top1"] / cnt),
-            "top5_accuracy": float(st["top5"] / cnt),
-            "top10_accuracy": float(st["top10"] / cnt)
+            "mlm_loss": float(avg_loss) if st["count"] > 0 else 0.0,
+            "mlm_loss_derived_exponential": float(loss_exp) if st["count"] > 0 else 0.0,
+            "top1_accuracy": float(st["top1"] / cnt) if st["count"] > 0 else 0.0,
+            "top5_accuracy": float(st["top5"] / cnt) if st["count"] > 0 else 0.0,
+            "top10_accuracy": float(st["top10"] / cnt) if st["count"] > 0 else 0.0
         }
 
     gen_summary = summarize(general_stats)
-    mar_summary = summarize(maritime_stats)
+    dom_summary = summarize(domain_stats)
     rare_summary = summarize(rare_stats)
     cat_summaries = {cat: summarize(st) for cat, st in cat_stats.items()}
 
-    performance_gap = gen_summary["top1_accuracy"] - mar_summary["top1_accuracy"]
+    performance_gap = gen_summary["top1_accuracy"] - dom_summary["top1_accuracy"]
 
     return {
         "evaluated_documents": len(eval_docs),
         "evaluation_time_sec": float(eval_time),
         "general_tokens_summary": gen_summary,
-        "maritime_tokens_summary": mar_summary,
-        "rare_maritime_tokens_summary": rare_summary,
+        "domain_tokens_summary": dom_summary,
+        "maritime_tokens_summary": dom_summary,  # Backwards compatibility alias
+        "rare_domain_tokens_summary": rare_summary,
+        "rare_maritime_tokens_summary": rare_summary,  # Backwards compatibility alias
         "category_recall": {cat: round(st["top1_accuracy"], 4) for cat, st in cat_summaries.items()},
         "category_breakdown": cat_summaries,
         "performance_gap_top1": float(performance_gap)
@@ -194,9 +254,21 @@ def main():
 
     root = get_project_root()
     config = load_config()
+    bench_cfg = get_benchmark_config()
     output_dir = root / config.get("output_dir", "outputs")
 
-    vocab_path = output_dir / "maritime_vocabulary.txt"
+    categories = bench_cfg.get("categories", {})
+    rare_terms = bench_cfg.get("rare_domain_terms", [])
+
+    vocab_filename = bench_cfg.get("vocabulary_file", "maritime_vocabulary.txt")
+    vocab_path = output_dir / vocab_filename
+    if not vocab_path.exists():
+        if bench_cfg.get("allow_corpus_auto_discovery", False):
+            fallback_vocabs = list(output_dir.glob("*_vocabulary.txt"))
+            vocab_path = fallback_vocabs[0] if fallback_vocabs else vocab_path
+        else:
+            logger.warning(f"Vocabulary file not found at {vocab_path}.")
+
     vocab_terms = []
     if vocab_path.exists():
         with open(vocab_path, "r", encoding="utf-8") as fv:
@@ -224,7 +296,7 @@ def main():
     logger.info(f"Using compute device: {device}")
 
     total_runs = len(TARGET_MODELS) * len(representations) * len(subsets)
-    logger.info(f"Starting 350-Run Matrix Evaluation Grid ({total_runs} independent runs) across {len(TARGET_MODELS)} models...")
+    logger.info(f"Starting 175-Run Matrix Evaluation Grid ({total_runs} independent runs: {len(TARGET_MODELS)} models × {len(representations)} reps × {len(subsets)} subsets)...")
 
     run_count = 0
 
@@ -242,8 +314,20 @@ def main():
             continue
 
         # Evaluate General English Baseline once for Domain Shift calculation
-        gen_eng_eval = evaluate_model_on_docs(model, tokenizer, gen_eng_docs, vocab_terms, device)
-        gen_eng_top1 = gen_eng_eval.get("general_tokens_summary", {}).get("top1_accuracy", 0.85)
+        # Methodological Hardening: NO FAKE FALLBACKS. If baseline cannot be evaluated, explicitly mark unavailable.
+        gen_eng_top1 = None
+        baseline_available = False
+
+        if gen_eng_docs:
+            gen_eng_eval = evaluate_model_on_docs(model, tokenizer, gen_eng_docs, vocab_terms, categories, rare_terms, device)
+            gen_sum = gen_eng_eval.get("general_tokens_summary")
+            if gen_sum and gen_sum.get("masked_sample_count", 0) > 0:
+                gen_eng_top1 = float(gen_sum["top1_accuracy"])
+                baseline_available = True
+            else:
+                logger.warning(f"General English baseline evaluation returned 0 masked tokens for {model_name}.")
+        else:
+            logger.warning(f"General English baseline documents not found at {gen_eng_path}. Baseline will be marked unavailable.")
 
         eval_record = None
         for rep in representations:
@@ -265,20 +349,22 @@ def main():
                     continue
 
                 sub_path = subsets_dir / f"{sub}.jsonl"
-                sub_occ_ids = set()
+                sub_doc_ids = set()
                 if sub_path.exists():
                     with open(sub_path, "r", encoding="utf-8") as f:
-                        sub_occ_ids = {json.loads(l)["occurrence_id"] for l in f}
+                        for l in f:
+                            r_json = json.loads(l)
+                            sub_doc_ids.add(r_json.get("doc_id") or r_json.get("occurrence_id"))
 
-                if not sub_occ_ids:
-                    logger.warning(f"Subset '{sub}' contains 0 occurrence IDs. Skipping.")
+                if not sub_doc_ids:
+                    logger.warning(f"Subset '{sub}' contains 0 document IDs. Skipping.")
                     continue
 
-                # Filter representation documents strictly by subset occurrence_id
+                # Filter representation documents strictly by subset document identifier
                 target_docs = [
                     rec["document"]
                     for rec in rep_records
-                    if rec.get("occurrence_id") in sub_occ_ids
+                    if (rec.get("doc_id") in sub_doc_ids or rec.get("occurrence_id") in sub_doc_ids)
                 ][:200]
 
                 if not target_docs:
@@ -287,10 +373,15 @@ def main():
 
                 logger.info(f"[{run_count + 1}/{total_runs}] Evaluating {clean_model} | Rep: {rep} | Subset: {sub} | Matched Documents: {len(target_docs)}")
 
-                eval_res = evaluate_model_on_docs(model, tokenizer, target_docs, vocab_terms, device)
+                eval_res = evaluate_model_on_docs(model, tokenizer, target_docs, vocab_terms, categories, rare_terms, device)
 
-                maritime_top1 = eval_res.get("maritime_tokens_summary", {}).get("top1_accuracy", 0.0)
-                domain_shift_gap = float(gen_eng_top1 - maritime_top1)
+                dom_top1 = eval_res.get("domain_tokens_summary", {}).get("top1_accuracy", 0.0)
+
+                # Strict Domain Gap calculation: Null/None if baseline unavailable
+                if baseline_available and gen_eng_top1 is not None:
+                    domain_shift_gap = float(gen_eng_top1 - dom_top1)
+                else:
+                    domain_shift_gap = None
 
                 eval_record = {
                     "model_name": model_name,
@@ -298,7 +389,8 @@ def main():
                     "representation": rep,
                     "subset": sub,
                     "evaluated_doc_count": len(target_docs),
-                    "general_english_baseline_top1": float(gen_eng_top1),
+                    "baseline_available": baseline_available,
+                    "general_english_baseline_top1": gen_eng_top1,
                     "domain_shift_gap": domain_shift_gap,
                     "evaluation_metrics": eval_res
                 }
@@ -307,7 +399,7 @@ def main():
                     json.dump(eval_record, f, indent=2)
 
                 run_count += 1
-                logger.info(f"[{run_count}/{total_runs}] Completed: {clean_model} | Rep: {rep} | Subset: {sub} | Top1: {maritime_top1:.4f}")
+                logger.info(f"[{run_count}/{total_runs}] Completed: {clean_model} | Rep: {rep} | Subset: {sub} | Top1: {dom_top1:.4f}")
 
         # Also store model summary under outputs/evaluations/<clean_model>.json
         if eval_record is not None:

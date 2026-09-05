@@ -19,5 +19,50 @@
     "max_tonnage": 300000.0,
     "max_crew": 1000,
     "max_injuries": 1000
+  },
+  "benchmark": {
+    "domain_name": "maritime",
+    "corpus_file": "maritime_corpus.txt",
+    "vocabulary_file": "maritime_vocabulary.txt",
+    "metric_name": "DUI",
+    "metric_display_name": "Domain Understanding Index (DUI)",
+    "categories": {
+      "vessel_terminology": ["vess", "ship", "boat", "barge", "tug", "tanker", "trawler", "carrier", "hull", "deck", "keel", "tonnage", "transom", "freeboard", "gunwale", "bilge"],
+      "navigation": ["navig", "gps", "ais", "vhf", "radar", "sonar", "compass", "gyro", "sounder", "chart", "vdr", "fathometer"],
+      "machinery_propulsion": ["engine", "propel", "machinery", "motor", "shaft", "boiler", "fuel", "steering", "windlass", "hawser"],
+      "casualty_incident": ["collision", "grounding", "stranding", "flooding", "leak", "capsiz", "sink", "injury", "death", "fatality", "missing", "damage"],
+      "weather_environment": ["weather", "wind", "sea", "wave", "swell", "temp", "ice", "visibility", "fog", "clear", "windward", "leeward"],
+      "safety_lifesaving": ["lifeboat", "liferaft", "lifejack", "lsa", "epirb", "sart", "buoy", "flare", "safety", "davit", "coxswain"]
+    },
+    "rare_domain_terms": [
+      "gyrocompass", "fathometer", "forepeak", "bulwark", "stempost", "windlass",
+      "epirb", "sart", "hawser", "freeboard", "coxswain", "transom", "gunwale",
+      "bilge", "fairlead", "windward", "leeward", "davit", "bitts", "bollard", "focsle"
+    ],
+    "allow_corpus_auto_discovery": false,
+    "deduplicate_corpus": false,
+    "domain_semantic_lexicons": {
+      "subject_entity_keywords": ["vessel", "ship", "boat", "craft", "barge", "tug", "tanker", "trawler", "carrier", "ferry"],
+      "context_keywords": ["underway", "anchored", "berthed", "docked", "transit", "moored"],
+      "incident_keywords": ["collision", "grounding", "stranding", "flooding", "leak", "capsized", "sink", "fire", "explosion", "breakdown"],
+      "consequence_keywords": ["damage", "loss", "injury", "fatalit", "death", "missing", "holed", "listing", "salvage"]
+    },
+    "domain_lint_patterns": [
+      "formerly\\s*occno",
+      "extraction\\s+status\\s+pending",
+      "marine occurrence"
+    ]
+  },
+  "decision": {
+    "dapt": {
+      "top1_threshold": 85.0,
+      "max_domain_gap": 5.0,
+      "max_fragmentation": 20.0
+    },
+    "scratch": {
+      "top1_threshold": 60.0,
+      "min_domain_gap": 20.0,
+      "max_fragmentation": 40.0
+    }
   }
 }

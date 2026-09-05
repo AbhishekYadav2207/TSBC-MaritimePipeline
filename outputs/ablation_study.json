@@ -1,32 +1,107 @@
 {
-  "Rare Vocabulary": {
-    "ablated_feature_removed": "Rare Vocabulary",
-    "relevance_score": 83.1,
-    "performance_drop_pct": 8.4,
-    "justification": "Removing Rare Vocabulary degrades domain semantic selection precision by 8.4%."
-  },
-  "Concept Diversity": {
-    "ablated_feature_removed": "Concept Diversity",
-    "relevance_score": 85.3,
-    "performance_drop_pct": 6.2,
-    "justification": "Removing Concept Diversity degrades domain semantic selection precision by 6.2%."
-  },
-  "Redundancy Penalty": {
-    "ablated_feature_removed": "Redundancy Penalty",
-    "relevance_score": 86.4,
-    "performance_drop_pct": 5.1,
-    "justification": "Removing Redundancy Penalty degrades domain semantic selection precision by 5.1%."
-  },
-  "Event Complexity": {
-    "ablated_feature_removed": "Event Complexity",
-    "relevance_score": 87.2,
-    "performance_drop_pct": 4.3,
-    "justification": "Removing Event Complexity degrades domain semantic selection precision by 4.3%."
-  },
-  "Metadata Completeness": {
-    "ablated_feature_removed": "Metadata Completeness",
-    "relevance_score": 88.7,
-    "performance_drop_pct": 2.8,
-    "justification": "Removing Metadata Completeness degrades domain semantic selection precision by 2.8%."
+  "is_real_calculation": true,
+  "baseline_mean_importance_score": 38.19,
+  "documents_evaluated": 2000,
+  "features": {
+    "Domain Terminology Density": {
+      "ablated_feature": "Domain Terminology Density",
+      "feature_key": "domain_density",
+      "original_weight": 0.3,
+      "baseline_mean_score": 38.19,
+      "ablated_mean_score": 29.16,
+      "score_reduction": 9.04,
+      "performance_drop_pct": 23.66,
+      "empirical_finding": "Removing Domain Terminology Density reduces the mean semantic importance score by 9.04 points (23.66% relative drop)."
+    },
+    "Rare Vocabulary": {
+      "ablated_feature": "Rare Vocabulary",
+      "feature_key": "rare_score",
+      "original_weight": 0.2,
+      "baseline_mean_score": 38.19,
+      "ablated_mean_score": 32.79,
+      "score_reduction": 5.4,
+      "performance_drop_pct": 14.15,
+      "empirical_finding": "Removing Rare Vocabulary reduces the mean semantic importance score by 5.40 points (14.15% relative drop)."
+    },
+    "Concept Diversity": {
+      "ablated_feature": "Concept Diversity",
+      "feature_key": "concept_diversity",
+      "original_weight": 0.15,
+      "baseline_mean_score": 38.19,
+      "ablated_mean_score": 27.96,
+      "score_reduction": 10.24,
+      "performance_drop_pct": 26.8,
+      "empirical_finding": "Removing Concept Diversity reduces the mean semantic importance score by 10.24 points (26.80% relative drop)."
+    },
+    "Entity Diversity": {
+      "ablated_feature": "Entity Diversity",
+      "feature_key": "entity_diversity",
+      "original_weight": 0.1,
+      "baseline_mean_score": 38.19,
+      "ablated_mean_score": 28.27,
+      "score_reduction": 9.92,
+      "performance_drop_pct": 25.98,
+      "empirical_finding": "Removing Entity Diversity reduces the mean semantic importance score by 9.92 points (25.98% relative drop)."
+    },
+    "Event Complexity": {
+      "ablated_feature": "Event Complexity",
+      "feature_key": "event_complexity",
+      "original_weight": 0.1,
+      "baseline_mean_score": 38.19,
+      "ablated_mean_score": 26.45,
+      "score_reduction": 11.74,
+      "performance_drop_pct": 30.74,
+      "empirical_finding": "Removing Event Complexity reduces the mean semantic importance score by 11.74 points (30.74% relative drop)."
+    },
+    "Information Density": {
+      "ablated_feature": "Information Density",
+      "feature_key": "information_density",
+      "original_weight": 0.1,
+      "baseline_mean_score": 38.19,
+      "ablated_mean_score": 30.55,
+      "score_reduction": 7.64,
+      "performance_drop_pct": 20.0,
+      "empirical_finding": "Removing Information Density reduces the mean semantic importance score by 7.64 points (20.00% relative drop)."
+    },
+    "Structural Completeness": {
+      "ablated_feature": "Structural Completeness",
+      "feature_key": "structural_completeness",
+      "original_weight": 0.05,
+      "baseline_mean_score": 38.19,
+      "ablated_mean_score": 29.85,
+      "score_reduction": 8.34,
+      "performance_drop_pct": 21.85,
+      "empirical_finding": "Removing Structural Completeness reduces the mean semantic importance score by 8.34 points (21.85% relative drop)."
+    },
+    "Linguistic Diversity (TTR)": {
+      "ablated_feature": "Linguistic Diversity (TTR)",
+      "feature_key": "linguistic_diversity",
+      "original_weight": 0.05,
+      "baseline_mean_score": 38.19,
+      "ablated_mean_score": 28.61,
+      "score_reduction": 9.58,
+      "performance_drop_pct": 25.09,
+      "empirical_finding": "Removing Linguistic Diversity (TTR) reduces the mean semantic importance score by 9.58 points (25.09% relative drop)."
+    },
+    "Domain Novelty (IDF)": {
+      "ablated_feature": "Domain Novelty (IDF)",
+      "feature_key": "domain_novelty",
+      "original_weight": 0.05,
+      "baseline_mean_score": 38.19,
+      "ablated_mean_score": 33.08,
+      "score_reduction": 5.11,
+      "performance_drop_pct": 13.38,
+      "empirical_finding": "Removing Domain Novelty (IDF) reduces the mean semantic importance score by 5.11 points (13.38% relative drop)."
+    },
+    "Redundancy Penalty": {
+      "ablated_feature": "Redundancy Penalty",
+      "feature_key": "redundancy_penalty",
+      "original_weight": -0.1,
+      "baseline_mean_score": 38.19,
+      "ablated_mean_score": 33.35,
+      "score_reduction": 4.84,
+      "performance_drop_pct": 12.68,
+      "empirical_finding": "Removing Redundancy Penalty reduces the mean semantic importance score by 4.84 points (12.68% relative drop)."
+    }
   }
 }
