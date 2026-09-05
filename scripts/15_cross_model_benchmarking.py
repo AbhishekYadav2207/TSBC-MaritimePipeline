@@ -35,26 +35,13 @@ MODEL_PROFILES = {
 def clean_model_filename(model_name: str) -> str:
     return model_name.replace("/", "_").replace("-", "_")
 
-def apply_legacy_maritime_compatibility(row: dict, cat_rec: dict) -> dict:
-    """
-    Isolated backwards-compatibility layer.
-    Exposes legacy column aliases without polluting universal scoring logic.
-    """
-    row["nav_acc"] = cat_rec.get("navigation", 0.0)
-    row["weather_acc"] = cat_rec.get("weather_environment", 0.0)
-    row["safety_acc"] = cat_rec.get("safety_lifesaving", 0.0)
-    row["machinery_acc"] = cat_rec.get("machinery_propulsion", 0.0)
-    row["vessel_acc"] = cat_rec.get("vessel_terminology", 0.0)
-    row["casualty_acc"] = cat_rec.get("casualty_incident", 0.0)
-    return row
-
 def main():
     root = get_project_root()
     config = load_config()
     bench_cfg = get_benchmark_config()
     output_dir = root / config.get("output_dir", "outputs")
 
-    domain_name = bench_cfg.get("domain_name", "maritime")
+    domain_name = bench_cfg.get("domain_name", "generic")
     metric_name = bench_cfg.get("metric_name", "DUI")
     tok_dir = output_dir / "tokenizer_analysis"
     cache_dir = output_dir / "evaluations" / "cache"
@@ -83,12 +70,13 @@ def main():
                 metrics = item.get("evaluation_metrics", {})
 
                 gen_sum = metrics.get("general_tokens_summary", {})
-                dom_sum = metrics.get("domain_tokens_summary") or metrics.get("maritime_tokens_summary", {})
-                rare_sum = metrics.get("rare_domain_tokens_summary") or metrics.get("rare_maritime_tokens_summary", {})
+                dom_sum = metrics.get("domain_tokens_summary", {})
+                rare_sum = metrics.get("rare_domain_tokens_summary", {})
                 cat_rec = metrics.get("category_recall", {})
 
-                # Read actual evaluated doc count for correct per-document timing
-                evaluated_doc_count = item.get("evaluated_doc_count", metrics.get("evaluated_documents", 200))
+                # Read actual evaluated doc count for correct per-document timing (no assumed /200)
+                raw_cnt = item.get("evaluated_doc_count") or metrics.get("evaluated_documents")
+                actual_doc_cnt = float(raw_cnt) if (raw_cnt is not None and float(raw_cnt) > 0) else np.nan
 
                 row = {
                     "model_name": model_name,
@@ -102,17 +90,13 @@ def main():
                     "rare_top1_acc": rare_sum.get("top1_accuracy", 0.0),
                     "performance_gap": metrics.get("performance_gap_top1", 0.0),
                     "eval_time_sec": metrics.get("evaluation_time_sec", 0.0),
-                    "evaluated_doc_count": max(1, evaluated_doc_count)
+                    "evaluated_doc_count": actual_doc_cnt
                 }
 
                 # Purely dynamic category registration
                 for cat, acc in cat_rec.items():
                     category_keys.add(cat)
                     row[f"cat_{cat}_acc"] = acc
-
-                # Isolated backward-compatibility layer
-                if domain_name == "maritime":
-                    row = apply_legacy_maritime_compatibility(row, cat_rec)
 
                 mlm_rows.append(row)
 
@@ -150,7 +134,7 @@ def main():
         else:
             cat_balance = 1.0
 
-        frag_rate = t_info.get("domain_fragmentation_rate", t_info.get("maritime_fragmentation_rate", 0.3))
+        frag_rate = t_info.get("domain_fragmentation_rate", 0.3)
         oov_rate = t_info.get("oov_rate", 0.0)
         tok_speed = t_info.get("tokenizer_speed_tokens_per_sec", 1000.0)
 
@@ -166,12 +150,16 @@ def main():
         ) * 100.0
 
         # Methodological Hardening: Accurate evaluation timing terminology
-        # Use actual evaluated_doc_count for per-document normalization (not hardcoded 200)
+        # Use actual evaluated_doc_count for per-document normalization (never assume /200)
         avg_eval_time = grp["eval_time_sec"].mean()
-        avg_doc_count = grp["evaluated_doc_count"].mean() if "evaluated_doc_count" in grp.columns else 200.0
-        avg_doc_count = max(1.0, avg_doc_count)
-        eval_time_per_doc_ms = (avg_eval_time / avg_doc_count) * 1000.0 if avg_eval_time > 0 else 5.0
-        docs_per_sec = 1000.0 / eval_time_per_doc_ms if eval_time_per_doc_ms > 0 else 200.0
+        valid_cnts = grp["evaluated_doc_count"].dropna()
+        if not valid_cnts.empty and valid_cnts.mean() > 0:
+            avg_doc_count = float(valid_cnts.mean())
+            eval_time_per_doc_ms = (avg_eval_time / avg_doc_count) * 1000.0 if avg_eval_time > 0 else 0.0
+            docs_per_sec = (1000.0 / eval_time_per_doc_ms) if eval_time_per_doc_ms > 0 else 0.0
+        else:
+            eval_time_per_doc_ms = None
+            docs_per_sec = None
 
         # 95% Confidence Interval Error Bounds (Standard Error * 1.96)
         std_err_top1 = (grp["top1_acc"].std() / np.sqrt(len(grp))) * 1.96 if len(grp) > 1 else 0.01
@@ -179,12 +167,9 @@ def main():
         leaderboard_rows.append({
             "model_name": model_name,
             "dui_score": round(score, 2),
-            "mui_score": round(score, 2),  # Compatibility alias
             "domain_top1_acc": round(avg_top1 * 100, 2),
-            "maritime_top1_acc": round(avg_top1 * 100, 2),  # Compatibility alias
             "top1_ci_error": round(std_err_top1 * 100, 2),
             "rare_domain_acc": round(avg_rare * 100, 2),
-            "rare_maritime_acc": round(avg_rare * 100, 2),  # Compatibility alias
             "mlm_loss": round(avg_loss, 4),
             "domain_shift_gap_pct": round(avg_shift * 100, 2) if not shift_vals.empty else None,
             "performance_gap_pct": round(avg_gap * 100, 2),
@@ -193,9 +178,8 @@ def main():
             "oov_rate_pct": round(oov_rate * 100, 4),
             "params_millions": p_info["params_m"],
             "disk_size_mb": p_info["size_mb"],
-            "evaluation_time_per_document_ms": round(eval_time_per_doc_ms, 2),
-            "inference_latency_ms": round(eval_time_per_doc_ms, 2),  # Compatibility alias
-            "throughput_docs_sec": round(docs_per_sec, 2),
+            "evaluation_time_per_document_ms": round(eval_time_per_doc_ms, 2) if eval_time_per_doc_ms is not None else None,
+            "throughput_docs_sec": round(docs_per_sec, 2) if docs_per_sec is not None else None,
             "tokenizer_speed_tok_sec": round(tok_speed, 2)
         })
 
@@ -253,7 +237,6 @@ def main():
     plt.legend(loc="upper right", bbox_to_anchor=(1.3, 1.1))
     plt.tight_layout()
     plt.savefig(viz_dir / "domain_accuracy_radar.png", dpi=300)
-    plt.savefig(viz_dir / "maritime_accuracy_radar.png", dpi=300)
     plt.close()
 
     # Visualization 4: Tokenizer Fragmentation Heatmap

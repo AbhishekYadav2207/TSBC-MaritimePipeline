@@ -30,7 +30,7 @@ def main():
     output_dir = root / config.get("output_dir", "outputs")
 
     # Resolve TXT corpus path (deterministic, no silent fallback)
-    corpus_filename = bench_cfg.get("corpus_file", "maritime_corpus.txt")
+    corpus_filename = bench_cfg.get("corpus_file", "corpus.txt")
     corpus_path = output_dir / corpus_filename
 
     allow_discovery = bench_cfg.get("allow_corpus_auto_discovery", False)
@@ -70,7 +70,6 @@ def main():
                     if len(issue_samples[rule_name]) < 5:
                         issue_samples[rule_name].append({
                             "doc_id": doc_id,
-                            "occurrence_id": doc_id,  # Compatibility alias
                             "match": matches[0] if isinstance(matches[0], str) else matches[0][0],
                             "snippet": doc_text[:150]
                         })

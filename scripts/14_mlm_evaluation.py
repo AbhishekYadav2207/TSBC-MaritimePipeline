@@ -179,7 +179,7 @@ def evaluate_model_on_docs(
                         tok_str = tokenizer.decode([target_id]).strip().lower().replace("##", "")
                         if tok_str and len(tok_str) >= 3:
                             for span in doc_spans:
-                                if span["term"] in doc_text.lower():
+                                if tok_str in span["term"]:
                                     is_domain = True
                                     if span["is_rare"]:
                                         is_rare = True
@@ -240,9 +240,7 @@ def evaluate_model_on_docs(
         "evaluation_time_sec": float(eval_time),
         "general_tokens_summary": gen_summary,
         "domain_tokens_summary": dom_summary,
-        "maritime_tokens_summary": dom_summary,  # Backwards compatibility alias
         "rare_domain_tokens_summary": rare_summary,
-        "rare_maritime_tokens_summary": rare_summary,  # Backwards compatibility alias
         "category_recall": {cat: round(st["top1_accuracy"], 4) for cat, st in cat_summaries.items()},
         "category_breakdown": cat_summaries,
         "performance_gap_top1": float(performance_gap)
@@ -260,7 +258,7 @@ def main():
     categories = bench_cfg.get("categories", {})
     rare_terms = bench_cfg.get("rare_domain_terms", [])
 
-    vocab_filename = bench_cfg.get("vocabulary_file", "maritime_vocabulary.txt")
+    vocab_filename = bench_cfg.get("vocabulary_file", "vocabulary.txt")
     vocab_path = output_dir / vocab_filename
     if not vocab_path.exists():
         if bench_cfg.get("allow_corpus_auto_discovery", False):
@@ -354,7 +352,8 @@ def main():
                     with open(sub_path, "r", encoding="utf-8") as f:
                         for l in f:
                             r_json = json.loads(l)
-                            sub_doc_ids.add(r_json.get("doc_id") or r_json.get("occurrence_id"))
+                            if r_json.get("doc_id"):
+                                sub_doc_ids.add(r_json["doc_id"])
 
                 if not sub_doc_ids:
                     logger.warning(f"Subset '{sub}' contains 0 document IDs. Skipping.")
@@ -364,7 +363,7 @@ def main():
                 target_docs = [
                     rec["document"]
                     for rec in rep_records
-                    if (rec.get("doc_id") in sub_doc_ids or rec.get("occurrence_id") in sub_doc_ids)
+                    if rec.get("doc_id") in sub_doc_ids
                 ][:200]
 
                 if not target_docs:

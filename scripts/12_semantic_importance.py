@@ -72,17 +72,17 @@ def compute_document_features(
     lexicons = domain_lexicons or {}
     subject_kw = set(lexicons.get("subject_entity_keywords", []))
     context_kw = set(lexicons.get("context_keywords", []))
-    incident_kw = set(lexicons.get("incident_keywords", []))
-    consequence_kw = set(lexicons.get("consequence_keywords", []))
+    action_kw = set(lexicons.get("action_keywords", lexicons.get("incident_keywords", [])))
+    impact_kw = set(lexicons.get("impact_keywords", lexicons.get("consequence_keywords", [])))
 
     tokens = re.findall(r'\b[a-zA-Z]{3,}\b', doc_text.lower())
     num_tokens = len(tokens)
     if num_tokens == 0:
         return {
-            "domain_density": 0.0, "maritime_density": 0.0, "rare_term_count": 0, "rare_score": 0.0,
+            "domain_density": 0.0, "rare_term_count": 0, "rare_score": 0.0,
             "concept_diversity": 0.0, "entity_diversity": 0.0, "event_complexity": 0.0,
             "information_density": 0.0, "redundancy_penalty": 1.0, "structural_completeness": 0.0,
-            "metadata_completeness": 0.0, "linguistic_diversity": 0.0,
+            "linguistic_diversity": 0.0,
             "rare_domain_term_novelty": 0.0, "domain_novelty": 0.0,
             "concepts": []
         }
@@ -132,12 +132,12 @@ def compute_document_features(
     has_subject = 1 if len(distinct_entities) > 0 or any(k in tokens for k in subject_kw) else 0
     # (b) Context / environmental conditions: temporal/spatial prepositions or context keywords
     has_context = 1 if re.search(r'\b(under|during|while|at|in|near|between|conditions|phase)\b', doc_text.lower()) or any(k in tokens for k in context_kw) else 0
-    # (c) Incident / action verbs: verbal participles or incident keywords
-    has_action = 1 if re.search(r'\b([a-z]{3,}(?:ed|ing|ied))\b', doc_text.lower()) or any(k in tokens for k in incident_kw) else 0
+    # (c) Incident / action verbs: verbal participles or action keywords
+    has_action = 1 if re.search(r'\b([a-z]{3,}(?:ed|ing|ied))\b', doc_text.lower()) or any(k in tokens for k in action_kw) else 0
     # (d) Numeric measurement or metric indicator: numeric specs with optional units/symbols
     has_metric = 1 if re.search(r'\b\d+(?:\.\d+)?(?:\s*[a-zA-Z%$/\^]+)?\b', doc_text) else 0
-    # (e) Consequence / impact description: evaluative outcomes or consequence keywords
-    has_impact = 1 if re.search(r'\b(damage|loss|injury|death|failure|severe|minor|major|status|result|impact)\b', doc_text.lower()) or any(k in tokens for k in consequence_kw) else 0
+    # (e) Consequence / impact description: evaluative outcomes or impact keywords
+    has_impact = 1 if re.search(r'\b(damage|loss|injury|death|failure|severe|minor|major|status|result|impact|outcome|effect)\b', doc_text.lower()) or any(k in tokens for k in impact_kw) else 0
 
     structural_completeness = (has_subject + has_context + has_action + has_metric + has_impact) / 5.0
 
@@ -150,7 +150,6 @@ def compute_document_features(
 
     return {
         "domain_density": domain_density,
-        "maritime_density": domain_density,  # Compatibility alias
         "rare_term_count": rare_count,
         "rare_score": rare_score,
         "concept_diversity": concept_diversity,
@@ -159,10 +158,9 @@ def compute_document_features(
         "information_density": info_density,
         "redundancy_penalty": redundancy_penalty,
         "structural_completeness": structural_completeness,
-        "metadata_completeness": structural_completeness,  # Compatibility alias
         "linguistic_diversity": linguistic_diversity,
         "rare_domain_term_novelty": rare_domain_term_novelty,
-        "domain_novelty": rare_domain_term_novelty,  # Compatibility alias
+        "domain_novelty": rare_domain_term_novelty,
         "concepts": list(detected_concepts)
     }
 
@@ -197,7 +195,7 @@ def main():
     domain_lexicons = bench_cfg.get("domain_semantic_lexicons", {})
 
     # Resolve TXT corpus path (deterministic, no silent fallback)
-    corpus_filename = bench_cfg.get("corpus_file", "maritime_corpus.txt")
+    corpus_filename = bench_cfg.get("corpus_file", "corpus.txt")
     corpus_path = output_dir / corpus_filename
 
     allow_discovery = bench_cfg.get("allow_corpus_auto_discovery", False)
@@ -239,11 +237,9 @@ def main():
 
         scored_records.append({
             "doc_id": doc_id,
-            "occurrence_id": doc_id,  # Compatibility alias
             "importance_score": round(importance_score, 2),
             "knowledge_tier": knowledge_tier,
             "domain_density": round(feats["domain_density"], 4),
-            "maritime_density": round(feats["domain_density"], 4),
             "rare_term_count": feats["rare_term_count"],
             "concept_diversity": round(feats["concept_diversity"], 4),
             "information_density": round(feats["information_density"], 4),
@@ -336,7 +332,6 @@ def main():
         for idx, sent in enumerate(GENERAL_ENGLISH_SENTENCES):
             f.write(json.dumps({
                 "doc_id": f"gen_eng_{idx+1:04d}",
-                "occurrence_id": 900000 + idx,
                 "importance_score": 10.0,
                 "knowledge_tier": "General English",
                 "document": sent

@@ -1,66 +1,53 @@
-# HANDOFF: Universal Benchmark Refactor (Stages 11–18)
+# HANDOFF: Universal Domain-Agnostic Benchmark Core (Stages 11–18)
 
 ## PROJECT STATE
-Complete. The benchmarking pipeline from Stage 11 onward has been universalized. The canonical interface contract is a cleaned plain-text corpus (`*_corpus.txt`), separated by double newlines (`\n\n`). Stages 11–18 have zero dependencies on `clean_documents.jsonl`, MARSIS schemas, `OccID`, `VesselID`, or hardcoded domain fields. All tests and static dependency audits pass with zero violations.
+Complete and Hardened. Stages 11–18 constitute a fully domain-independent, deterministic, reproducible benchmarking suite for evaluating text representations and language models on arbitrary text corpora. The canonical interface boundary is a clean plain-text corpus (`*_corpus.txt`), separated by double newlines (`\n\n+`). Stages 11–18 have zero dependencies on upstream corpus construction (`clean_documents.jsonl`), relational databases, or hardcoded maritime schemas.
 
-## LAST COMPLETED STAGE
-Robustness & Research-Grade Hardening Pass (Stages 11–18):
-- Span-aware domain term detection implemented in Stage 14 (character spans mapped via Fast Tokenizer offset mappings), preventing global subword contamination.
-- Fake general-English 0.85 fallback eliminated in Stage 14 (explicitly reports `baseline_available=False`, `domain_shift_gap=None` when missing).
-- Hidden domain lexicons removed from Stage 12 generic core; optional domain profiles externalized to `config.json`.
-- Domain lint patterns externalized to `config.json`; Stage 18 generic core operates cleanly with empty pattern lists.
-- Latency metric accurately renamed to `evaluation_time_per_document_ms` in Stage 15/17.
-- Silent auto-discovery replaced with deterministic `FileNotFoundError` unless explicitly configured.
-- Explicit duplicate detection vs. deduplication semantics implemented in `load_corpus_documents()`.
-- Decoupled `information_density` (content word ratio) from `domain_density` in Stage 12, preventing double-counting.
-- Statistical unit strictly documented as $N = 25$ paired experimental cells.
-- Real empirical leave-one-feature-out contribution clarified in Stage 16.
+## FINAL UNIVERSALITY & RESEARCH-GRADE HARDENING
 
-## CURRENT TASK
-Final research-grade audit complete. All 29 tests pass (22 universal benchmark + 7 quality optimization).
+### Core Architectural Guarantees
+1. **TXT Interface Contract**: Stages 11–18 consume only plain text from `corpus_file` (documents delimited by `\n\n+`), assigning deterministic sequential identifiers (`doc_id`). `clean_documents.jsonl` is strictly isolated as an upstream provenance artifact.
+2. **Zero Domain-Specific Hardcoding**:
+   - Stage 11: Removed domain measurement units (`GT`, `knots`, `tonnes`, `fatalities`, etc.) and replaced with generic quantity extraction (`20 mg`, `15%`, `120 ms`, `500 kg`, `$500`, `€200`, `3.5 GHz`, `20km`, `120ms`) with optional config units.
+   - Stage 11: Replaced event/operational ontology with neutral template structures (`Record`, `Subject`, `Context`, `Details`, `Statement`). Removed invented fallbacks (`general operational context` replaced with `Not specified`).
+   - Removed `occurrence_id` from all output schemas across Stages 11, 12, 17, and 18; only `doc_id` is generated.
+   - Token count in Stage 11 structured output explicitly named `whitespace_token_count` to distinguish from model-token counts.
+   - Stage 12: Core semantic importance scoring operates on generic lexical/syntactic heuristics and works identically with empty domain lexicons.
+   - Stage 13: Vocabulary analysis handles arbitrary tokenizer families (WordPiece, BPE, Byte-Level BPE) with documented OOV semantic differences.
+   - Stage 14: Uses span-aware character matching on actual document text mapped via Fast Tokenizer `offset_mapping`, completely preventing subword contamination (e.g. `dynamic` is never marked as `hemodynamic`).
+   - Stage 14: Never fabricates a baseline. When general baseline is unavailable, `baseline_available = False` and `domain_shift_gap = None`.
+   - Stage 15: Per-document timing divisor uses actual `evaluated_doc_count` (never assumes `/200`) and reports `evaluation_time_per_document_ms` (not bare inference latency). Dynamic category scoring has zero hardcoded legacy categories.
+   - Stage 16: Statistical comparisons strictly align on `(representation, subset)` keys ($N=25$ paired experimental cells controlling for underlying text, not 25 independent document draws). Feature ablation is documented as empirical leave-one-feature-out marginal contribution without retraining.
+   - Stage 17: Operates using configurable heuristic decision thresholds, safely handling `None` and `NaN` metrics without fabricating decisions.
+   - Stage 18: Core lint rules are generic linguistic heuristics; domain-specific artifact patterns come strictly from configuration.
 
-## FILES CHANGED
-- `config/config.json`: Added `domain_semantic_lexicons`, `domain_lint_patterns`, discovery and deduplication flags.
-- `scripts/pipeline_utils.py`: Deterministic corpus loading, explicit duplicate flags, strict missing-file errors.
-- `scripts/11_corpus_representations.py`: Strict corpus resolution without silent fallback.
-- `scripts/12_semantic_importance.py`: Decoupled information density, generic linguistic heuristics, subset overlap tracking.
-- `scripts/13_tokenizer_analysis.py`: Deterministic corpus loading without silent fallback.
-- `scripts/14_mlm_evaluation.py`: Span-aware domain token identification via offset mappings; removed fake 0.85 fallback.
-- `scripts/15_cross_model_benchmarking.py`: Renamed latency to `evaluation_time_per_document_ms`, isolated legacy compatibility.
-- `scripts/16_statistical_analysis.py`: Statistical unit phrased as $N=25$ paired cells; clarified empirical ablation contribution.
-- `scripts/17_decision_engine.py`: Updated benchmark report table with accurate timing terminology (`Eval Time (ms/doc)`); fixed Section 7 report text from "inference speeds" to "evaluation throughput" with explicit definition.
-- `scripts/18_lint_corpus.py`: Generic core rules separated from configurable domain lint patterns.
-- `documentation/15_universal_benchmark_refactor.md`: Added `ROBUSTNESS HARDENING` section.
+### Representation Methodology & Overhead
+The five representations (Narrative, Key-Value, Template, Structured Semantic, Mixed) originate from the identical underlying document. The experiment evaluates the effect of surface format while controlling for underlying semantic content. The Mixed representation deliberately pairs structured headers with narrative body, introducing intentional textual overhead and higher whitespace token counts.
 
-## FILES CREATED
-- `HANDOFF.md`: Repository root handoff file.
-- `tests/domain_test_corpus.txt`: Synthetic non-maritime corpus.
-- `tests/test_universal_benchmark.py`: Comprehensive test suite (22 unit & regression tests + static AST audit).
-- `documentation/15_universal_benchmark_refactor.md`: Architecture and refactor reference document.
+### Known Methodological Limitations
+1. **Paired Experimental Unit Scope**: The 25 units in Stage 16 represent paired experimental configuration cells across 5 representations and 5 score-partitioned subsets. They are not independent random samples of documents.
+2. **Subset Overlap**: High, Medium, and Low subsets are score distribution partitions; Balanced intentionally samples from each tier, and Random is drawn uniformly without replacement. Subsets overlap and are tracked in `subset_overlap_statistics.json`.
+3. **Lexical/Pattern Extraction**: Stage 11 entity extraction is deterministic rule-based pattern matching (quotes, acronyms, proper nouns), not a trained statistical Named Entity Recognition (NER) model.
+4. **Tokenizer OOV Incomparability**: Byte-level BPE tokenizers (RoBERTa, ModernBERT) represent any byte sequence and thus report 0.0% OOV, whereas WordPiece tokenizers emit `[UNK]`. OOV rates cannot be compared across different tokenizer families.
+5. **Observed Throughput Context**: Throughput metrics represent observed pipeline processing speed under the local hardware/software benchmarking environment.
+6. **Heuristic Decision Engine**: Stage 17 rules triage architectures using user-configurable heuristic tolerance thresholds rather than objectively validated causal boundaries.
 
-## TESTS PASSED
-- `tests/test_universal_benchmark.py`: 22/22 PASSED (including 10 new regression tests for subword span contamination, missing baseline, empty lexicons, non-maritime scoring, non-maritime linting, missing corpus error, dynamic category scoring, duplicate semantics, density independence, deterministic sampling, and static AST dependency audit).
-- `tests/test_quality_optimizations.py`: 7/7 PASSED.
-- `tests/verify_pipeline.py`: ALL 25 REQUIRED OUTPUTS VERIFIED.
-- Static AST & token dependency audit: ZERO violations across `scripts/11*` through `scripts/18*`.
-- Final research-grade audit: ZERO residual methodology defects.
+## TEST SUITE STATUS
+- `tests/test_universal_benchmark.py`: **34/34 PASSED** (100% pass rate covering all 34 required test areas).
+- `tests/test_quality_optimizations.py`: **7/7 PASSED**.
+- Static AST & token dependency audit: **ZERO violations** across `scripts/11*` through `scripts/18*`.
+- Semantic domain-hardcoding audit: **ZERO violations** across `scripts/11*` through `scripts/18*`.
 
-## KNOWN FAILURES
-None.
-
-## NEXT ACTIONS
-- Benchmark is hardened and ready for final runs or execution on any external domain corpus.
-
-## IMPORTANT DESIGN DECISIONS
-- The canonical interface is plain-text `*_corpus.txt` with `\n\n` document boundary delimiters.
-- Document identifier is `doc_id` with `occurrence_id` retained as a backwards-compatible alias.
-- Stage 14 masks and evaluates actual domain-term character spans mapped to token offsets, never global token IDs.
-- Stage 16 pairs observations strictly on `(representation, subset)` keys ($N=25$ paired cells per model comparison).
-- Feature ablation in Stage 16 is calculated empirically over document feature vectors.
-- Decision engine thresholds in `config.json` support both decimal (0.85) and percentage (85.0) representations.
-
-## DO NOT CHANGE
-- `dapt/` directory (untouched).
-- `maritimebert_validation.ipynb` (untouched).
-- Stages 01–10 (domain-specific corpus construction).
-- `clean_documents.jsonl` (preserved for upstream provenance, but ignored by Stages 11–18).
+## HOW TO RUN ON ANY DOMAIN CORPUS
+1. Place plain text corpus into `outputs/<domain>_corpus.txt` (documents separated by `\n\n`).
+2. Update `config/config.json`:
+   ```json
+   "benchmark": {
+     "domain_name": "<domain>",
+     "corpus_file": "<domain>_corpus.txt",
+     "vocabulary_file": "<domain>_vocabulary.txt",
+     "categories": { ... },
+     "rare_domain_terms": [ ... ]
+   }
+   ```
+3. Run Stages 11 through 18 sequentially. No Python source modifications are required.

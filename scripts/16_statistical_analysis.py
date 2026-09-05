@@ -60,7 +60,7 @@ def compute_real_feature_ablation(doc_importance_path: Path) -> dict:
         "information_density": 0.10,
         "structural_completeness": 0.05,
         "linguistic_diversity": 0.05,
-        "domain_novelty": 0.05,
+        "rare_domain_term_novelty": 0.05,
         "redundancy_penalty": -0.10
     }
 
@@ -73,7 +73,7 @@ def compute_real_feature_ablation(doc_importance_path: Path) -> dict:
         "information_density": "Information Density",
         "structural_completeness": "Structural Completeness",
         "linguistic_diversity": "Linguistic Diversity (TTR)",
-        "domain_novelty": "Domain Novelty (IDF)",
+        "rare_domain_term_novelty": "Rare Domain Term Novelty (IDF)",
         "redundancy_penalty": "Redundancy Penalty"
     }
 
@@ -121,6 +121,7 @@ def compute_real_feature_ablation(doc_importance_path: Path) -> dict:
         w_abl = {k: (0.0 if k == feat_key else v) for k, v in base_weights.items()}
 
         for f in sample_feats:
+            novelty_val = f.get("rare_domain_term_novelty", f.get("domain_novelty", 0.0))
             raw = (
                 w_abl["domain_density"] * f.get("domain_density", 0.0) +
                 w_abl["rare_score"] * f.get("rare_score", 0.0) +
@@ -130,7 +131,7 @@ def compute_real_feature_ablation(doc_importance_path: Path) -> dict:
                 w_abl["information_density"] * f.get("information_density", 0.0) +
                 w_abl["structural_completeness"] * f.get("structural_completeness", 0.0) +
                 w_abl["linguistic_diversity"] * f.get("linguistic_diversity", 0.0) +
-                w_abl["domain_novelty"] * f.get("domain_novelty", 0.0) +
+                w_abl["rare_domain_term_novelty"] * novelty_val +
                 w_abl["redundancy_penalty"] * f.get("redundancy_penalty", 0.0)
             )
             ablated_scores.append(float(np.clip(raw * 100.0, 0.0, 100.0)))
@@ -225,7 +226,8 @@ def main():
                 "p_value_wilcoxon": float(p_val_w),
                 "cohens_d_effect_size": round(d_val, 4),
                 "cliffs_delta_effect_size": round(delta_val, 4),
-                "is_statistically_significant": bool(p_val_t < 0.05)
+                "is_statistically_significant": bool(p_val_t < 0.05),
+                "methodological_caveat": "Evaluates performance differences across 25 paired experimental cells controlling for underlying source content; does not imply causal superiority or independent document draws."
             })
 
     stat_summary = {

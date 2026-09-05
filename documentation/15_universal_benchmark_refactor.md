@@ -193,6 +193,26 @@ The repository is in a clean, working state. Another developer can execute any s
 ### Remaining Limitations
 - MLM matrix runs rely on cached checkpoint evaluations unless full GPU recomputation is explicitly requested.
 
-### Exact Next Step
-- Run individual benchmark stages with any target domain corpus by configuring `config/config.json`.
+---
+
+## FINAL UNIVERSALITY & RESEARCH-GRADE HARDENING
+
+### Architectural & Methodological Guarantees
+1. **TXT Boundary**: The sole formal input to Stages 11–18 is the plain-text corpus (`*_corpus.txt`) where documents are separated by `\n\n+`. Stages 11–18 have zero dependencies on `clean_documents.jsonl` or relational schemas.
+2. **Configuration-Driven Domain Semantics**: All domain concepts (domain name, corpus/vocabulary files, categories, rare domain terms, semantic lexicons, measurement units, lint patterns, decision thresholds, random seed) are governed by `config/config.json`. Core Python code contains zero hardcoded maritime, medical, or other single-domain terms.
+3. **Five Representation Design**: The five representations (Narrative, Key-Value, Template, Structured Semantic, Mixed) are deterministically extracted from the same underlying text. The benchmark measures the impact of surface formatting on tokenizer fragmentation and MLM accuracy while strictly controlling for underlying semantic content.
+4. **Mixed Representation Overhead**: The Mixed representation pairs an extracted structural header with the full narrative text, deliberately introducing textual overhead and resulting in higher whitespace token counts.
+5. **Span-Aware Domain Matching**: Stage 14 locates character-level spans of configured domain terms in the text and maps them via Fast Tokenizer `offset_mapping`. Subtokens (e.g. `dynamic` in `dynamic routing`) are never contaminated by unreferenced domain terms (`hemodynamic`).
+6. **Honest Baseline Handling**: No fake 0.85 general-English baseline is fabricated. If unavailable, `baseline_available = False` and `domain_shift_gap = None`.
+7. **Accurate Evaluation Timing Definition**: Metric is `evaluation_time_per_document_ms` (not bare inference latency). Divisor is the actual `evaluated_doc_count`, and the system fails safely if document counts are missing.
+8. **Paired Experimental Cell Interpretation**: The 25 units in Stage 16 represent paired experimental configuration cells across 5 representations and 5 score-partitioned subsets controlling for source content, not independent document observations.
+9. **Subset Overlap Tracking**: Subsets are non-independent partitions of the corpus. Pairwise overlap counts are tracked and exported to `subset_overlap_statistics.json`.
+10. **Configurable Heuristic Decision Thresholds**: Stage 17 rules triage candidate models using user-configurable heuristic tolerance thresholds rather than an objectively validated or causal boundary. Safely handles `None` and `NaN` metrics without fabricating decisions.
+
+### Methodological Limitations
+1. **Rule-Based Entity Extraction**: Stage 11 entity extraction uses deterministic lexical patterns (quotes, acronyms, capitalized sequences), not a trained statistical Named Entity Recognition (NER) model.
+2. **Tokenizer OOV Semantic Discrepancy**: Byte-level BPE tokenizers represent any byte sequence (0.0% OOV), while WordPiece emits `[UNK]`. OOV rates cannot be compared across different tokenizer families.
+3. **Observed Throughput**: Reported throughput reflects observed processing speed in the specific local benchmarking runtime environment.
+4. **Non-Retrained Ablation**: Feature ablation reflects leave-one-feature-out marginal contribution of scoring weights over evaluated corpus vectors without retraining.
+
 

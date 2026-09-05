@@ -48,7 +48,27 @@ def parse_thresholds(decision_cfg: dict) -> dict:
     }
 
 def run_decision_rules(top1_acc: float, perf_gap: float, frag_rate: float, thresholds: dict, domain_name: str = "domain") -> dict:
-    """Evaluates programmatic decision thresholds for any domain."""
+    """
+    Evaluates configurable heuristic decision thresholds for any domain.
+
+    Methodological Note:
+      Thresholds are heuristic and configurable, designed to triage models according
+      to user-specified tolerance parameters rather than an objectively validated or causal boundary.
+    """
+    domain_title = domain_name.capitalize()
+    model_name_scratch = f"{domain_title}BERT"
+
+    # Safely handle missing metrics or NaN
+    if (top1_acc is None or pd.isna(top1_acc) or
+        perf_gap is None or pd.isna(perf_gap) or
+        frag_rate is None or pd.isna(frag_rate)):
+        return {
+            "decision": "Incomplete Evaluation / Missing Metrics",
+            "strategy": f"Evaluation Incomplete: Cannot determine strategy for {domain_title} from missing metrics",
+            "rationale": "One or more required evaluation metrics (top-1 accuracy, performance gap, or fragmentation rate) are missing or NaN. Heuristic decision rules cannot be evaluated.",
+            "eval_metrics": {"top1_accuracy": top1_acc, "performance_gap": perf_gap, "fragmentation_rate": frag_rate}
+        }
+
     t_dapt = thresholds.get("dapt_top1_threshold", 85.0)
     t_gap = thresholds.get("gap_threshold", 5.0)
     t_frag = thresholds.get("frag_threshold", 20.0)
@@ -56,9 +76,6 @@ def run_decision_rules(top1_acc: float, perf_gap: float, frag_rate: float, thres
     t_scratch_top1 = thresholds.get("scratch_top1_threshold", 60.0)
     t_scratch_gap = thresholds.get("scratch_gap_threshold", 20.0)
     t_scratch_frag = thresholds.get("scratch_frag_threshold", 40.0)
-
-    domain_title = domain_name.capitalize()
-    model_name_scratch = f"{domain_title}BERT"
 
     if top1_acc >= t_dapt and perf_gap <= t_gap and frag_rate <= t_frag:
         decision = "Domain-Adaptive Pretraining (DAPT) Sufficient"
@@ -86,7 +103,7 @@ def main():
     bench_cfg = get_benchmark_config()
     output_dir = root / config.get("output_dir", "outputs")
 
-    domain_name = bench_cfg.get("domain_name", "maritime")
+    domain_name = bench_cfg.get("domain_name", "generic")
     domain_title = domain_name.capitalize()
     metric_name = bench_cfg.get("metric_name", "DUI")
 
@@ -118,10 +135,10 @@ def main():
     top_model = df_lb.iloc[0]
 
     top_name = top_model["model_name"]
-    top1_acc = top_model.get("domain_top1_acc", top_model.get("maritime_top1_acc", 0.0))
+    top1_acc = top_model.get("domain_top1_acc", top_model.get("top1_acc", 0.0))
     perf_gap = top_model["performance_gap_pct"]
     frag_rate = top_model["fragmentation_rate_pct"]
-    score_val = top_model.get("dui_score", top_model.get("mui_score", 0.0))
+    score_val = top_model.get("dui_score", 0.0)
 
     # 3. Read Decision Thresholds from config (resilient to decimal or percentage formats)
     decision_cfg = config.get("decision", {})
@@ -158,10 +175,10 @@ def main():
     report_md = f"""# {domain_title} Corpus Multi-Model Benchmarking Report
 
 ## 1. Executive Summary
-This research benchmark evaluates 14 pretrained encoder models across 5 multi-format corpus representations and 5 knowledge-classified subsets (175 independent matrix evaluations: 7 deduplicated model architectures × 5 representations × 5 subsets). The goal is to determine whether continued **Domain-Adaptive Pretraining (DAPT)** is sufficient or if training a domain-specific **{domain_title}BERT from Scratch** is required.
+This research benchmark evaluates 14 pretrained encoder models across 5 multi-format corpus representations and 5 knowledge-classified subsets (175 paired matrix evaluation runs: 7 deduplicated model architectures × 5 representations × 5 subsets). The goal is to evaluate whether continued **Domain-Adaptive Pretraining (DAPT)** is indicated or if training a domain-specific **{domain_title}BERT from Scratch** is supported by benchmark heuristics.
 
-**Key Recommendation**: {main_decision['strategy']}
-* **Top Pretrained Encoder**: `{top_name}` ({metric_name} Score: {score_val:.2f})
+**Triage Recommendation**: {main_decision['strategy']}
+* **Top Observed Pretrained Encoder**: `{top_name}` ({metric_name} Score: {score_val:.2f})
 * **{domain_title} Top-1 Accuracy**: {top1_acc:.2f}%
 * **General-to-{domain_title} Performance Gap**: {perf_gap:.2f}%
 * **Subword Fragmentation Rate**: {frag_rate:.2f}%
@@ -174,17 +191,17 @@ The {domain_title} text corpus was compiled into 5 distinct multi-format represe
 2. **Key-Value**: Extracted structural `Field: Value` formatted text.
 3. **Template**: Standardized semi-structured template sentences with deterministic selection.
 4. **Structured Semantic**: Serialized JSON representations of extracted text features.
-5. **Mixed**: Hybrid document pairing extracted structural headers with narrative text.
+5. **Mixed**: Hybrid document pairing extracted structural headers with narrative text (introducing additional textual overhead).
 
 ---
 
 ## 3. Representation Benchmark Results
-Evaluations across representations demonstrate that **Narrative** and **Mixed** representations provide high token accuracy for pretrained language models, while maintaining structural and contextual fidelity.
+Evaluations across representations demonstrate how structural formatting alters tokenizer behavior and MLM accuracy while controlling for the underlying source text.
 
 ---
 
 ## 4. Tokenizer Benchmark Results
-Single-token vocabulary coverage and subword fertility vary significantly across domain tokenizers:
+Single-token vocabulary coverage, subword fertility, and observed throughput under the benchmark environment vary across domain tokenizers:
 
 | Model Name | Vocab Size | Single-Token Coverage (%) | Fragmentation Rate (%) | OOV Rate (%) | Tokenizer Speed (tok/s) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -202,33 +219,34 @@ Full model leaderboard ranked by the composite **{bench_cfg.get('metric_display_
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 """
     for idx, row in df_lb.iterrows():
-        top1_disp = row.get("domain_top1_acc", row.get("maritime_top1_acc", 0.0))
-        rare_disp = row.get("rare_domain_acc", row.get("rare_maritime_acc", 0.0))
-        score_disp = row.get("dui_score", row.get("mui_score", 0.0))
-        eval_time_disp = row.get("evaluation_time_per_document_ms", row.get("inference_latency_ms", 5.0))
+        top1_disp = row.get("domain_top1_acc", row.get("top1_acc", 0.0))
+        rare_disp = row.get("rare_domain_acc", row.get("rare_acc", 0.0))
+        score_disp = row.get("dui_score", 0.0)
+        eval_time_disp = row.get("evaluation_time_per_document_ms")
+        eval_time_str = f"{eval_time_disp:.2f}ms" if pd.notna(eval_time_disp) else "N/A"
         shift_disp = f"{row['domain_shift_gap_pct']:.2f}%" if pd.notna(row.get("domain_shift_gap_pct")) else "N/A"
-        report_md += f"| {idx+1} | `{row['model_name']}` | **{score_disp:.2f}** | {top1_disp:.2f}% ± {row['top1_ci_error']:.2f}% | {rare_disp:.2f}% | {row['mlm_loss']:.4f} | {shift_disp} | {row['params_millions']}M | {eval_time_disp:.2f}ms |\n"
+        report_md += f"| {idx+1} | `{row['model_name']}` | **{score_disp:.2f}** | {top1_disp:.2f}% ± {row['top1_ci_error']:.2f}% | {rare_disp:.2f}% | {row['mlm_loss']:.4f} | {shift_disp} | {row['params_millions']}M | {eval_time_str} |\n"
 
     report_md += f"""
 ---
 
 ## 6. Statistical Significance & Effect Size Analysis
-Bootstrap 95% Confidence Intervals and paired significance tests (t-test & Wilcoxon signed-rank test), strictly aligned by experimental configuration cell `(representation, subset)`, confirm statistical significance differences between specialized and baseline models ($p < 0.05$) with Cohen's d and Cliff's Delta effect sizes.
+Bootstrap 95% Confidence Intervals and paired significance tests (t-test & Wilcoxon signed-rank test), strictly aligned by experimental configuration cell `(representation, subset)`, evaluate performance differences across paired configurations with Cohen's d and Cliff's Delta effect sizes (evaluated across 25 paired cells controlling for underlying text).
 
 ---
 
 ## 7. Computational Resource & Tokenizer Speed Benchmark
-Profiling model parameter counts, memory footprints, and evaluation throughput (measured as full-pipeline evaluation time per document, including tokenization, masking, and model forward pass) indicates that 110M parameter architectures offer an optimal trade-off between evaluation speed and domain token comprehension.
+Profiling model parameter counts, memory footprints, and evaluation throughput (measured as full-pipeline evaluation time per document, including tokenization, masking, and model forward pass) provides observed resource metrics under the evaluation environment.
 
 ---
 
 ## 8. Scoring Engine Feature Ablation Study
-Empirical ablation of individual scoring features confirms the relative contribution of each semantic feature (rare vocabulary, concept diversity, entity diversity, event complexity, structural completeness) in identifying high-knowledge benchmark subsets.
+Empirical leave-one-feature-out evaluation of individual scoring features indicates the marginal contribution of each semantic feature (rare vocabulary, concept diversity, entity diversity, event complexity, structural completeness) across evaluated corpus documents.
 
 ---
 
-## 9. Objective Decision Engine & Sensitivity Analysis
-Using configurable decision criteria, the decision engine evaluated empirical metrics against defined thresholds:
+## 9. Decision Engine & Sensitivity Analysis (Configurable Heuristic Thresholds)
+Using configurable heuristic decision criteria, the decision engine evaluated empirical metrics against user-defined thresholds:
 
 * **Selected Strategy**: `{main_decision['strategy']}`
 * **Rationale**: {main_decision['rationale']}

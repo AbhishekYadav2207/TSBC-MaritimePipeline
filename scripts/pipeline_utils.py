@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import re
 import logging
 from pathlib import Path
 import pandas as pd
@@ -183,8 +184,8 @@ def get_benchmark_config() -> dict:
     benchmark_cfg = config.get("benchmark", {})
     return {
         "domain_name": benchmark_cfg.get("domain_name", "generic"),
-        "corpus_file": benchmark_cfg.get("corpus_file", "maritime_corpus.txt"),
-        "vocabulary_file": benchmark_cfg.get("vocabulary_file", "maritime_vocabulary.txt"),
+        "corpus_file": benchmark_cfg.get("corpus_file", "corpus.txt"),
+        "vocabulary_file": benchmark_cfg.get("vocabulary_file", "vocabulary.txt"),
         "metric_name": benchmark_cfg.get("metric_name", "DUI"),
         "metric_display_name": benchmark_cfg.get("metric_display_name", "Domain Understanding Index (DUI)"),
         "categories": benchmark_cfg.get("categories", {}),
@@ -192,7 +193,10 @@ def get_benchmark_config() -> dict:
         "allow_corpus_auto_discovery": benchmark_cfg.get("allow_corpus_auto_discovery", False),
         "deduplicate_corpus": benchmark_cfg.get("deduplicate_corpus", False),
         "domain_semantic_lexicons": benchmark_cfg.get("domain_semantic_lexicons", {}),
-        "domain_lint_patterns": benchmark_cfg.get("domain_lint_patterns", [])
+        "domain_lint_patterns": benchmark_cfg.get("domain_lint_patterns", []),
+        "measurement_units": benchmark_cfg.get("measurement_units", []),
+        "decision_thresholds": config.get("decision", {}),
+        "random_seed": benchmark_cfg.get("random_seed", 42)
     }
 
 def load_corpus_documents(
@@ -204,16 +208,31 @@ def load_corpus_documents(
     """
     Canonical interface loader for Stage 11+ benchmarking.
     Loads documents from a plain-text corpus file (*.txt).
-    Splits on double newlines by default.
+
+    Document boundary semantics:
+      - Documents are separated by one or more blank lines (robust regex: \\n\\n+).
+      - Empty or whitespace-only segments are silently discarded.
+      - doc_delimiter parameter is retained for compatibility but the actual split
+        uses a compiled regex equivalent to \\n{2,} for robustness against
+        multiple consecutive blank lines.
 
     Duplicate semantics:
-      - By default (deduplicate=False), all non-empty documents are preserved.
-        Each document is assigned a unique, deterministic doc_id, and flagged with 'is_duplicate'.
-      - If deduplicate=True, identical text boundaries are filtered out.
+      - By default (deduplicate=False), all non-empty documents are preserved,
+        each assigned a unique, deterministic doc_id.
+        Exact duplicate documents receive is_duplicate=True (detection only, no removal).
+      - If deduplicate=True, exact text duplicates are removed (only first occurrence kept).
+      - NOTE: do not call deduplicate=False "deduplication"; it is duplicate DETECTION.
 
     Missing corpus semantics:
-      - If corpus_path is missing and allow_auto_discovery=False (default), raises FileNotFoundError.
-      - If allow_auto_discovery=True, attempts fallback to any discovered *_corpus.txt.
+      - If corpus_path is missing and allow_auto_discovery=False (default), raises
+        a deterministic FileNotFoundError.
+      - If allow_auto_discovery=True, attempts fallback to any discovered *_corpus.txt
+        in the same directory.
+
+    Output record keys:
+      - doc_id (str): deterministic sequential identifier.
+      - document (str): stripped document text.
+      - is_duplicate (bool): True if this exact text appeared earlier in the corpus.
     """
     corpus_path = Path(corpus_path)
     if not corpus_path.exists():
@@ -233,9 +252,11 @@ def load_corpus_documents(
     with open(corpus_path, "r", encoding="utf-8") as f:
         content = f.read()
 
-    # Split documents by delimiter
-    raw_docs = content.split(doc_delimiter) if doc_delimiter else content.splitlines()
-    
+    # Robust split: one or more blank lines separate documents.
+    # This handles \n\n, \n\n\n, etc., without creating empty segments.
+    _BLANK_LINE_RE = re.compile(r'\n{2,}')
+    raw_docs = _BLANK_LINE_RE.split(content)
+
     docs = []
     seen_hashes = set()
     import hashlib
@@ -245,7 +266,7 @@ def load_corpus_documents(
         text = raw.strip()
         if not text:
             continue
-        
+
         doc_hash = hashlib.md5(text.encode("utf-8")).hexdigest()
         is_dup = doc_hash in seen_hashes
 
@@ -253,12 +274,11 @@ def load_corpus_documents(
             continue
 
         seen_hashes.add(doc_hash)
-        
+
         doc_id = f"doc_{doc_idx:06d}"
         docs.append({
             "doc_id": doc_id,
             "document": text,
-            "occurrence_id": doc_id,  # Backwards compatibility alias
             "is_duplicate": is_dup
         })
         doc_idx += 1

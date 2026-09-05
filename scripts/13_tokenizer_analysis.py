@@ -38,6 +38,16 @@ def clean_model_filename(model_name: str) -> str:
     return model_name.replace("/", "_").replace("-", "_")
 
 def analyze_tokenizer(model_name: str, vocab_terms: list, corpus_docs: list) -> dict:
+    """
+    Analyzes tokenizer behavior over domain vocabulary and corpus text.
+
+    Methodological Notes:
+      - OOV Interpretation: WordPiece tokenizers define explicit out-of-vocabulary tokens ([UNK]).
+        Byte-level BPE tokenizers (e.g., RoBERTa, ModernBERT) represent arbitrary UTF-8 byte sequences
+        and inherently have an OOV rate of 0.0%. OOV rates are therefore not directly comparable across families.
+      - Throughput: Reported as observed tokenizer throughput under the benchmark environment,
+        which reflects platform-specific Python/Rust bindings and CPU/hardware state.
+    """
     logger.info(f"Analyzing tokenizer: {model_name}...")
     try:
         tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -111,21 +121,19 @@ def analyze_tokenizer(model_name: str, vocab_terms: list, corpus_docs: list) -> 
         "total_subword_tokens_analyzed": total_subword_tokens,
         "average_subwords_per_word": fertility,
         "domain_fragmentation_rate": domain_frag_rate,
-        "maritime_fragmentation_rate": domain_frag_rate,  # Compatibility alias
         "single_token_vocabulary_coverage": single_token_coverage,
         "single_token_count": single_token_count,
         "total_domain_terms": total_terms,
-        "total_maritime_terms": total_terms,  # Compatibility alias
         "avg_pieces_per_term": avg_pieces,
         "median_pieces_per_term": median_pieces,
         "p95_pieces_per_term": p95_pieces,
         "max_pieces_per_term": max_pieces,
         "oov_rate": oov_rate,
+        "observed_tokenizer_throughput_tokens_per_sec": tokenizer_speed,
         "tokenizer_speed_tokens_per_sec": tokenizer_speed,
         "sequence_length_distribution": seq_length_dist,
         "worst_fragmented_terms": vocab_splits[:15],
-        "domain_vocabulary_splits": vocab_splits[:50],
-        "maritime_vocabulary_splits": vocab_splits[:50]  # Compatibility alias
+        "domain_vocabulary_splits": vocab_splits[:50]
     }
 
 def main():
@@ -134,10 +142,13 @@ def main():
     bench_cfg = get_benchmark_config()
     output_dir = root / config.get("output_dir", "outputs")
 
+    allow_discovery = bench_cfg.get("allow_corpus_auto_discovery", False)
+    dedup = bench_cfg.get("deduplicate_corpus", False)
+
     # Load vocabulary from benchmark config or file
-    vocab_filename = bench_cfg.get("vocabulary_file", "maritime_vocabulary.txt")
+    vocab_filename = bench_cfg.get("vocabulary_file", "vocabulary.txt")
     vocab_path = output_dir / vocab_filename
-    if not vocab_path.exists():
+    if not vocab_path.exists() and allow_discovery:
         fallback_vocabs = list(output_dir.glob("*_vocabulary.txt"))
         if fallback_vocabs:
             vocab_path = fallback_vocabs[0]
@@ -148,7 +159,7 @@ def main():
             vocab_terms = [line.strip() for line in fv if line.strip()]
 
     # Load corpus text directly from plain-text corpus (deterministic, no silent fallback)
-    corpus_filename = bench_cfg.get("corpus_file", "maritime_corpus.txt")
+    corpus_filename = bench_cfg.get("corpus_file", "corpus.txt")
     corpus_path = output_dir / corpus_filename
 
     allow_discovery = bench_cfg.get("allow_corpus_auto_discovery", False)
