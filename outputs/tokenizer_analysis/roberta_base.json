@@ -2,23 +2,24 @@
   "model_name": "roberta-base",
   "clean_model_name": "roberta_base",
   "vocab_size": 50265,
-  "sampled_documents": 1501,
-  "total_raw_words_analyzed": 51529,
-  "total_subword_tokens_analyzed": 77777,
-  "average_subwords_per_word": 1.5093830658464167,
-  "maritime_fragmentation_rate": 0.6467065868263473,
-  "single_token_vocabulary_coverage": 0.3532934131736527,
+  "sampled_documents": 1500,
+  "total_raw_words_analyzed": 60723,
+  "total_subword_tokens_analyzed": 94691,
+  "average_subwords_per_word": 1.559392651878201,
+  "domain_fragmentation_rate": 0.6477611940298508,
+  "single_token_vocabulary_coverage": 0.3522388059701492,
   "single_token_count": 118,
-  "total_maritime_terms": 334,
-  "avg_pieces_per_term": 1.841317365269461,
+  "total_domain_terms": 335,
+  "avg_pieces_per_term": 1.8567164179104478,
   "median_pieces_per_term": 2.0,
   "p95_pieces_per_term": 3.0,
   "max_pieces_per_term": 4,
   "oov_rate": 0.0,
-  "tokenizer_speed_tokens_per_sec": 388726.8884106568,
+  "observed_tokenizer_throughput_tokens_per_sec": 304253.7769562123,
+  "tokenizer_speed_tokens_per_sec": 304253.7769562123,
   "sequence_length_distribution": {
-    "under_128": 1501,
-    "under_256": 0,
+    "under_128": 1492,
+    "under_256": 8,
     "under_512": 0,
     "over_512": 0
   },
@@ -30,6 +31,16 @@
         "\u0120ton",
         "n",
         "age"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "vhf radio",
+      "tokens": [
+        "v",
+        "h",
+        "f",
+        "\u0120radio"
       ],
       "num_pieces": 4
     },
@@ -50,16 +61,6 @@
         "ig",
         "ational",
         "\u0120aid"
-      ],
-      "num_pieces": 4
-    },
-    {
-      "term": "vhf radio",
-      "tokens": [
-        "v",
-        "h",
-        "f",
-        "\u0120radio"
       ],
       "num_pieces": 4
     },
@@ -94,6 +95,26 @@
       "num_pieces": 4
     },
     {
+      "term": "echosounder",
+      "tokens": [
+        "ech",
+        "os",
+        "ound",
+        "er"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "gyrocompass",
+      "tokens": [
+        "gy",
+        "ro",
+        "comp",
+        "ass"
+      ],
+      "num_pieces": 4
+    },
+    {
       "term": "shippegan",
       "tokens": [
         "sh",
@@ -109,6 +130,15 @@
         "f",
         "ishing",
         "\u0120vessel"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "gps receiver",
+      "tokens": [
+        "g",
+        "ps",
+        "\u0120receiver"
       ],
       "num_pieces": 3
     },
@@ -138,36 +168,9 @@
         "\u0120hold"
       ],
       "num_pieces": 3
-    },
-    {
-      "term": "search and rescue",
-      "tokens": [
-        "search",
-        "\u0120and",
-        "\u0120rescue"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "steering failure",
-      "tokens": [
-        "ste",
-        "ering",
-        "\u0120failure"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "hull damage",
-      "tokens": [
-        "h",
-        "ull",
-        "\u0120damage"
-      ],
-      "num_pieces": 3
     }
   ],
-  "maritime_vocabulary_splits": [
+  "domain_vocabulary_splits": [
     {
       "term": "gross tonnage",
       "tokens": [
@@ -175,6 +178,16 @@
         "\u0120ton",
         "n",
         "age"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "vhf radio",
+      "tokens": [
+        "v",
+        "h",
+        "f",
+        "\u0120radio"
       ],
       "num_pieces": 4
     },
@@ -195,16 +208,6 @@
         "ig",
         "ational",
         "\u0120aid"
-      ],
-      "num_pieces": 4
-    },
-    {
-      "term": "vhf radio",
-      "tokens": [
-        "v",
-        "h",
-        "f",
-        "\u0120radio"
       ],
       "num_pieces": 4
     },
@@ -239,6 +242,26 @@
       "num_pieces": 4
     },
     {
+      "term": "echosounder",
+      "tokens": [
+        "ech",
+        "os",
+        "ound",
+        "er"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "gyrocompass",
+      "tokens": [
+        "gy",
+        "ro",
+        "comp",
+        "ass"
+      ],
+      "num_pieces": 4
+    },
+    {
       "term": "shippegan",
       "tokens": [
         "sh",
@@ -254,6 +277,15 @@
         "f",
         "ishing",
         "\u0120vessel"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "gps receiver",
+      "tokens": [
+        "g",
+        "ps",
+        "\u0120receiver"
       ],
       "num_pieces": 3
     },
@@ -402,6 +434,15 @@
       "num_pieces": 3
     },
     {
+      "term": "vhf",
+      "tokens": [
+        "v",
+        "h",
+        "f"
+      ],
+      "num_pieces": 3
+    },
+    {
       "term": "propeller",
       "tokens": [
         "pro",
@@ -420,11 +461,29 @@
       "num_pieces": 3
     },
     {
+      "term": "lifesaving",
+      "tokens": [
+        "lif",
+        "es",
+        "aving"
+      ],
+      "num_pieces": 3
+    },
+    {
       "term": "seaspan",
       "tokens": [
         "se",
         "asp",
         "an"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "liferaft",
+      "tokens": [
+        "l",
+        "ifer",
+        "aft"
       ],
       "num_pieces": 3
     },
@@ -452,6 +511,24 @@
         "ev",
         "ac",
         "uated"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "navigational",
+      "tokens": [
+        "nav",
+        "ig",
+        "ational"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "lifejacket",
+      "tokens": [
+        "life",
+        "j",
+        "acket"
       ],
       "num_pieces": 3
     },
@@ -492,15 +569,6 @@
       "num_pieces": 3
     },
     {
-      "term": "liferaft",
-      "tokens": [
-        "l",
-        "ifer",
-        "aft"
-      ],
-      "num_pieces": 3
-    },
-    {
       "term": "propellor",
       "tokens": [
         "pro",
@@ -537,6 +605,15 @@
       "num_pieces": 3
     },
     {
+      "term": "lifebuoy",
+      "tokens": [
+        "life",
+        "bu",
+        "oy"
+      ],
+      "num_pieces": 3
+    },
+    {
       "term": "shearwater",
       "tokens": [
         "she",
@@ -551,78 +628,6 @@
         "fl",
         "ood",
         "ing"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "algoport",
-      "tokens": [
-        "alg",
-        "op",
-        "ort"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "opportunity",
-      "tokens": [
-        "opp",
-        "ortun",
-        "ity"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "oceanex",
-      "tokens": [
-        "o",
-        "cean",
-        "ex"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "algolake",
-      "tokens": [
-        "alg",
-        "ol",
-        "ake"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "plaisance",
-      "tokens": [
-        "pl",
-        "ais",
-        "ance"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "wedgeport",
-      "tokens": [
-        "w",
-        "edge",
-        "port"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "deployed",
-      "tokens": [
-        "de",
-        "ploy",
-        "ed"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "fisheries",
-      "tokens": [
-        "f",
-        "isher",
-        "ies"
       ],
       "num_pieces": 3
     }

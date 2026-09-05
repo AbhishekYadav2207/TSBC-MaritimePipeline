@@ -1,8 +1,8 @@
-model_name,mui_score,maritime_top1_acc,top1_ci_error,rare_maritime_acc,mlm_loss,domain_shift_gap_pct,performance_gap_pct,single_token_coverage_pct,fragmentation_rate_pct,oov_rate_pct,params_millions,disk_size_mb,inference_latency_ms,throughput_docs_sec,tokenizer_speed_tok_sec
-answerdotai/ModernBERT-base,70.34,73.38,6.27,67.61,1.5004,-17.83,-18.35,36.53,63.47,0.0,149,590,241.52,4.14,354507.59
-roberta-base,65.57,63.79,8.89,66.13,2.0865,-17.12,-15.11,35.33,64.67,0.0,125,500,177.85,5.62,388726.89
-allenai/scibert_scivocab_uncased,49.94,28.03,3.9,53.09,4.5816,11.97,19.85,58.08,41.92,0.0,110,440,161.36,6.2,247347.95
-nlpaueb/legal-bert-base-uncased,49.44,30.69,2.57,37.84,4.2138,-4.02,13.42,63.77,36.23,0.0383,110,440,137.56,7.27,315029.09
-bert-base-uncased,48.64,25.62,3.3,42.77,4.9786,12.48,20.93,74.55,25.45,0.0,110,440,153.56,6.51,291551.99
-dmis-lab/biobert-base-cased-v1.2,41.89,21.97,3.81,23.17,5.1492,23.86,18.51,65.57,34.43,0.0,110,440,130.06,7.69,324130.78
-microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext,36.53,16.35,4.22,20.04,6.0874,7.46,28.11,57.19,42.81,0.0,110,440,133.14,7.51,324411.02
+model_name,dui_score,domain_top1_acc,top1_ci_error,rare_domain_acc,mlm_loss,domain_shift_gap_pct,performance_gap_pct,single_token_coverage_pct,fragmentation_rate_pct,oov_rate_pct,params_millions,disk_size_mb,evaluation_time_per_document_ms,throughput_docs_sec,tokenizer_speed_tok_sec
+answerdotai/ModernBERT-base,68.15,69.95,7.22,59.36,1.6463,-25.5,-4.21,36.72,63.28,0.0,149,590,213.58,4.68,265830.21
+roberta-base,66.26,66.49,6.79,59.44,1.8957,-13.86,-6.56,35.22,64.78,0.0,125,500,130.47,7.66,304253.78
+bert-base-uncased,64.65,54.42,7.67,55.51,3.1039,-13.51,-1.38,73.43,26.57,0.0,110,440,181.37,5.51,170399.97
+dmis-lab/biobert-base-cased-v1.2,60.21,51.91,10.82,43.9,3.1889,-6.91,-0.3,64.48,35.52,0.0,110,440,122.49,8.16,161068.68
+allenai/scibert_scivocab_uncased,57.3,56.02,9.6,24.35,2.7989,-20.73,1.28,58.21,41.79,0.0,110,440,205.73,4.86,230259.91
+nlpaueb/legal-bert-base-uncased,56.75,54.55,9.35,23.28,2.9696,5.45,-1.13,62.39,37.61,0.0289,110,440,109.18,9.16,268004.18
+microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext,52.36,46.78,11.19,26.51,4.0012,0.28,8.3,57.61,42.39,0.0,110,440,112.27,8.91,173899.09

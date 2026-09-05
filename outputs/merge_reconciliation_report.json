@@ -15,20 +15,28 @@
   "child_table_matches": {
     "injuries": {
       "matched": 16486,
-      "orphan": 6518
+      "orphan": 6518,
+      "multiplication_factor": 0.2948
     },
     "lsa_equipment": {
       "matched": 4534,
-      "orphan": 0
+      "orphan": 0,
+      "multiplication_factor": 0.0811
     },
     "navigation_equipment": {
       "matched": 276412,
-      "orphan": 0
+      "orphan": 0,
+      "multiplication_factor": 4.9422
     },
     "recording_equipment": {
       "matched": 8002,
-      "orphan": 0
+      "orphan": 0,
+      "multiplication_factor": 0.1431
     }
+  },
+  "cartesian_join_check": {
+    "status": "PASS",
+    "message": "Independent child table aggregation verified. No multiplicative Cartesian joins detected."
   },
   "synthesized_placeholders": {
     "placeholder_vessels_created": 6139,

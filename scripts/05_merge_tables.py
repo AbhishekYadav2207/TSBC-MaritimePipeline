@@ -1,4 +1,5 @@
 import os
+import re
 import json
 from pathlib import Path
 import pandas as pd
@@ -189,98 +190,6 @@ def main():
             orphan_rec_by_occ.setdefault(int(oid), []).append(cleaned_row)
             orphan_rec += 1
 
-import re
-
-def normalize_label(val: str) -> str:
-    if not val or pd.isna(val):
-        return ""
-    val_clean = str(val).strip()
-    val_clean = re.sub(r'\s*-\s*deactivated\s+\w+\.?\s+\d{4}', '', val_clean, flags=re.IGNORECASE)
-    val_clean = re.sub(r'\s*-\s*active\s+\w+\.?\s+\d{4}', '', val_clean, flags=re.IGNORECASE)
-    val_clean = re.sub(r'\s*-\s*.*?(19\d{2}|20\d{2})', '', val_clean, flags=re.IGNORECASE)
-    val_clean = re.sub(r'\s+', ' ', val_clean).strip()
-    val_lower = val_clean.lower()
-    
-    fallback_map = {
-        "radar1": "radar", "radar2": "radar", "radar3": "radar", "radar 1": "radar", "radar 2": "radar", "radar 3": "radar",
-        "mf/hf": "MF/HF radio", "vhf": "VHF radio", "gps": "GPS receiver", "ecdis": "ECDIS",
-        "ais": "AIS", "vdr": "VDR", "bnwas": "BNWAS", "gyro compass": "gyrocompass", "magnetic compass": "magnetic compass",
-        "direction_finder": "direction finder"
-    }
-    if val_lower in fallback_map:
-        return fallback_map[val_lower]
-        
-    normalized = re.sub(r'(\w+?)\d+$', r'\1', val_clean)
-    normalized = normalized.replace("_", " ").replace("-", " ")
-    
-    acronyms = {"gps", "ecdis", "vhf", "ais", "vdr", "bnwas", "mf", "hf", "lsa", "sart", "epirb"}
-    words = normalized.split()
-    cleaned_words = [w.upper() if w.lower() in acronyms else w for w in words]
-    return " ".join(cleaned_words)
-
-def deduplicate_child_records(records_list: list, table_type: str) -> list:
-    """Deduplicates child records by semantic identity and normalizes equipment names."""
-    if not records_list:
-        return []
-    
-    seen = {}
-    for r in records_list:
-        if table_type == "nav":
-            ntype = r.get("NavigationAidTypeDisplayEng")
-            norm_name = normalize_label(ntype) if ntype else ""
-            status = str(r.get("OnOffEnumDisplayEng") or "").strip().title()
-            key = (norm_name.lower(), status.lower())
-            if not norm_name:
-                continue
-            if key not in seen:
-                r_clean = dict(r)
-                r_clean["normalized_name"] = norm_name
-                r_clean["status_clean"] = status
-                r_clean["item_count"] = 1
-                seen[key] = r_clean
-            else:
-                seen[key]["item_count"] += 1
-                
-        elif table_type == "lsa":
-            ltype = r.get("LsApplianceDisplayEng")
-            norm_name = normalize_label(ltype) if ltype else ""
-            key = norm_name.lower()
-            if not norm_name:
-                continue
-            if key not in seen:
-                r_clean = dict(r)
-                r_clean["normalized_name"] = norm_name
-                r_clean["item_count"] = 1
-                seen[key] = r_clean
-            else:
-                seen[key]["item_count"] += 1
-                
-        elif table_type == "rec":
-            rtype = r.get("RecordingEquipDisplayEng")
-            norm_name = normalize_label(rtype) if rtype else ""
-            ext_status = str(r.get("DataExtractedEnumDisplayEng") or "").strip().title()
-            key = (norm_name.lower(), ext_status.lower())
-            if not norm_name:
-                continue
-            if key not in seen:
-                r_clean = dict(r)
-                r_clean["normalized_name"] = norm_name
-                r_clean["ext_status_clean"] = ext_status
-                r_clean["item_count"] = 1
-                seen[key] = r_clean
-            else:
-                seen[key]["item_count"] += 1
-                
-        elif table_type == "injuries":
-            key = (
-                r.get("VictimMinorInjuries"), r.get("VictimSeriousInjuries"),
-                r.get("VictimDeath"), r.get("VictimMissing"), r.get("TotalPeopleInWater")
-            )
-            if key not in seen:
-                seen[key] = r
-                
-    return list(seen.values())
-
     # 6. Group Vessels by OccID
     logger.info("Grouping composite vessels by OccID...")
     vessels_by_occ = {}
@@ -399,6 +308,99 @@ def deduplicate_child_records(records_list: list, table_type: str) -> list:
         
     logger.info(f"Merge Reconciliation Report exported to {recon_path}")
     logger.info("Tables merged and saved successfully!")
+
+
+def normalize_label(val: str) -> str:
+    if not val or pd.isna(val):
+        return ""
+    val_clean = str(val).strip()
+    val_clean = re.sub(r'\s*-\s*deactivated\s+\w+\.?\s+\d{4}', '', val_clean, flags=re.IGNORECASE)
+    val_clean = re.sub(r'\s*-\s*active\s+\w+\.?\s+\d{4}', '', val_clean, flags=re.IGNORECASE)
+    val_clean = re.sub(r'\s*-\s*.*?(19\d{2}|20\d{2})', '', val_clean, flags=re.IGNORECASE)
+    val_clean = re.sub(r'\s+', ' ', val_clean).strip()
+    val_lower = val_clean.lower()
+    
+    fallback_map = {
+        "radar1": "radar", "radar2": "radar", "radar3": "radar", "radar 1": "radar", "radar 2": "radar", "radar 3": "radar",
+        "mf/hf": "MF/HF radio", "vhf": "VHF radio", "gps": "GPS receiver", "ecdis": "ECDIS",
+        "ais": "AIS", "vdr": "VDR", "bnwas": "BNWAS", "gyro compass": "gyrocompass", "magnetic compass": "magnetic compass",
+        "direction_finder": "direction finder"
+    }
+    if val_lower in fallback_map:
+        return fallback_map[val_lower]
+        
+    normalized = re.sub(r'(\w+?)\d+$', r'\1', val_clean)
+    normalized = normalized.replace("_", " ").replace("-", " ")
+    
+    acronyms = {"gps", "ecdis", "vhf", "ais", "vdr", "bnwas", "mf", "hf", "lsa", "sart", "epirb"}
+    words = normalized.split()
+    cleaned_words = [w.upper() if w.lower() in acronyms else w for w in words]
+    return " ".join(cleaned_words)
+
+
+def deduplicate_child_records(records_list: list, table_type: str) -> list:
+    """Deduplicates child records by semantic identity and normalizes equipment names."""
+    if not records_list:
+        return []
+    
+    seen = {}
+    for r in records_list:
+        if table_type == "nav":
+            ntype = r.get("NavigationAidTypeDisplayEng")
+            norm_name = normalize_label(ntype) if ntype else ""
+            status = str(r.get("OnOffEnumDisplayEng") or "").strip().title()
+            key = (norm_name.lower(), status.lower())
+            if not norm_name:
+                continue
+            if key not in seen:
+                r_clean = dict(r)
+                r_clean["normalized_name"] = norm_name
+                r_clean["status_clean"] = status
+                r_clean["item_count"] = 1
+                seen[key] = r_clean
+            else:
+                seen[key]["item_count"] += 1
+                
+        elif table_type == "lsa":
+            ltype = r.get("LsApplianceDisplayEng")
+            norm_name = normalize_label(ltype) if ltype else ""
+            key = norm_name.lower()
+            if not norm_name:
+                continue
+            if key not in seen:
+                r_clean = dict(r)
+                r_clean["normalized_name"] = norm_name
+                r_clean["item_count"] = 1
+                seen[key] = r_clean
+            else:
+                seen[key]["item_count"] += 1
+                
+        elif table_type == "rec":
+            rtype = r.get("RecordingEquipDisplayEng")
+            norm_name = normalize_label(rtype) if rtype else ""
+            ext_status = str(r.get("DataExtractedEnumDisplayEng") or "").strip().title()
+            key = (norm_name.lower(), ext_status.lower())
+            if not norm_name:
+                continue
+            if key not in seen:
+                r_clean = dict(r)
+                r_clean["normalized_name"] = norm_name
+                r_clean["ext_status_clean"] = ext_status
+                r_clean["item_count"] = 1
+                seen[key] = r_clean
+            else:
+                seen[key]["item_count"] += 1
+                
+        elif table_type == "injuries":
+            key = (
+                r.get("VictimMinorInjuries"), r.get("VictimSeriousInjuries"),
+                r.get("VictimDeath"), r.get("VictimMissing"), r.get("TotalPeopleInWater")
+            )
+            if key not in seen:
+                seen[key] = r
+                
+    return list(seen.values())
+
 
 if __name__ == "__main__":
     main()

@@ -3,7 +3,7 @@
   "top_performing_model": "answerdotai/ModernBERT-base",
   "decision": "Train MaritimeBERT From Scratch Required",
   "strategy": "Strategy B: Train Domain-Specific MaritimeBERT Model From Scratch",
-  "rationale": "Substantial domain gap detected. Maritime Top-1 (73.38%) is below 60.0%, performance gap (-18.35%) exceeds 20.0%, or fragmentation (63.47%) exceeds 40.0%.",
+  "rationale": "Substantial domain gap detected. Maritime Top-1 (69.95%) is below 60.0%, performance gap (-4.21%) exceeds 20.0%, or fragmentation (63.28%) exceeds 40.0%.",
   "decision_thresholds_used": {
     "dapt_top1_threshold": 85.0,
     "gap_threshold": 5.0,

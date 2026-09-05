@@ -1,0 +1,53 @@
+{
+  "target_sample_size": 1000,
+  "subsets_document_counts": {
+    "high_knowledge": 1000,
+    "medium_knowledge": 1000,
+    "low_knowledge": 1000,
+    "balanced_knowledge": 999,
+    "random_baseline": 1000
+  },
+  "pairwise_overlap_counts": {
+    "high_knowledge__vs__medium_knowledge": {
+      "overlap_count": 0,
+      "overlap_pct_of_first": 0.0
+    },
+    "high_knowledge__vs__low_knowledge": {
+      "overlap_count": 0,
+      "overlap_pct_of_first": 0.0
+    },
+    "high_knowledge__vs__balanced_knowledge": {
+      "overlap_count": 333,
+      "overlap_pct_of_first": 33.3
+    },
+    "high_knowledge__vs__random_baseline": {
+      "overlap_count": 12,
+      "overlap_pct_of_first": 1.2
+    },
+    "medium_knowledge__vs__low_knowledge": {
+      "overlap_count": 0,
+      "overlap_pct_of_first": 0.0
+    },
+    "medium_knowledge__vs__balanced_knowledge": {
+      "overlap_count": 333,
+      "overlap_pct_of_first": 33.3
+    },
+    "medium_knowledge__vs__random_baseline": {
+      "overlap_count": 8,
+      "overlap_pct_of_first": 0.8
+    },
+    "low_knowledge__vs__balanced_knowledge": {
+      "overlap_count": 333,
+      "overlap_pct_of_first": 33.3
+    },
+    "low_knowledge__vs__random_baseline": {
+      "overlap_count": 7,
+      "overlap_pct_of_first": 0.7
+    },
+    "balanced_knowledge__vs__random_baseline": {
+      "overlap_count": 4,
+      "overlap_pct_of_first": 0.4
+    }
+  },
+  "methodological_notes": "High, Medium, and Low subsets are constructed from score distribution partitions. Balanced Knowledge intentionally samples 1/3 from each tier. Random Baseline is sampled uniformly without replacement from the full corpus. Document IDs are tracked deterministically across all subsets."
+}

@@ -5,70 +5,70 @@ This report evaluates the scale, document length, structural diversity, scaffold
 ---
 
 ## 1. Corpus Scale & Information Density
-* **Total Documents**: 96,658
-* **Total Words (Tokens)**: 3,277,084
-* **Total Characters**: 20,668,573
-* **Unique Vocabulary**: 42,762 terms
-* **Maritime Information Density (MID)**: **1.00** concepts / 100 words
+* **Total Documents**: 96,856
+* **Total Words (Tokens)**: 3,733,761
+* **Total Characters**: 24,350,872
+* **Unique Vocabulary**: 42,780 terms
+* **Maritime Information Density (MID)**: **3.67** concepts / 100 words
 
 ---
 
 ## 2. Document Length Distribution
-* **Mean Length**: 33.90 words
-* **Median Length**: 36.00 words
-* **Standard Deviation**: 15.01 words
-* **Percentiles**: P10=10, P25=25, P50=36, P75=44, P90=50, P95=53
+* **Mean Length**: 38.55 words
+* **Median Length**: 37.00 words
+* **Standard Deviation**: 20.17 words
+* **Percentiles**: P10=10, P25=25, P50=37, P75=51, P90=67, P95=73
 * **Min / Max**: 4 / 513 words
 
 ### Length Buckets
-* `<20 words`: 18,232 (18.9%)
-* `20–50 words`: 68,546 (70.9%)
-* `50–100 words`: 9,680 (10.0%)
-* `100–200 words`: 176 (0.2%)
+* `<20 words`: 18,230 (18.8%)
+* `20–50 words`: 53,342 (55.1%)
+* `50–100 words`: 24,987 (25.8%)
+* `100–200 words`: 273 (0.3%)
 * `200–512 words`: 23 (0.0%)
 * `>512 words`: 1 (0.0%)
 
 ---
 
 ## 3. Linguistic Diversity
-* **Type-Token Ratio (TTR)**: 0.01305
-* **Shannon Entropy**: 8.2438 bits
-* **Unique Sentences**: 126,968
-* **Unique Paragraphs**: 96,654
+* **Type-Token Ratio (TTR)**: 0.01146
+* **Shannon Entropy**: 8.3171 bits
+* **Unique Sentences**: 145,681
+* **Unique Paragraphs**: 96,850
 
 ---
 
 ## 4. Duplication & Near-Duplicate Analysis
-* **Sentence Duplicate Ratio**: 7.41%
-* **Paragraph Duplicate Ratio**: 0.00%
-* **Scaffold-Reduced Near-Duplicate Rate (MinHash LSH)**: 18.40%
-* **Template Pattern Concentration**: 41.91% (Top pattern: `raw_tsb_summary`)
+* **Sentence Duplicate Ratio**: 9.43%
+* **Paragraph Duplicate Ratio**: 0.01%
+* **Scaffold-Reduced Near-Duplicate Rate (MinHash LSH)**: 17.86%
+* **Template Pattern Concentration**: 41.82% (Top pattern: `raw_tsb_summary`)
 
 ---
 
 ## 5. Maritime Domain Coverage
-* **Top Domain Bigrams**: 'the vessel', 'the fishing', 'fishing vessel', 'on board', 'people on'
-* **Top Domain Trigrams**: 'the fishing vessel', 'people on board', 'on board reported', 'the vessel was', 'reported being disabled'
-* **Top Domain 4-Grams**: 'people on board reported', 'the canadian coast guard', 'on board reported being', 'board reported being disabled', 'the vessel was towed'
+* **Top Domain Bigrams**: 'navigation equipment', 'magnetic compass', 'equipment included', 'vhf radio', 'equipment reported'
+* **Top Domain Trigrams**: 'navigation equipment reported', 'equipment reported inactive', 'reported inactive included', 'active navigation equipment', 'navigation equipment included'
+* **Top Domain 4-Grams**: 'navigation equipment reported inactive', 'equipment reported inactive included', 'active navigation equipment included', 'under clear weather and', 'weather and calm glassy'
 
 ---
 
 ## 6. Template Influence
-* **Template Scaffolding Token Ratio**: 66.42%
-* **Domain-Derived Token Ratio**: 33.58%
+* **Template Scaffolding Token Ratio**: 58.47%
+* **Domain-Derived Token Ratio**: 41.53%
 
 ---
 
 ## 7. BERT Tokenizer Compatibility
 * **BERT Model**: `bert-base-uncased`
-* **Tokenizer Fertility (Subwords/Word)**: 1.3416
-* **Maritime Fragmentation Rate**: 25.15%
+* **Tokenizer Fertility (Subwords/Word)**: 0.0000
+* **Maritime Fragmentation Rate**: 0.00%
 * **OOV / [UNK] Rate**: 0.0000%
 
 ---
 
 ## 8. BERT MLM Baseline Diagnostic
-* **MLM Evaluation Model**: `bert-base-uncased`
+* **MLM Evaluation Model**: `N/A`
 * **General Tokens Top-1 Accuracy**: 0.00%
 * **Maritime Tokens Top-1 Accuracy**: 0.00%
 * **Performance Gap**: 0.00%
@@ -91,21 +91,3 @@ This report evaluates the scale, document length, structural diversity, scaffold
 # Status: **READY WITH WARNINGS**
 
 * **Assessment Summary**: Corpus evaluation across 7 quality dimensions.
-
----
-
-## 11. BEFORE (v2 Baseline) vs. AFTER (Optimized) Ablation Comparison
-
-| Metric | BEFORE (v2 Baseline) | AFTER (Optimized) | Delta / Change |
-| :--- | :--- | :--- | :--- |
-| **Total Documents** | 117,889 | 96,658 | -21,231 |
-| **Total Tokens (Words)** | 4,033,904 | 3,277,084 | -756,820 |
-| **Maritime Information Density (MID)** | 0.00 | **1.00** | **+1.00 concepts/100w** |
-| **Mean Doc Length (words)** | 34.22 | 33.90 | -0.31 words |
-| **Median Doc Length (words)**| 35.00 | 36.00 | +1.00 words |
-| **Sentence Duplication Rate** | 16.21% | 7.41% | **-8.80%** |
-| **Near-Duplicate Rate (MinHash)**| 16.24% | 18.40% | **+2.16%** |
-| **Template Scaffolding Ratio**| 54.82% | 66.42% | **+11.60%** |
-| **Top Pattern Concentration** | 42.83% | 41.91% | **-0.92%** |
-| **Tokenizer Fertility** | 1.4858 | 1.3416 | -0.1442 |
-| **Maritime Fragmentation** | 27.60% | 25.15% | **-2.45%** |

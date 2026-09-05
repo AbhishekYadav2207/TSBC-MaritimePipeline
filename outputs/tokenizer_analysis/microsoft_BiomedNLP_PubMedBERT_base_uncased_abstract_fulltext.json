@@ -2,23 +2,24 @@
   "model_name": "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext",
   "clean_model_name": "microsoft_BiomedNLP_PubMedBERT_base_uncased_abstract_fulltext",
   "vocab_size": 30522,
-  "sampled_documents": 1501,
-  "total_raw_words_analyzed": 51529,
-  "total_subword_tokens_analyzed": 72361,
-  "average_subwords_per_word": 1.4042772031283355,
-  "maritime_fragmentation_rate": 0.4281437125748503,
-  "single_token_vocabulary_coverage": 0.5718562874251497,
-  "single_token_count": 191,
-  "total_maritime_terms": 334,
-  "avg_pieces_per_term": 1.5838323353293413,
+  "sampled_documents": 1500,
+  "total_raw_words_analyzed": 60723,
+  "total_subword_tokens_analyzed": 88276,
+  "average_subwords_per_word": 1.4537489913212456,
+  "domain_fragmentation_rate": 0.42388059701492536,
+  "single_token_vocabulary_coverage": 0.5761194029850746,
+  "single_token_count": 193,
+  "total_domain_terms": 335,
+  "avg_pieces_per_term": 1.5820895522388059,
   "median_pieces_per_term": 1.0,
   "p95_pieces_per_term": 3.0,
   "max_pieces_per_term": 5,
   "oov_rate": 0.0,
-  "tokenizer_speed_tokens_per_sec": 324411.0246378082,
+  "observed_tokenizer_throughput_tokens_per_sec": 173899.09090456498,
+  "tokenizer_speed_tokens_per_sec": 173899.09090456498,
   "sequence_length_distribution": {
-    "under_128": 1501,
-    "under_256": 0,
+    "under_128": 1499,
+    "under_256": 1,
     "under_512": 0,
     "over_512": 0
   },
@@ -56,12 +57,32 @@
       "num_pieces": 4
     },
     {
+      "term": "echosounder",
+      "tokens": [
+        "echo",
+        "##so",
+        "##und",
+        "##er"
+      ],
+      "num_pieces": 4
+    },
+    {
       "term": "unberthing",
       "tokens": [
         "un",
         "##bert",
         "##hi",
         "##ng"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "lifejacket",
+      "tokens": [
+        "life",
+        "##ja",
+        "##ck",
+        "##et"
       ],
       "num_pieces": 4
     },
@@ -96,14 +117,13 @@
       "num_pieces": 4
     },
     {
-      "term": "drydocked",
+      "term": "vhf radio",
       "tokens": [
-        "dry",
-        "##do",
-        "##ck",
-        "##ed"
+        "vh",
+        "##f",
+        "radio"
       ],
-      "num_pieces": 4
+      "num_pieces": 3
     },
     {
       "term": "search and rescue",
@@ -149,27 +169,9 @@
         "aid"
       ],
       "num_pieces": 3
-    },
-    {
-      "term": "vhf radio",
-      "tokens": [
-        "vh",
-        "##f",
-        "radio"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "navigational aids",
-      "tokens": [
-        "navigation",
-        "##al",
-        "aids"
-      ],
-      "num_pieces": 3
     }
   ],
-  "maritime_vocabulary_splits": [
+  "domain_vocabulary_splits": [
     {
       "term": "crewmember",
       "tokens": [
@@ -203,12 +205,32 @@
       "num_pieces": 4
     },
     {
+      "term": "echosounder",
+      "tokens": [
+        "echo",
+        "##so",
+        "##und",
+        "##er"
+      ],
+      "num_pieces": 4
+    },
+    {
       "term": "unberthing",
       "tokens": [
         "un",
         "##bert",
         "##hi",
         "##ng"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "lifejacket",
+      "tokens": [
+        "life",
+        "##ja",
+        "##ck",
+        "##et"
       ],
       "num_pieces": 4
     },
@@ -243,14 +265,13 @@
       "num_pieces": 4
     },
     {
-      "term": "drydocked",
+      "term": "vhf radio",
       "tokens": [
-        "dry",
-        "##do",
-        "##ck",
-        "##ed"
+        "vh",
+        "##f",
+        "radio"
       ],
-      "num_pieces": 4
+      "num_pieces": 3
     },
     {
       "term": "search and rescue",
@@ -294,15 +315,6 @@
         "navigation",
         "##al",
         "aid"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "vhf radio",
-      "tokens": [
-        "vh",
-        "##f",
-        "radio"
       ],
       "num_pieces": 3
     },
@@ -361,6 +373,15 @@
       "num_pieces": 3
     },
     {
+      "term": "gyrocompass",
+      "tokens": [
+        "gyr",
+        "##ocomp",
+        "##ass"
+      ],
+      "num_pieces": 3
+    },
+    {
       "term": "berthing",
       "tokens": [
         "bert",
@@ -388,6 +409,24 @@
       "num_pieces": 3
     },
     {
+      "term": "liferaft",
+      "tokens": [
+        "life",
+        "##ra",
+        "##ft"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "lifeboat",
+      "tokens": [
+        "life",
+        "##bo",
+        "##at"
+      ],
+      "num_pieces": 3
+    },
+    {
       "term": "crewman",
       "tokens": [
         "cre",
@@ -400,15 +439,6 @@
       "term": "workboat",
       "tokens": [
         "work",
-        "##bo",
-        "##at"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "lifeboat",
-      "tokens": [
-        "life",
         "##bo",
         "##at"
       ],
@@ -442,15 +472,6 @@
       "num_pieces": 3
     },
     {
-      "term": "liferaft",
-      "tokens": [
-        "life",
-        "##ra",
-        "##ft"
-      ],
-      "num_pieces": 3
-    },
-    {
       "term": "propellor",
       "tokens": [
         "prop",
@@ -474,6 +495,15 @@
         "riv",
         "##to",
         "##w"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "lifebuoy",
+      "tokens": [
+        "life",
+        "##bu",
+        "##oy"
       ],
       "num_pieces": 3
     },
@@ -532,37 +562,18 @@
       "num_pieces": 3
     },
     {
-      "term": "cruiser",
-      "tokens": [
-        "cr",
-        "##uis",
-        "##er"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "propellers",
-      "tokens": [
-        "prop",
-        "##eller",
-        "##s"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "algobay",
-      "tokens": [
-        "alg",
-        "##oba",
-        "##y"
-      ],
-      "num_pieces": 3
-    },
-    {
       "term": "fishing vessel",
       "tokens": [
         "fishing",
         "vessel"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "gps receiver",
+      "tokens": [
+        "gps",
+        "receiver"
       ],
       "num_pieces": 2
     },
@@ -611,14 +622,6 @@
       "tokens": [
         "container",
         "ship"
-      ],
-      "num_pieces": 2
-    },
-    {
-      "term": "cargo hold",
-      "tokens": [
-        "cargo",
-        "hold"
       ],
       "num_pieces": 2
     }

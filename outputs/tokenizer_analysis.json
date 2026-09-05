@@ -2,28 +2,40 @@
   "model_name": "bert-base-uncased",
   "clean_model_name": "bert_base_uncased",
   "vocab_size": 30522,
-  "sampled_documents": 1501,
-  "total_raw_words_analyzed": 51529,
-  "total_subword_tokens_analyzed": 69099,
-  "average_subwords_per_word": 1.3409730443051486,
-  "maritime_fragmentation_rate": 0.25449101796407186,
-  "single_token_vocabulary_coverage": 0.7455089820359282,
-  "single_token_count": 249,
-  "total_maritime_terms": 334,
-  "avg_pieces_per_term": 1.3203592814371257,
+  "sampled_documents": 1500,
+  "total_raw_words_analyzed": 60723,
+  "total_subword_tokens_analyzed": 84882,
+  "average_subwords_per_word": 1.3978558371621956,
+  "domain_fragmentation_rate": 0.2656716417910448,
+  "single_token_vocabulary_coverage": 0.7343283582089553,
+  "single_token_count": 246,
+  "total_domain_terms": 335,
+  "avg_pieces_per_term": 1.3492537313432835,
   "median_pieces_per_term": 1.0,
   "p95_pieces_per_term": 3.0,
-  "max_pieces_per_term": 4,
+  "max_pieces_per_term": 5,
   "oov_rate": 0.0,
-  "tokenizer_speed_tokens_per_sec": 291551.9900529843,
+  "observed_tokenizer_throughput_tokens_per_sec": 170399.96751486725,
+  "tokenizer_speed_tokens_per_sec": 170399.96751486725,
   "sequence_length_distribution": {
-    "under_128": 1501,
+    "under_128": 1500,
     "under_256": 0,
     "under_512": 0,
     "over_512": 0
   },
   "worst_fragmented_terms": [
     {
+      "term": "gyrocompass",
+      "tokens": [
+        "g",
+        "##yr",
+        "##oco",
+        "##mp",
+        "##ass"
+      ],
+      "num_pieces": 5
+    },
+    {
       "term": "crewmembers",
       "tokens": [
         "crew",
@@ -80,11 +92,38 @@
       "num_pieces": 3
     },
     {
+      "term": "echosounder",
+      "tokens": [
+        "echo",
+        "##so",
+        "##under"
+      ],
+      "num_pieces": 3
+    },
+    {
       "term": "unberthing",
       "tokens": [
         "un",
         "##bert",
         "##hing"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "lifesaving",
+      "tokens": [
+        "life",
+        "##sa",
+        "##ving"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "liferaft",
+      "tokens": [
+        "life",
+        "##raf",
+        "##t"
       ],
       "num_pieces": 3
     },
@@ -107,61 +146,36 @@
       "num_pieces": 3
     },
     {
+      "term": "lifejacket",
+      "tokens": [
+        "life",
+        "##jack",
+        "##et"
+      ],
+      "num_pieces": 3
+    },
+    {
       "term": "shippegan",
       "tokens": [
         "ship",
         "##pe",
         "##gan"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "liferaft",
-      "tokens": [
-        "life",
-        "##raf",
-        "##t"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "propellor",
-      "tokens": [
-        "prop",
-        "##ello",
-        "##r"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "rivtow",
-      "tokens": [
-        "ri",
-        "##v",
-        "##tow"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "navigating",
-      "tokens": [
-        "na",
-        "##vi",
-        "##gating"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "algoport",
-      "tokens": [
-        "al",
-        "##go",
-        "##port"
       ],
       "num_pieces": 3
     }
   ],
-  "maritime_vocabulary_splits": [
+  "domain_vocabulary_splits": [
+    {
+      "term": "gyrocompass",
+      "tokens": [
+        "g",
+        "##yr",
+        "##oco",
+        "##mp",
+        "##ass"
+      ],
+      "num_pieces": 5
+    },
     {
       "term": "crewmembers",
       "tokens": [
@@ -219,11 +233,38 @@
       "num_pieces": 3
     },
     {
+      "term": "echosounder",
+      "tokens": [
+        "echo",
+        "##so",
+        "##under"
+      ],
+      "num_pieces": 3
+    },
+    {
       "term": "unberthing",
       "tokens": [
         "un",
         "##bert",
         "##hing"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "lifesaving",
+      "tokens": [
+        "life",
+        "##sa",
+        "##ving"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "liferaft",
+      "tokens": [
+        "life",
+        "##raf",
+        "##t"
       ],
       "num_pieces": 3
     },
@@ -246,20 +287,20 @@
       "num_pieces": 3
     },
     {
+      "term": "lifejacket",
+      "tokens": [
+        "life",
+        "##jack",
+        "##et"
+      ],
+      "num_pieces": 3
+    },
+    {
       "term": "shippegan",
       "tokens": [
         "ship",
         "##pe",
         "##gan"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "liferaft",
-      "tokens": [
-        "life",
-        "##raf",
-        "##t"
       ],
       "num_pieces": 3
     },
@@ -287,6 +328,15 @@
         "na",
         "##vi",
         "##gating"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "lifebuoy",
+      "tokens": [
+        "life",
+        "##bu",
+        "##oy"
       ],
       "num_pieces": 3
     },
@@ -309,6 +359,15 @@
       "num_pieces": 3
     },
     {
+      "term": "epirb",
+      "tokens": [
+        "ep",
+        "##ir",
+        "##b"
+      ],
+      "num_pieces": 3
+    },
+    {
       "term": "plaisance",
       "tokens": [
         "pl",
@@ -327,28 +386,26 @@
       "num_pieces": 3
     },
     {
-      "term": "drydocked",
+      "term": "vhf radio",
       "tokens": [
-        "dry",
-        "##dock",
-        "##ed"
+        "vhf",
+        "radio"
       ],
-      "num_pieces": 3
-    },
-    {
-      "term": "algobay",
-      "tokens": [
-        "al",
-        "##go",
-        "##bay"
-      ],
-      "num_pieces": 3
+      "num_pieces": 2
     },
     {
       "term": "fishing vessel",
       "tokens": [
         "fishing",
         "vessel"
+      ],
+      "num_pieces": 2
+    },
+    {
+      "term": "gps receiver",
+      "tokens": [
+        "gps",
+        "receiver"
       ],
       "num_pieces": 2
     },
@@ -505,14 +562,6 @@
       "num_pieces": 2
     },
     {
-      "term": "vhf radio",
-      "tokens": [
-        "vhf",
-        "radio"
-      ],
-      "num_pieces": 2
-    },
-    {
       "term": "deck damage",
       "tokens": [
         "deck",
@@ -541,46 +590,6 @@
       "tokens": [
         "steering",
         "breakdown"
-      ],
-      "num_pieces": 2
-    },
-    {
-      "term": "stern damage",
-      "tokens": [
-        "stern",
-        "damage"
-      ],
-      "num_pieces": 2
-    },
-    {
-      "term": "machinery loss",
-      "tokens": [
-        "machinery",
-        "loss"
-      ],
-      "num_pieces": 2
-    },
-    {
-      "term": "engine loss",
-      "tokens": [
-        "engine",
-        "loss"
-      ],
-      "num_pieces": 2
-    },
-    {
-      "term": "cargo tanker",
-      "tokens": [
-        "cargo",
-        "tanker"
-      ],
-      "num_pieces": 2
-    },
-    {
-      "term": "propulsion loss",
-      "tokens": [
-        "propulsion",
-        "loss"
       ],
       "num_pieces": 2
     }

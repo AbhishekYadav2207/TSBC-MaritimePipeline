@@ -2,27 +2,39 @@
   "model_name": "nlpaueb/legal-bert-base-uncased",
   "clean_model_name": "nlpaueb_legal_bert_base_uncased",
   "vocab_size": 30522,
-  "sampled_documents": 1501,
-  "total_raw_words_analyzed": 51529,
-  "total_subword_tokens_analyzed": 73132,
-  "average_subwords_per_word": 1.419239651458402,
-  "maritime_fragmentation_rate": 0.36227544910179643,
-  "single_token_vocabulary_coverage": 0.6377245508982036,
-  "single_token_count": 213,
-  "total_maritime_terms": 334,
-  "avg_pieces_per_term": 1.4520958083832336,
+  "sampled_documents": 1500,
+  "total_raw_words_analyzed": 60723,
+  "total_subword_tokens_analyzed": 89877,
+  "average_subwords_per_word": 1.4801146188429426,
+  "domain_fragmentation_rate": 0.3761194029850746,
+  "single_token_vocabulary_coverage": 0.6238805970149254,
+  "single_token_count": 209,
+  "total_domain_terms": 335,
+  "avg_pieces_per_term": 1.5044776119402985,
   "median_pieces_per_term": 1.0,
   "p95_pieces_per_term": 3.0,
-  "max_pieces_per_term": 4,
-  "oov_rate": 0.00038286933216649346,
-  "tokenizer_speed_tokens_per_sec": 315029.0907679209,
+  "max_pieces_per_term": 5,
+  "oov_rate": 0.0002892842440223861,
+  "observed_tokenizer_throughput_tokens_per_sec": 268004.17791705887,
+  "tokenizer_speed_tokens_per_sec": 268004.17791705887,
   "sequence_length_distribution": {
-    "under_128": 1501,
-    "under_256": 0,
+    "under_128": 1498,
+    "under_256": 2,
     "under_512": 0,
     "over_512": 0
   },
   "worst_fragmented_terms": [
+    {
+      "term": "gyrocompass",
+      "tokens": [
+        "gy",
+        "##roc",
+        "##omp",
+        "##as",
+        "##s"
+      ],
+      "num_pieces": 5
+    },
     {
       "term": "vhf radio",
       "tokens": [
@@ -34,12 +46,52 @@
       "num_pieces": 4
     },
     {
+      "term": "echosounder",
+      "tokens": [
+        "echo",
+        "##s",
+        "##oun",
+        "##der"
+      ],
+      "num_pieces": 4
+    },
+    {
       "term": "unberthing",
       "tokens": [
         "un",
         "##bert",
         "##hin",
         "##g"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "lifesaving",
+      "tokens": [
+        "life",
+        "##s",
+        "##avi",
+        "##ng"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "lifejacket",
+      "tokens": [
+        "life",
+        "##jack",
+        "##e",
+        "##t"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "lifebuoy",
+      "tokens": [
+        "life",
+        "##bu",
+        "##o",
+        "##y"
       ],
       "num_pieces": 4
     },
@@ -69,6 +121,15 @@
         "gross",
         "to",
         "##nnage"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "gps receiver",
+      "tokens": [
+        "gp",
+        "##s",
+        "receiver"
       ],
       "num_pieces": 3
     },
@@ -107,63 +168,20 @@
         "##ibility"
       ],
       "num_pieces": 3
-    },
-    {
-      "term": "reduced visibility",
-      "tokens": [
-        "reduced",
-        "vis",
-        "##ibility"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "restricted visibility",
-      "tokens": [
-        "restricted",
-        "vis",
-        "##ibility"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "good visibility",
-      "tokens": [
-        "good",
-        "vis",
-        "##ibility"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "steering loss",
-      "tokens": [
-        "steer",
-        "##ing",
-        "loss"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "navigational aid",
-      "tokens": [
-        "navigation",
-        "##al",
-        "aid"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "navigational aids",
-      "tokens": [
-        "navigation",
-        "##al",
-        "aids"
-      ],
-      "num_pieces": 3
     }
   ],
-  "maritime_vocabulary_splits": [
+  "domain_vocabulary_splits": [
+    {
+      "term": "gyrocompass",
+      "tokens": [
+        "gy",
+        "##roc",
+        "##omp",
+        "##as",
+        "##s"
+      ],
+      "num_pieces": 5
+    },
     {
       "term": "vhf radio",
       "tokens": [
@@ -175,12 +193,52 @@
       "num_pieces": 4
     },
     {
+      "term": "echosounder",
+      "tokens": [
+        "echo",
+        "##s",
+        "##oun",
+        "##der"
+      ],
+      "num_pieces": 4
+    },
+    {
       "term": "unberthing",
       "tokens": [
         "un",
         "##bert",
         "##hin",
         "##g"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "lifesaving",
+      "tokens": [
+        "life",
+        "##s",
+        "##avi",
+        "##ng"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "lifejacket",
+      "tokens": [
+        "life",
+        "##jack",
+        "##e",
+        "##t"
+      ],
+      "num_pieces": 4
+    },
+    {
+      "term": "lifebuoy",
+      "tokens": [
+        "life",
+        "##bu",
+        "##o",
+        "##y"
       ],
       "num_pieces": 4
     },
@@ -210,6 +268,15 @@
         "gross",
         "to",
         "##nnage"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "gps receiver",
+      "tokens": [
+        "gp",
+        "##s",
+        "receiver"
       ],
       "num_pieces": 3
     },
@@ -322,11 +389,29 @@
       "num_pieces": 3
     },
     {
+      "term": "vhf",
+      "tokens": [
+        "v",
+        "##h",
+        "##f"
+      ],
+      "num_pieces": 3
+    },
+    {
       "term": "towed",
       "tokens": [
         "to",
         "##we",
         "##d"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "vdr",
+      "tokens": [
+        "v",
+        "##d",
+        "##r"
       ],
       "num_pieces": 3
     },
@@ -376,29 +461,20 @@
       "num_pieces": 3
     },
     {
+      "term": "epirb",
+      "tokens": [
+        "epi",
+        "##r",
+        "##b"
+      ],
+      "num_pieces": 3
+    },
+    {
       "term": "plaisance",
       "tokens": [
         "plai",
         "##s",
         "##ance"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "algobay",
-      "tokens": [
-        "alg",
-        "##oba",
-        "##y"
-      ],
-      "num_pieces": 3
-    },
-    {
-      "term": "bight",
-      "tokens": [
-        "big",
-        "##h",
-        "##t"
       ],
       "num_pieces": 3
     },
@@ -535,62 +611,6 @@
       "tokens": [
         "stern",
         "damage"
-      ],
-      "num_pieces": 2
-    },
-    {
-      "term": "machinery loss",
-      "tokens": [
-        "machinery",
-        "loss"
-      ],
-      "num_pieces": 2
-    },
-    {
-      "term": "engine loss",
-      "tokens": [
-        "engine",
-        "loss"
-      ],
-      "num_pieces": 2
-    },
-    {
-      "term": "cargo tanker",
-      "tokens": [
-        "cargo",
-        "tanker"
-      ],
-      "num_pieces": 2
-    },
-    {
-      "term": "tonnage",
-      "tokens": [
-        "to",
-        "##nnage"
-      ],
-      "num_pieces": 2
-    },
-    {
-      "term": "ahead",
-      "tokens": [
-        "a",
-        "##head"
-      ],
-      "num_pieces": 2
-    },
-    {
-      "term": "berthed",
-      "tokens": [
-        "berth",
-        "##ed"
-      ],
-      "num_pieces": 2
-    },
-    {
-      "term": "docked",
-      "tokens": [
-        "dock",
-        "##ed"
       ],
       "num_pieces": 2
     }

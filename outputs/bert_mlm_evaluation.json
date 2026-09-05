@@ -4,93 +4,94 @@
   "representation": "json",
   "subset": "balanced_knowledge",
   "evaluated_doc_count": 200,
-  "general_english_baseline_top1": 0.38095238095238093,
-  "domain_shift_gap": 0.28323251124554055,
+  "baseline_available": true,
+  "general_english_baseline_top1": 0.4090909090909091,
+  "domain_shift_gap": -0.08389974511469839,
   "evaluation_metrics": {
     "evaluated_documents": 200,
-    "evaluation_time_sec": 40.04815626144409,
+    "evaluation_time_sec": 54.490912437438965,
     "general_tokens_summary": {
-      "masked_sample_count": 6901,
-      "mlm_loss": 2.1027049714435804,
-      "mlm_loss_derived_exponential": 8.188289071344077,
-      "top1_accuracy": 0.6920736125199246,
-      "top5_accuracy": 0.779307346761339,
-      "top10_accuracy": 0.8068395884654398
+      "masked_sample_count": 4187,
+      "mlm_loss": 2.515407584645578,
+      "mlm_loss_derived_exponential": 12.371650246310944,
+      "top1_accuracy": 0.6030570814425603,
+      "top5_accuracy": 0.730117028898973,
+      "top10_accuracy": 0.7750179125865775
     },
-    "maritime_tokens_summary": {
-      "masked_sample_count": 614,
-      "mlm_loss": 7.110448697005309,
-      "mlm_loss_derived_exponential": 1224.6969406763606,
-      "top1_accuracy": 0.09771986970684039,
-      "top5_accuracy": 0.19055374592833876,
-      "top10_accuracy": 0.247557003257329
+    "domain_tokens_summary": {
+      "masked_sample_count": 428,
+      "mlm_loss": 3.4794718421052298,
+      "mlm_loss_derived_exponential": 32.442582743922536,
+      "top1_accuracy": 0.4929906542056075,
+      "top5_accuracy": 0.602803738317757,
+      "top10_accuracy": 0.6495327102803738
     },
-    "rare_maritime_tokens_summary": {
-      "masked_sample_count": 99,
-      "mlm_loss": 5.263733911393869,
-      "mlm_loss_derived_exponential": 193.2015435998716,
-      "top1_accuracy": 0.20202020202020202,
-      "top5_accuracy": 0.32323232323232326,
-      "top10_accuracy": 0.42424242424242425
+    "rare_domain_tokens_summary": {
+      "masked_sample_count": 29,
+      "mlm_loss": 2.497558391290709,
+      "mlm_loss_derived_exponential": 12.152785360495505,
+      "top1_accuracy": 0.6206896551724138,
+      "top5_accuracy": 0.7241379310344828,
+      "top10_accuracy": 0.7241379310344828
     },
     "category_recall": {
-      "vessel_terminology": 0.0766,
-      "navigation": 0.202,
-      "machinery_propulsion": 0.4286,
-      "casualty_incident": 0.1967,
-      "weather_environment": 0.0222,
-      "safety_lifesaving": 0.0333
+      "vessel_terminology": 0.4791,
+      "navigation": 0.0,
+      "machinery_propulsion": 1.0,
+      "casualty_incident": 0.7778,
+      "weather_environment": 0.4468,
+      "safety_lifesaving": 1.0
     },
     "category_breakdown": {
       "vessel_terminology": {
-        "masked_sample_count": 431,
-        "mlm_loss": 7.48468434878894,
-        "mlm_loss_derived_exponential": 1780.5620445106038,
-        "top1_accuracy": 0.0765661252900232,
-        "top5_accuracy": 0.16473317865429235,
-        "top10_accuracy": 0.21577726218097448
+        "masked_sample_count": 359,
+        "mlm_loss": 3.526966431400211,
+        "mlm_loss_derived_exponential": 34.020607073009906,
+        "top1_accuracy": 0.479108635097493,
+        "top5_accuracy": 0.596100278551532,
+        "top10_accuracy": 0.649025069637883
       },
       "navigation": {
-        "masked_sample_count": 99,
-        "mlm_loss": 5.263733911393869,
-        "mlm_loss_derived_exponential": 193.2015435998716,
-        "top1_accuracy": 0.20202020202020202,
-        "top5_accuracy": 0.32323232323232326,
-        "top10_accuracy": 0.42424242424242425
+        "masked_sample_count": 0,
+        "mlm_loss": 0.0,
+        "mlm_loss_derived_exponential": 0.0,
+        "top1_accuracy": 0.0,
+        "top5_accuracy": 0.0,
+        "top10_accuracy": 0.0
       },
       "machinery_propulsion": {
-        "masked_sample_count": 7,
-        "mlm_loss": 4.082540606281587,
-        "mlm_loss_derived_exponential": 59.295926246414396,
-        "top1_accuracy": 0.42857142857142855,
-        "top5_accuracy": 0.5714285714285714,
-        "top10_accuracy": 0.5714285714285714
+        "masked_sample_count": 3,
+        "mlm_loss": 0.0526850203362604,
+        "mlm_loss_derived_exponential": 1.0540975735249443,
+        "top1_accuracy": 1.0,
+        "top5_accuracy": 1.0,
+        "top10_accuracy": 1.0
       },
       "casualty_incident": {
-        "masked_sample_count": 61,
-        "mlm_loss": 5.864298749043316,
-        "mlm_loss_derived_exponential": 352.2350643053314,
-        "top1_accuracy": 0.19672131147540983,
-        "top5_accuracy": 0.39344262295081966,
-        "top10_accuracy": 0.45901639344262296
+        "masked_sample_count": 18,
+        "mlm_loss": 1.4187232291118965,
+        "mlm_loss_derived_exponential": 4.1318416559288735,
+        "top1_accuracy": 0.7777777777777778,
+        "top5_accuracy": 0.8888888888888888,
+        "top10_accuracy": 0.8888888888888888
       },
       "weather_environment": {
-        "masked_sample_count": 45,
-        "mlm_loss": 7.653327462408278,
-        "mlm_loss_derived_exponential": 2107.6470507417453,
-        "top1_accuracy": 0.022222222222222223,
-        "top5_accuracy": 0.06666666666666667,
-        "top10_accuracy": 0.13333333333333333
+        "masked_sample_count": 47,
+        "mlm_loss": 4.198652286607613,
+        "mlm_loss_derived_exponential": 66.59651751453258,
+        "top1_accuracy": 0.44680851063829785,
+        "top5_accuracy": 0.5106382978723404,
+        "top10_accuracy": 0.5319148936170213
       },
       "safety_lifesaving": {
-        "masked_sample_count": 30,
-        "mlm_loss": 8.317560271422069,
-        "mlm_loss_derived_exponential": 4095.1567396770097,
-        "top1_accuracy": 0.03333333333333333,
-        "top5_accuracy": 0.1,
-        "top10_accuracy": 0.1
+        "masked_sample_count": 1,
+        "mlm_loss": 0.0012688927818089724,
+        "mlm_loss_derived_exponential": 1.0012696981668678,
+        "top1_accuracy": 1.0,
+        "top5_accuracy": 1.0,
+        "top10_accuracy": 1.0
       }
     },
-    "performance_gap_top1": 0.5943537428130842
+    "performance_gap_top1": 0.11006642723695281
   }
 }

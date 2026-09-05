@@ -1,208 +1,208 @@
 {
-  "total_documents": 96658,
-  "total_characters": 20668573,
-  "total_tokens_words": 3277084,
-  "maritime_information_density_mid": 1.0042159431982824,
+  "total_documents": 96856,
+  "total_characters": 24350872,
+  "total_tokens_words": 3733761,
+  "maritime_information_density_mid": 3.6693832304745806,
   "length_stats": {
-    "mean": 33.90390862629063,
-    "median": 36.0,
-    "std": 15.005880582661304,
+    "mean": 38.54960972990832,
+    "median": 37.0,
+    "std": 20.171216108421387,
     "min": 4,
     "max": 513,
     "percentiles": {
       "P10": 10.0,
       "P25": 25.0,
-      "P50": 36.0,
-      "P75": 44.0,
-      "P90": 50.0,
-      "P95": 53.0
+      "P50": 37.0,
+      "P75": 51.0,
+      "P90": 67.0,
+      "P95": 73.0
     },
     "buckets": {
-      "<20": 18232,
-      "20-50": 68546,
-      "50-100": 9680,
-      "100-200": 176,
+      "<20": 18230,
+      "20-50": 53342,
+      "50-100": 24987,
+      "100-200": 273,
       "200-512": 23,
       ">512": 1
     }
   },
-  "vocabulary_size": 42762,
-  "type_token_ratio": 0.013048795819698243,
-  "type_token_ratio_lexical_diversity": 0.013048795819698243,
-  "shannon_entropy": 8.243811456119719,
-  "template_scaffolding_ratio": 0.6641996360178745,
-  "template_pattern_concentration": 0.4191065405863974,
+  "vocabulary_size": 42780,
+  "type_token_ratio": 0.011457616060588774,
+  "type_token_ratio_lexical_diversity": 0.011457616060588774,
+  "shannon_entropy": 8.317064670670801,
+  "template_scaffolding_ratio": 0.5846539186627103,
+  "template_pattern_concentration": 0.4182497728586768,
   "duplication": {
-    "sentence_duplicate_ratio": 0.07407785540306,
-    "paragraph_duplicate_ratio": 4.1383020546681415e-05,
-    "scaffold_reduced_near_duplicate_rate": 0.184
+    "sentence_duplicate_ratio": 0.09432777549827798,
+    "paragraph_duplicate_ratio": 6.19476336003455e-05,
+    "scaffold_reduced_near_duplicate_rate": 0.1786
   },
   "top_raw_bigrams": [
     [
       "a marine",
-      56158
+      56356
     ],
     [
       "marine occurrence",
-      56148
+      56346
     ],
     [
       "registered in",
-      54279
+      54451
     ],
     [
       "with a",
-      52343
+      52519
     ],
     [
       "constructed of",
-      50867
+      51041
     ],
     [
       "a gross",
-      50179
+      50355
     ],
     [
       "gross tonnage",
-      50179
+      50355
     ],
     [
       "tonnage of",
-      50179
+      50355
     ],
     [
       "gt registered",
-      50134
+      50310
     ],
     [
       "in canada",
-      43907
+      44080
     ]
   ],
   "top_domain_bigrams": [
     [
+      "navigation equipment",
+      34301
+    ],
+    [
+      "magnetic compass",
+      19937
+    ],
+    [
+      "equipment included",
+      18599
+    ],
+    [
+      "vhf radio",
+      18282
+    ],
+    [
+      "equipment reported",
+      17589
+    ],
+    [
+      "reported inactive",
+      17589
+    ],
+    [
+      "inactive included",
+      17589
+    ],
+    [
+      "active navigation",
+      16698
+    ],
+    [
       "the vessel",
-      12097
+      12119
     ],
     [
-      "the fishing",
-      11757
-    ],
-    [
-      "fishing vessel",
-      8229
-    ],
-    [
-      "on board",
-      6993
-    ],
-    [
-      "people on",
-      5763
-    ],
-    [
-      "in the",
-      5343
-    ],
-    [
-      "vessel was",
-      5319
-    ],
-    [
-      "board reported",
-      4659
-    ],
-    [
-      "reported being",
-      3770
-    ],
-    [
-      "being disabled",
-      3697
+      "weather and",
+      11877
     ]
   ],
   "top_domain_trigrams": [
+    [
+      "navigation equipment reported",
+      17589
+    ],
+    [
+      "equipment reported inactive",
+      17589
+    ],
+    [
+      "reported inactive included",
+      17589
+    ],
+    [
+      "active navigation equipment",
+      16698
+    ],
+    [
+      "navigation equipment included",
+      16698
+    ],
+    [
+      "clear weather and",
+      8042
+    ],
     [
       "the fishing vessel",
       6832
     ],
     [
+      "weather and calm",
+      6065
+    ],
+    [
+      "meters seas and",
+      6059
+    ],
+    [
       "people on board",
       5752
-    ],
-    [
-      "on board reported",
-      4657
-    ],
-    [
-      "the vessel was",
-      4535
-    ],
-    [
-      "reported being disabled",
-      3582
-    ],
-    [
-      "canadian coast guard",
-      3461
-    ],
-    [
-      "the canadian coast",
-      3264
-    ],
-    [
-      "board reported being",
-      2864
-    ],
-    [
-      "the bulk carrier",
-      2497
-    ],
-    [
-      "the cargo solid",
-      2291
     ]
   ],
   "top_domain_4grams": [
+    [
+      "navigation equipment reported inactive",
+      17589
+    ],
+    [
+      "equipment reported inactive included",
+      17589
+    ],
+    [
+      "active navigation equipment included",
+      16698
+    ],
+    [
+      "under clear weather and",
+      6399
+    ],
+    [
+      "weather and calm glassy",
+      5323
+    ],
+    [
+      "and calm glassy 0",
+      5323
+    ],
+    [
+      "clear weather and calm",
+      4715
+    ],
     [
       "people on board reported",
       4395
     ],
     [
-      "the canadian coast guard",
-      3258
+      "and day light conditions",
+      4163
     ],
     [
-      "on board reported being",
-      2863
-    ],
-    [
-      "board reported being disabled",
-      2776
-    ],
-    [
-      "the vessel was towed",
-      2013
-    ],
-    [
-      "reported being disabled with",
-      1927
-    ],
-    [
-      "canadian coast guard ship",
-      1924
-    ],
-    [
-      "3 people on board",
-      1733
-    ],
-    [
-      "with 3 people on",
-      1727
-    ],
-    [
-      "by the canadian coast",
-      1714
+      "a marine occurrence active",
+      3864
     ]
   ]
 }
