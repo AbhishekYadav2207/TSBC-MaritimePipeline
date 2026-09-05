@@ -3,19 +3,19 @@
   "clean_model_name": "bert_large_uncased",
   "vocab_size": 30522,
   "sampled_documents": 1501,
-  "total_raw_words_analyzed": 51451,
-  "total_subword_tokens_analyzed": 69028,
-  "average_subwords_per_word": 1.3416260130998425,
-  "maritime_fragmentation_rate": 0.25149700598802394,
-  "single_token_vocabulary_coverage": 0.7485029940119761,
-  "single_token_count": 250,
+  "total_raw_words_analyzed": 51529,
+  "total_subword_tokens_analyzed": 69099,
+  "average_subwords_per_word": 1.3409730443051486,
+  "maritime_fragmentation_rate": 0.25449101796407186,
+  "single_token_vocabulary_coverage": 0.7455089820359282,
+  "single_token_count": 249,
   "total_maritime_terms": 334,
-  "avg_pieces_per_term": 1.3173652694610778,
+  "avg_pieces_per_term": 1.3203592814371257,
   "median_pieces_per_term": 1.0,
   "p95_pieces_per_term": 3.0,
   "max_pieces_per_term": 4,
   "oov_rate": 0.0,
-  "tokenizer_speed_tokens_per_sec": 248066.5434966636,
+  "tokenizer_speed_tokens_per_sec": 297844.9640475858,
   "sequence_length_distribution": {
     "under_128": 1501,
     "under_256": 0,
@@ -327,20 +327,20 @@
       "num_pieces": 3
     },
     {
-      "term": "algobay",
-      "tokens": [
-        "al",
-        "##go",
-        "##bay"
-      ],
-      "num_pieces": 3
-    },
-    {
       "term": "drydocked",
       "tokens": [
         "dry",
         "##dock",
         "##ed"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "algobay",
+      "tokens": [
+        "al",
+        "##go",
+        "##bay"
       ],
       "num_pieces": 3
     },

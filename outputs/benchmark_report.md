@@ -31,13 +31,13 @@ Single-token vocabulary coverage and subword fertility vary significantly across
 
 | Model Name | Vocab Size | Fertility (Subwords/Word) | Single-Token Coverage (%) | Fragmentation Rate (%) | OOV Rate (%) | Tokenizer Speed (tok/s) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| `answerdotai/ModernBERT-base` | 59000 | 0.73 | 36.53% | 63.47% | 0.0000% | 328790.6 |
-| `roberta-base` | 50000 | 0.71 | 35.33% | 64.67% | 0.0000% | 337205.0 |
-| `allenai/scibert_scivocab_uncased` | 44000 | 1.16 | 58.08% | 41.92% | 0.0000% | 266700.2 |
-| `nlpaueb/legal-bert-base-uncased` | 44000 | 1.28 | 63.77% | 36.23% | 0.0370% | 255161.2 |
-| `bert-base-uncased` | 44000 | 1.50 | 74.85% | 25.15% | 0.0000% | 241993.3 |
-| `dmis-lab/biobert-base-cased-v1.2` | 44000 | 1.32 | 65.87% | 34.13% | 0.0000% | 284969.3 |
-| `microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext` | 44000 | 1.14 | 57.19% | 42.81% | 0.0000% | 286098.1 |
+| `answerdotai/ModernBERT-base` | 59000 | 0.73 | 36.53% | 63.47% | 0.0000% | 354507.6 |
+| `roberta-base` | 50000 | 0.71 | 35.33% | 64.67% | 0.0000% | 388726.9 |
+| `allenai/scibert_scivocab_uncased` | 44000 | 1.16 | 58.08% | 41.92% | 0.0000% | 247348.0 |
+| `nlpaueb/legal-bert-base-uncased` | 44000 | 1.28 | 63.77% | 36.23% | 0.0383% | 315029.1 |
+| `bert-base-uncased` | 44000 | 1.49 | 74.55% | 25.45% | 0.0000% | 291552.0 |
+| `dmis-lab/biobert-base-cased-v1.2` | 44000 | 1.31 | 65.57% | 34.43% | 0.0000% | 324130.8 |
+| `microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext` | 44000 | 1.14 | 57.19% | 42.81% | 0.0000% | 324411.0 |
 
 ---
 
@@ -50,8 +50,8 @@ Full model leaderboard ranked by the mathematical **Maritime Understanding Index
 | 2 | `roberta-base` | **65.57** | 63.79% ± 8.89% | 66.13% | 2.0865 | -17.12% | 125M | 177.85ms |
 | 3 | `allenai/scibert_scivocab_uncased` | **49.94** | 28.03% ± 3.90% | 53.09% | 4.5816 | 11.97% | 110M | 161.36ms |
 | 4 | `nlpaueb/legal-bert-base-uncased` | **49.44** | 30.69% ± 2.57% | 37.84% | 4.2138 | -4.02% | 110M | 137.56ms |
-| 5 | `bert-base-uncased` | **48.68** | 25.62% ± 3.30% | 42.77% | 4.9786 | 12.48% | 110M | 153.56ms |
-| 6 | `dmis-lab/biobert-base-cased-v1.2` | **41.94** | 21.97% ± 3.81% | 23.17% | 5.1492 | 23.86% | 110M | 130.06ms |
+| 5 | `bert-base-uncased` | **48.64** | 25.62% ± 3.30% | 42.77% | 4.9786 | 12.48% | 110M | 153.56ms |
+| 6 | `dmis-lab/biobert-base-cased-v1.2` | **41.89** | 21.97% ± 3.81% | 23.17% | 5.1492 | 23.86% | 110M | 130.06ms |
 | 7 | `microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext` | **36.53** | 16.35% ± 4.22% | 20.04% | 6.0874 | 7.46% | 110M | 133.14ms |
 
 ---

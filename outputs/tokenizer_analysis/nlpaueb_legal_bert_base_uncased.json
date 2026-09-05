@@ -3,19 +3,19 @@
   "clean_model_name": "nlpaueb_legal_bert_base_uncased",
   "vocab_size": 30522,
   "sampled_documents": 1501,
-  "total_raw_words_analyzed": 51451,
-  "total_subword_tokens_analyzed": 73049,
-  "average_subwords_per_word": 1.4197780412431245,
+  "total_raw_words_analyzed": 51529,
+  "total_subword_tokens_analyzed": 73132,
+  "average_subwords_per_word": 1.419239651458402,
   "maritime_fragmentation_rate": 0.36227544910179643,
   "single_token_vocabulary_coverage": 0.6377245508982036,
   "single_token_count": 213,
   "total_maritime_terms": 334,
-  "avg_pieces_per_term": 1.4491017964071857,
+  "avg_pieces_per_term": 1.4520958083832336,
   "median_pieces_per_term": 1.0,
   "p95_pieces_per_term": 3.0,
   "max_pieces_per_term": 4,
-  "oov_rate": 0.0003696149160152774,
-  "tokenizer_speed_tokens_per_sec": 255161.24491554996,
+  "oov_rate": 0.00038286933216649346,
+  "tokenizer_speed_tokens_per_sec": 315029.0907679209,
   "sequence_length_distribution": {
     "under_128": 1501,
     "under_256": 0,
@@ -394,6 +394,15 @@
       "num_pieces": 3
     },
     {
+      "term": "bight",
+      "tokens": [
+        "big",
+        "##h",
+        "##t"
+      ],
+      "num_pieces": 3
+    },
+    {
       "term": "fishing vessel",
       "tokens": [
         "fishing",
@@ -582,14 +591,6 @@
       "tokens": [
         "dock",
         "##ed"
-      ],
-      "num_pieces": 2
-    },
-    {
-      "term": "ice",
-      "tokens": [
-        "i",
-        "##ce"
       ],
       "num_pieces": 2
     }

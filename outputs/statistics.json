@@ -1,12 +1,12 @@
 {
-  "total_documents": 96714,
-  "total_characters": 20671676,
-  "total_tokens_words": 3277542,
-  "maritime_information_density_mid": 1.0019703790218402,
+  "total_documents": 96658,
+  "total_characters": 20668573,
+  "total_tokens_words": 3277084,
+  "maritime_information_density_mid": 1.0042159431982824,
   "length_stats": {
-    "mean": 33.88901296606489,
+    "mean": 33.90390862629063,
     "median": 36.0,
-    "std": 15.001868852973136,
+    "std": 15.005880582661304,
     "min": 4,
     "max": 513,
     "percentiles": {
@@ -18,79 +18,79 @@
       "P95": 53.0
     },
     "buckets": {
-      "<20": 18259,
-      "20-50": 68640,
-      "50-100": 9615,
+      "<20": 18232,
+      "20-50": 68546,
+      "50-100": 9680,
       "100-200": 176,
       "200-512": 23,
       ">512": 1
     }
   },
   "vocabulary_size": 42762,
-  "type_token_ratio": 0.01304697239577708,
-  "type_token_ratio_lexical_diversity": 0.01304697239577708,
-  "shannon_entropy": 8.243753355621793,
-  "template_scaffolding_ratio": 0.664217575243887,
-  "template_pattern_concentration": 0.41886386665839487,
+  "type_token_ratio": 0.013048795819698243,
+  "type_token_ratio_lexical_diversity": 0.013048795819698243,
+  "shannon_entropy": 8.243811456119719,
+  "template_scaffolding_ratio": 0.6641996360178745,
+  "template_pattern_concentration": 0.4191065405863974,
   "duplication": {
-    "sentence_duplicate_ratio": 0.07406732465411925,
-    "paragraph_duplicate_ratio": 5.1698823334778155e-05,
-    "scaffold_reduced_near_duplicate_rate": 0.2058
+    "sentence_duplicate_ratio": 0.07407785540306,
+    "paragraph_duplicate_ratio": 4.1383020546681415e-05,
+    "scaffold_reduced_near_duplicate_rate": 0.184
   },
   "top_raw_bigrams": [
     [
       "a marine",
-      56214
+      56158
     ],
     [
       "marine occurrence",
-      56204
+      56148
     ],
     [
       "registered in",
-      54318
+      54279
     ],
     [
       "with a",
-      52375
+      52343
     ],
     [
       "constructed of",
-      50902
+      50867
     ],
     [
       "a gross",
-      50211
+      50179
     ],
     [
       "gross tonnage",
-      50211
+      50179
     ],
     [
       "tonnage of",
-      50211
+      50179
     ],
     [
       "gt registered",
-      50166
+      50134
     ],
     [
       "in canada",
-      43949
+      43907
     ]
   ],
   "top_domain_bigrams": [
     [
       "the vessel",
-      12109
+      12097
     ],
     [
       "the fishing",
-      11648
+      11757
     ],
     [
       "fishing vessel",
-      8232
+      8229
     ],
     [
       "on board",
@@ -102,11 +102,11 @@
     ],
     [
       "in the",
-      5380
+      5343
     ],
     [
       "vessel was",
-      5343
+      5319
     ],
     [
       "board reported",
@@ -160,7 +160,7 @@
     ],
     [
       "the cargo solid",
-      2297
+      2291
     ]
   ],
   "top_domain_4grams": [

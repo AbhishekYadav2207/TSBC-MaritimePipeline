@@ -3,19 +3,19 @@
   "clean_model_name": "roberta_base",
   "vocab_size": 50265,
   "sampled_documents": 1501,
-  "total_raw_words_analyzed": 51451,
-  "total_subword_tokens_analyzed": 77817,
-  "average_subwords_per_word": 1.5124487376338653,
+  "total_raw_words_analyzed": 51529,
+  "total_subword_tokens_analyzed": 77777,
+  "average_subwords_per_word": 1.5093830658464167,
   "maritime_fragmentation_rate": 0.6467065868263473,
   "single_token_vocabulary_coverage": 0.3532934131736527,
   "single_token_count": 118,
   "total_maritime_terms": 334,
-  "avg_pieces_per_term": 1.844311377245509,
+  "avg_pieces_per_term": 1.841317365269461,
   "median_pieces_per_term": 2.0,
   "p95_pieces_per_term": 3.0,
   "max_pieces_per_term": 4,
   "oov_rate": 0.0,
-  "tokenizer_speed_tokens_per_sec": 337205.0169001221,
+  "tokenizer_speed_tokens_per_sec": 388726.8884106568,
   "sequence_length_distribution": {
     "under_128": 1501,
     "under_256": 0,
@@ -555,20 +555,20 @@
       "num_pieces": 3
     },
     {
-      "term": "opportunity",
-      "tokens": [
-        "opp",
-        "ortun",
-        "ity"
-      ],
-      "num_pieces": 3
-    },
-    {
       "term": "algoport",
       "tokens": [
         "alg",
         "op",
         "ort"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "opportunity",
+      "tokens": [
+        "opp",
+        "ortun",
+        "ity"
       ],
       "num_pieces": 3
     },
@@ -600,20 +600,20 @@
       "num_pieces": 3
     },
     {
-      "term": "deployed",
-      "tokens": [
-        "de",
-        "ploy",
-        "ed"
-      ],
-      "num_pieces": 3
-    },
-    {
       "term": "wedgeport",
       "tokens": [
         "w",
         "edge",
         "port"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "deployed",
+      "tokens": [
+        "de",
+        "ploy",
+        "ed"
       ],
       "num_pieces": 3
     },

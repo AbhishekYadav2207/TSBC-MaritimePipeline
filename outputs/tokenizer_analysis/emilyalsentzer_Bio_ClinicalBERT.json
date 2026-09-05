@@ -3,19 +3,19 @@
   "clean_model_name": "emilyalsentzer_Bio_ClinicalBERT",
   "vocab_size": 28996,
   "sampled_documents": 1501,
-  "total_raw_words_analyzed": 51451,
-  "total_subword_tokens_analyzed": 73242,
-  "average_subwords_per_word": 1.4235291831062564,
-  "maritime_fragmentation_rate": 0.3413173652694611,
-  "single_token_vocabulary_coverage": 0.6586826347305389,
-  "single_token_count": 220,
+  "total_raw_words_analyzed": 51529,
+  "total_subword_tokens_analyzed": 73295,
+  "average_subwords_per_word": 1.4224029187447844,
+  "maritime_fragmentation_rate": 0.344311377245509,
+  "single_token_vocabulary_coverage": 0.655688622754491,
+  "single_token_count": 219,
   "total_maritime_terms": 334,
-  "avg_pieces_per_term": 1.4461077844311376,
+  "avg_pieces_per_term": 1.4491017964071857,
   "median_pieces_per_term": 1.0,
   "p95_pieces_per_term": 3.0,
   "max_pieces_per_term": 4,
   "oov_rate": 0.0,
-  "tokenizer_speed_tokens_per_sec": 252405.30345653187,
+  "tokenizer_speed_tokens_per_sec": 312579.38409698434,
   "sequence_length_distribution": {
     "under_128": 1501,
     "under_256": 0,
@@ -392,20 +392,20 @@
       "num_pieces": 3
     },
     {
-      "term": "hovercraft",
-      "tokens": [
-        "ho",
-        "##ver",
-        "##craft"
-      ],
-      "num_pieces": 3
-    },
-    {
       "term": "algolake",
       "tokens": [
         "al",
         "##gol",
         "##ake"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "hovercraft",
+      "tokens": [
+        "ho",
+        "##ver",
+        "##craft"
       ],
       "num_pieces": 3
     },
@@ -437,20 +437,20 @@
       "num_pieces": 3
     },
     {
-      "term": "algobay",
-      "tokens": [
-        "al",
-        "##go",
-        "##bay"
-      ],
-      "num_pieces": 3
-    },
-    {
       "term": "drydocked",
       "tokens": [
         "dry",
         "##dock",
         "##ed"
+      ],
+      "num_pieces": 3
+    },
+    {
+      "term": "algobay",
+      "tokens": [
+        "al",
+        "##go",
+        "##bay"
       ],
       "num_pieces": 3
     },
