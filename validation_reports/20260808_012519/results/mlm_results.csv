@@ -1,0 +1,5 @@
+model_name,status,mlm_loss,perplexity,top1_accuracy,top5_accuracy,top10_accuracy,eval_tokens,masked_tokens,runtime_sec,throughput_docs_sec
+ModernBERT-base,Success,2.6995,14.8723,49.15,67.89,74.71,5500,763,18.8,5.32
+BERT-base-uncased,Success,3.5585,35.1092,42.66,60.49,66.8,4970,729,6.89,14.52
+RoBERTa-base,Success,3.019,20.4704,45.97,64.74,72.04,5458,794,10.33,9.68
+MaritimeBERT-v1,Success,0.8903,2.4359,81.8,90.9,92.79,5500,791,15.38,6.5

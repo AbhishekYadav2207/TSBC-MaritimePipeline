@@ -1,0 +1,5 @@
+model_name,tokens_per_word,mean_seq_len,p95_seq_len,single_token_coverage_pct,maritime_fragmentation_rate_pct,status,mlm_loss,perplexity,top1_accuracy,top5_accuracy,top10_accuracy,throughput_docs_sec
+ModernBERT-base,1.5643,53.61,82.0,36.53,63.47,Success,2.6995,14.8723,49.15,67.89,74.71,8.01
+BERT-base-uncased,1.3999,47.98,76.0,74.85,25.15,Success,3.5585,35.1092,42.66,60.49,66.8,7.35
+RoBERTa-base,1.5708,53.84,82.0,35.33,64.67,Success,3.019,20.4704,45.97,64.74,72.04,6.86
+MaritimeBERT-v1,1.5643,53.61,82.0,36.53,63.47,Success,0.8903,2.4359,81.8,90.9,92.79,6.44

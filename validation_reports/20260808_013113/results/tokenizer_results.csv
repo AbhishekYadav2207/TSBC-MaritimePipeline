@@ -1,0 +1,5 @@
+model_name,vocab_size,tokens_per_word,single_token_coverage_pct,maritime_fragmentation_rate_pct,mean_seq_len,median_seq_len,p90_seq_len,p95_seq_len,p99_seq_len,max_seq_len,oov_rate_pct,tokenizer_speed_tok_sec
+ModernBERT-base,50280,1.5643,36.53,63.47,53.61,58.0,77.0,82.0,89.0,97,0.0,324557.29
+BERT-base-uncased,30522,1.3999,74.85,25.15,47.98,54.0,73.0,76.0,83.0,89,0.0,319998.4
+RoBERTa-base,50265,1.5708,35.33,64.67,53.84,58.0,77.0,82.0,88.0,97,0.0,367615.2
+MaritimeBERT-v1,50280,1.5643,36.53,63.47,53.61,58.0,77.0,82.0,89.0,97,0.0,372808.58
