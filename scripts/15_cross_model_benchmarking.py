@@ -87,6 +87,9 @@ def main():
                 rare_sum = metrics.get("rare_domain_tokens_summary") or metrics.get("rare_maritime_tokens_summary", {})
                 cat_rec = metrics.get("category_recall", {})
 
+                # Read actual evaluated doc count for correct per-document timing
+                evaluated_doc_count = item.get("evaluated_doc_count", metrics.get("evaluated_documents", 200))
+
                 row = {
                     "model_name": model_name,
                     "representation": rep,
@@ -98,7 +101,8 @@ def main():
                     "top10_acc": dom_sum.get("top10_accuracy", 0.0),
                     "rare_top1_acc": rare_sum.get("top1_accuracy", 0.0),
                     "performance_gap": metrics.get("performance_gap_top1", 0.0),
-                    "eval_time_sec": metrics.get("evaluation_time_sec", 0.0)
+                    "eval_time_sec": metrics.get("evaluation_time_sec", 0.0),
+                    "evaluated_doc_count": max(1, evaluated_doc_count)
                 }
 
                 # Purely dynamic category registration
@@ -162,8 +166,11 @@ def main():
         ) * 100.0
 
         # Methodological Hardening: Accurate evaluation timing terminology
+        # Use actual evaluated_doc_count for per-document normalization (not hardcoded 200)
         avg_eval_time = grp["eval_time_sec"].mean()
-        eval_time_per_doc_ms = (avg_eval_time / 200.0) * 1000.0 if avg_eval_time > 0 else 5.0
+        avg_doc_count = grp["evaluated_doc_count"].mean() if "evaluated_doc_count" in grp.columns else 200.0
+        avg_doc_count = max(1.0, avg_doc_count)
+        eval_time_per_doc_ms = (avg_eval_time / avg_doc_count) * 1000.0 if avg_eval_time > 0 else 5.0
         docs_per_sec = 1000.0 / eval_time_per_doc_ms if eval_time_per_doc_ms > 0 else 200.0
 
         # 95% Confidence Interval Error Bounds (Standard Error * 1.96)

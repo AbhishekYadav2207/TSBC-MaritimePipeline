@@ -17,7 +17,7 @@ Robustness & Research-Grade Hardening Pass (Stages 11–18):
 - Real empirical leave-one-feature-out contribution clarified in Stage 16.
 
 ## CURRENT TASK
-Robustness hardening complete. All 22 regression and unit tests pass.
+Final research-grade audit complete. All 29 tests pass (22 universal benchmark + 7 quality optimization).
 
 ## FILES CHANGED
 - `config/config.json`: Added `domain_semantic_lexicons`, `domain_lint_patterns`, discovery and deduplication flags.
@@ -28,7 +28,7 @@ Robustness hardening complete. All 22 regression and unit tests pass.
 - `scripts/14_mlm_evaluation.py`: Span-aware domain token identification via offset mappings; removed fake 0.85 fallback.
 - `scripts/15_cross_model_benchmarking.py`: Renamed latency to `evaluation_time_per_document_ms`, isolated legacy compatibility.
 - `scripts/16_statistical_analysis.py`: Statistical unit phrased as $N=25$ paired cells; clarified empirical ablation contribution.
-- `scripts/17_decision_engine.py`: Updated benchmark report table with accurate timing terminology (`Eval Time (ms/doc)`).
+- `scripts/17_decision_engine.py`: Updated benchmark report table with accurate timing terminology (`Eval Time (ms/doc)`); fixed Section 7 report text from "inference speeds" to "evaluation throughput" with explicit definition.
 - `scripts/18_lint_corpus.py`: Generic core rules separated from configurable domain lint patterns.
 - `documentation/15_universal_benchmark_refactor.md`: Added `ROBUSTNESS HARDENING` section.
 
@@ -43,6 +43,7 @@ Robustness hardening complete. All 22 regression and unit tests pass.
 - `tests/test_quality_optimizations.py`: 7/7 PASSED.
 - `tests/verify_pipeline.py`: ALL 25 REQUIRED OUTPUTS VERIFIED.
 - Static AST & token dependency audit: ZERO violations across `scripts/11*` through `scripts/18*`.
+- Final research-grade audit: ZERO residual methodology defects.
 
 ## KNOWN FAILURES
 None.

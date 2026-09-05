@@ -218,7 +218,7 @@ Bootstrap 95% Confidence Intervals and paired significance tests (t-test & Wilco
 ---
 
 ## 7. Computational Resource & Tokenizer Speed Benchmark
-Profiling model parameter counts, memory footprints, and inference speeds indicates that 110M parameter architectures offer an optimal trade-off between inference throughput and domain token comprehension.
+Profiling model parameter counts, memory footprints, and evaluation throughput (measured as full-pipeline evaluation time per document, including tokenization, masking, and model forward pass) indicates that 110M parameter architectures offer an optimal trade-off between evaluation speed and domain token comprehension.
 
 ---
 
